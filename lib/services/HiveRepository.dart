@@ -4,24 +4,31 @@ import '../model/cookery.dart';
 
 const String COOKERY_BOX = 'COOKERY_BOX';
 
-class HiveRepository{
-
+class HiveRepository {
   static late final Box<Cookery> cookeryBox;
 
-  static Future openBox() async{
+  static Future openBox() async {
     cookeryBox = await Hive.openBox<Cookery>(COOKERY_BOX);
   }
 
-  static Future<void> add(Cookery cookery) async{
+  static Future<void> add(Cookery cookery) async {
     cookeryBox.add(cookery);
   }
 
-  static List<Cookery> getAll(){
+  static List<Cookery> getAll() {
     return cookeryBox.values.toList();
   }
 
-  static Future<Cookery> getAtIndex(int index) async{
+  static Future<Cookery> getAtIndex(int index) async {
     var item = cookeryBox.getAt(index) as Cookery;
     return item;
+  }
+
+  static Future update(int index, Cookery data) async {
+    cookeryBox.putAt(index, data);
+  }
+
+  static Future delete(int index) async {
+    cookeryBox.deleteAt(index);
   }
 }

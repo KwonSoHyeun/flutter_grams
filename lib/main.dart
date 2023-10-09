@@ -74,6 +74,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     return ListTile(
                       title: Text(cookery.title),
                       subtitle: Text(cookery.desc),
+                      onTap: () {
+                        _navigateToEditScreen(context, index);
+                      },
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) {
@@ -87,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _navigateToEditScreen(context);
+          _navigateToEditScreen(context, -1);
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
@@ -95,8 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _navigateToEditScreen(BuildContext context) {
+  void _navigateToEditScreen(BuildContext context, int index) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => EditCookery()));
+        .push(MaterialPageRoute(builder: (context) => EditCookery(index)));
   }
 }
