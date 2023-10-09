@@ -1,33 +1,31 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:grams/model/cookery.dart';
 import 'package:grams/screen/EditCookery.dart';
 import 'package:grams/services/HiveRepository.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-
+import 'package:hive_flutter/adapters.dart';
 import 'package:logger/logger.dart';
+
+import 'model/cookery.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
 );
 
 Future<void> main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(CookeryAdapter());
+  await HiveRepository.openBox();
 
-  //await Hive.initFlutter();
-  //Hive.registerAdapter(CookeryAdapter());
-
-  //HiveRepository.cookeryBox.put("title", "value1");
   runApp(const MyApp());
 }
 
 @override
-void initState(){
+void initState() {
   logger.d("ksh first");
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -59,18 +57,36 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-          ],
-        ),
-      ),
+      body: Center(
+          child: Column(
+        children: [
+          Expanded(
+              child: ValueListenableBuilder(
+            valueListenable: HiveRepository.cookeryBox.listenable(),
+            builder: (BuildContext context, Box<Cookery> box, Widget? child) {
+              List<Cookery> cookerys = HiveRepository.getAll();
+
+              if (cookerys.isEmpty) return const SizedBox();
+
+              return ListView.separated(
+                  itemBuilder: (context, index) {
+                    Cookery cookery = cookerys[index];
+                    return ListTile(
+                      title: Text(cookery.title),
+                      subtitle: Text(cookery.desc),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const Divider();
+                  },
+                  itemCount: HiveRepository.cookeryBox.length);
+            },
+          )),
+        ],
+      )),
+
       floatingActionButton: FloatingActionButton(
-        onPressed:(){
+        onPressed: () {
           _navigateToEditScreen(context);
         },
         tooltip: 'Increment',
@@ -80,6 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _navigateToEditScreen(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookery()));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => EditCookery()));
   }
 }
