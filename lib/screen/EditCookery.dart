@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grams/services/HiveRepository.dart';
+import 'package:grams/widgets/BoxIngredientItems.dart';
 import 'package:logger/logger.dart';
 
 import '../model/cookery.dart';
@@ -72,6 +73,7 @@ class _EditCookeryState extends State<EditCookery> {
   );
 
   var groupWidgets = <Widget>[];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -166,9 +168,25 @@ class _EditCookeryState extends State<EditCookery> {
         }));
   }
 
+  late List<TextEditingController> _nameControllers;
+  late List<TextEditingController> _rateControllers;
+  late List<TextEditingController> _unitControllers;
+
+  int boxIndex = 0;
+
   void onAddBoxPress() {
     setState(() {
-      this.groupWidgets.add(BoxItems());
+      TextEditingController nameController = TextEditingController();
+      TextEditingController rateController = TextEditingController();
+      TextEditingController unitController = TextEditingController();
+
+      _nameControllers.add(nameController);
+      _rateControllers.add(rateController);
+      _unitControllers.add(unitController);
+
+      boxIndex++;
+      this.groupWidgets.add(BoxIngredientItem(
+          boxIndex, nameController, rateController, unitController));
     });
   }
 }
