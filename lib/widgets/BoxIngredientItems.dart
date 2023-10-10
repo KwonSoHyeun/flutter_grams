@@ -20,40 +20,47 @@ class _BoxIngredientItemState extends State<BoxIngredientItem> {
     return Row(
         // 커스텀 위젯의 내용
         children: [
-          TextField(
-            controller: widget.nameController,
-            decoration: const InputDecoration(labelText: '재료명'),
-            keyboardType: TextInputType.text,
+          Container(
+            width: 100,
+            height: 50,
+            child: TextField(
+              controller: widget.nameController,
+              decoration: const InputDecoration(labelText: '재료명'),
+              keyboardType: TextInputType.text,
+            ),
           ),
-          TextField(
-            controller: widget.rateController,
-            decoration: const InputDecoration(labelText: '중량 또는 비율'),
-            keyboardType: TextInputType.text,
+          const SizedBox(
+            width: 60,
+            height: 60,
           ),
-          TextField(
-            controller: widget.rateController,
-            decoration: const InputDecoration(labelText: '단위'),
-            keyboardType: TextInputType.text,
+          Container(
+            width: 100,
+            height: 50,
+            child: TextField(
+              controller: widget.rateController,
+              decoration: const InputDecoration(labelText: '중량 또는 비율'),
+              keyboardType: TextInputType.text,
+            ),
           ),
-          IconButton(
-            icon: Icon(Icons.thumb_up),
-            onPressed: () {},
-          )
+          const SizedBox(
+            width: 60,
+          ),
+          Container(
+            width: 30,
+            height: 50,
+            child: TextField(
+              controller: widget.unitController,
+              decoration: const InputDecoration(labelText: '단위'),
+              keyboardType: TextInputType.text,
+            ),
+          ),
+          SizedBox(
+              height: 18,
+              width: 18,
+              child: IconButton(
+                icon: Icon(Icons.backspace_rounded),
+                onPressed: () {},
+              ))
         ]);
   }
 }
-/*
-class _BoxIngredientItemState extends State<BoxIngredientItem> {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      // 커스텀 위젯의 내용
-      child: TextField(
-        controller: widget.controller1,
-        decoration: const InputDecoration(labelText: '재료명'),
-        keyboardType: TextInputType.text,
-      ),
-    );
-  }
-}
- */

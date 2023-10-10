@@ -77,69 +77,75 @@ class _EditCookeryState extends State<EditCookery> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text("레시피 입력/수정"),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: <Widget>[
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(labelText: '요리명'),
-                keyboardType: TextInputType.text,
-              ),
-              TextField(
-                controller: descController,
-                decoration: const InputDecoration(labelText: '간단한 설명'),
-                keyboardType: TextInputType.text,
-              ),
-              const Padding(padding: EdgeInsets.all(50)),
-              Column(
-                children: this.groupWidgets,
-              ),
-              Row(
-                children: <Widget>[
-                  Visibility(
-                    visible: widget.index < 0,
-                    child: Column(
-                      children: [
-                        TextButton(
-                          child: Text("Add item "),
-                          onPressed: () {
-                            onAddPress();
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                      visible: widget.index >= 0,
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  controller: titleController,
+                  decoration: const InputDecoration(labelText: '요리명'),
+                  keyboardType: TextInputType.text,
+                ),
+                TextField(
+                  controller: descController,
+                  decoration: const InputDecoration(labelText: '간단한 설명'),
+                  keyboardType: TextInputType.text,
+                ),
+                const Padding(padding: EdgeInsets.all(10)),
+                Column(
+                  children: this.groupWidgets,
+                ),
+                Row(
+                  children: <Widget>[
+                    Visibility(
+                      visible: widget.index < 0,
                       child: Column(
                         children: [
                           TextButton(
-                            child: Text("Delete item "),
+                            child: Text("save"),
                             onPressed: () {
-                              onDeletePress(context);
-                            },
-                          ),
-                          TextButton(
-                            child: Text("Update item "),
-                            onPressed: () {
-                              onUpdatePress(context);
-                            },
-                          ),
-                          TextButton(
-                            child: Text("test "),
-                            onPressed: () {
-                              onAddBoxPress();
+                              onAddPress();
                             },
                           ),
                         ],
-                      ))
-                ],
-              )
-            ],
+                      ),
+                    ),
+                    Visibility(
+                        visible: widget.index >= 0,
+                        child: Column(
+                          children: [
+                            TextButton(
+                              child: Text("Delete item "),
+                              onPressed: () {
+                                onDeletePress(context);
+                              },
+                            ),
+                            TextButton(
+                              child: Text("Update item "),
+                              onPressed: () {
+                                onUpdatePress(context);
+                              },
+                            ),
+                          ],
+                        )),
+                    SizedBox(
+                        height: 18,
+                        width: 18,
+                        child: IconButton(
+                          icon: Icon(Icons.add_box_outlined),
+                          onPressed: () {
+                            onAddBoxPress();
+                          },
+                        ))
+                  ],
+                )
+              ],
+            ),
           ),
         ));
   }
@@ -168,22 +174,22 @@ class _EditCookeryState extends State<EditCookery> {
         }));
   }
 
-  late List<TextEditingController> _nameControllers;
-  late List<TextEditingController> _rateControllers;
-  late List<TextEditingController> _unitControllers;
+  List<TextEditingController> nameControllers = [];
+  List<TextEditingController> rateControllers = [];
+  List<TextEditingController> unitControllers = [];
 
   int boxIndex = 0;
 
   void onAddBoxPress() {
+    TextEditingController nameController = TextEditingController();
+    TextEditingController rateController = TextEditingController();
+    TextEditingController unitController = TextEditingController();
+
+    nameControllers.add(nameController);
+    rateControllers.add(rateController);
+    unitControllers.add(unitController);
+
     setState(() {
-      TextEditingController nameController = TextEditingController();
-      TextEditingController rateController = TextEditingController();
-      TextEditingController unitController = TextEditingController();
-
-      _nameControllers.add(nameController);
-      _rateControllers.add(rateController);
-      _unitControllers.add(unitController);
-
       boxIndex++;
       this.groupWidgets.add(BoxIngredientItem(
           boxIndex, nameController, rateController, unitController));
