@@ -4,6 +4,7 @@ import 'package:logger/logger.dart';
 
 import '../model/cookery.dart';
 import '../model/ingredient.dart';
+import '../widgets/BoxItems.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -66,6 +67,11 @@ class _EditCookeryState extends State<EditCookery> {
     showConfirm(context);
   }
 
+  Column someColumn = Column(
+    children: [BoxItems(), BoxItems()],
+  );
+
+  var groupWidgets = <Widget>[];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,6 +93,9 @@ class _EditCookeryState extends State<EditCookery> {
                 keyboardType: TextInputType.text,
               ),
               const Padding(padding: EdgeInsets.all(50)),
+              Column(
+                children: this.groupWidgets,
+              ),
               Row(
                 children: <Widget>[
                   Visibility(
@@ -116,6 +125,12 @@ class _EditCookeryState extends State<EditCookery> {
                             child: Text("Update item "),
                             onPressed: () {
                               onUpdatePress(context);
+                            },
+                          ),
+                          TextButton(
+                            child: Text("test "),
+                            onPressed: () {
+                              onAddBoxPress();
                             },
                           ),
                         ],
@@ -149,5 +164,11 @@ class _EditCookeryState extends State<EditCookery> {
             ],
           );
         }));
+  }
+
+  void onAddBoxPress() {
+    setState(() {
+      this.groupWidgets.add(BoxItems());
+    });
   }
 }
