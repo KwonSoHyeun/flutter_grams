@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:grams/screen/EditCookery.dart';
 import 'package:grams/services/HiveRepository.dart';
+import 'package:grams/services/ItemProvider.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
 import 'model/cookery.dart';
 
@@ -28,14 +30,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ItemProvider>(create: (_) => ItemProvider()),
+        Provider<String>.value(value: "Kwon")
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const MyHomePage(title: 'Flutter Demo Home Page C'),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page C'),
     );
   }
 }

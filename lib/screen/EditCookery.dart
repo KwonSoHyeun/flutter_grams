@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:grams/services/HiveRepository.dart';
-import 'package:grams/widgets/BoxIngredientItems.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
 import '../model/cookery.dart';
 import '../model/ingredient.dart';
-import '../widgets/BoxItems.dart';
+import '../services/ItemProvider.dart';
+import '../widgets/BoxIngredientItems.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -23,6 +24,7 @@ class EditCookery extends StatefulWidget {
 class _EditCookeryState extends State<EditCookery> {
   final titleController = TextEditingController();
   final descController = TextEditingController();
+  final testController = TextEditingController();
 
   late Cookery editCookery;
 
@@ -56,6 +58,8 @@ class _EditCookeryState extends State<EditCookery> {
     await HiveRepository.add(personModel);
   }
 
+  void getListIngredient() {}
+
   Future<void> onUpdatePress(BuildContext context) async {
     editCookery.title = titleController.text;
     editCookery.desc = descController.text;
@@ -68,25 +72,68 @@ class _EditCookeryState extends State<EditCookery> {
     showConfirm(context);
   }
 
-  Column someColumn = Column(
-    children: [BoxItems(), BoxItems()],
-  );
+  var groupWidgetList = <Widget>[];
 
-  var groupWidgets = <Widget>[];
+  // List<Widget> getWidgets() {
+  //   //logger.i(set.elementAt(0));
+  //   logger.i("변경감지!!");
+  //   return groupWidgetList;
+  // }
 
   @override
   Widget build(BuildContext context) {
+    final consumer = Provider.of<ItemProvider>(context);
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text("레시피 입력/수정"),
+          actions: [
+            Visibility(
+              visible: widget.index < 0,
+              child: IconButton(
+                icon: const Icon(Icons.save),
+                tooltip: 'Open shopping cart',
+                onPressed: () {
+                  onAddPress();
+                  // handle the press
+                },
+              ),
+            ),
+            Visibility(
+              visible: widget.index >= 0,
+              child: IconButton(
+                icon: const Icon(Icons.save_as_sharp),
+                tooltip: 'Open shopping cart',
+                onPressed: () {
+                  onUpdatePress(context); // handle the press
+                },
+              ),
+            ),
+            Visibility(
+              visible: widget.index >= 0,
+              child: IconButton(
+                icon: const Icon(Icons.delete),
+                color: Colors.redAccent,
+                tooltip: 'Open shopping cart',
+                onPressed: () {
+                  onDeletePress(context); // handle the press
+                },
+              ),
+            )
+          ],
         ),
         body: SingleChildScrollView(
+          padding: EdgeInsets.only(
+              top: 50, bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               children: <Widget>[
-                TextField(
+                Text("${consumer.getSize().toString()}"),
+                TextFormField(
+                  scrollPadding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
                   controller: titleController,
                   decoration: const InputDecoration(labelText: '요리명'),
                   keyboardType: TextInputType.text,
@@ -97,51 +144,21 @@ class _EditCookeryState extends State<EditCookery> {
                   keyboardType: TextInputType.text,
                 ),
                 const Padding(padding: EdgeInsets.all(10)),
-                Column(
-                  children: this.groupWidgets,
+                Column(children: consumer.getBoxItems()),
+                const SizedBox(
+                  width: 60,
+                  height: 60,
                 ),
                 Row(
                   children: <Widget>[
-                    Visibility(
-                      visible: widget.index < 0,
-                      child: Column(
-                        children: [
-                          TextButton(
-                            child: Text("save"),
-                            onPressed: () {
-                              onAddPress();
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    Visibility(
-                        visible: widget.index >= 0,
-                        child: Column(
-                          children: [
-                            TextButton(
-                              child: Text("Delete item "),
-                              onPressed: () {
-                                onDeletePress(context);
-                              },
-                            ),
-                            TextButton(
-                              child: Text("Update item "),
-                              onPressed: () {
-                                onUpdatePress(context);
-                              },
-                            ),
-                          ],
-                        )),
                     SizedBox(
-                        height: 18,
-                        width: 18,
                         child: IconButton(
-                          icon: Icon(Icons.add_box_outlined),
-                          onPressed: () {
-                            onAddBoxPress();
-                          },
-                        ))
+                      icon: Icon(Icons.add_box_outlined),
+                      onPressed: () {
+                        consumer.addNewWidgetWithController();
+                        //onAddBoxPress();
+                      },
+                    ))
                   ],
                 )
               ],
@@ -181,6 +198,7 @@ class _EditCookeryState extends State<EditCookery> {
   int boxIndex = 0;
 
   void onAddBoxPress() {
+    logger.d("add ingredient1");
     TextEditingController nameController = TextEditingController();
     TextEditingController rateController = TextEditingController();
     TextEditingController unitController = TextEditingController();
@@ -189,9 +207,10 @@ class _EditCookeryState extends State<EditCookery> {
     rateControllers.add(rateController);
     unitControllers.add(unitController);
 
+    boxIndex++;
+
     setState(() {
-      boxIndex++;
-      this.groupWidgets.add(BoxIngredientItem(
+      this.groupWidgetList.add(BoxIngredientItem(
           boxIndex, nameController, rateController, unitController));
     });
   }
