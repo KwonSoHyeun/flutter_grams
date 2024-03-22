@@ -83,6 +83,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       title: Text(cookery.title),
                       subtitle: Text(cookery.desc),
                       onTap: () {
+                      //  _navigateToEditScreen(context, index);
+                      },
+                      onLongPress: (){
                         _navigateToEditScreen(context, index);
                       },
                     );
