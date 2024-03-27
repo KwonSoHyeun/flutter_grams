@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grams/model/cookery.dart';
 import 'package:grams/screen/edit_cookery_page.dart';
-import 'package:grams/services/hive_cookery_repository.dart';
+import 'package:grams/services/local_repository.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';

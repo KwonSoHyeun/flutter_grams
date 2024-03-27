@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grams/services/hive_cookery_repository.dart';
+import 'package:grams/services/local_repository.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -9,13 +9,11 @@ import '../model/ingredient.dart';
 import '../services/ItemProvider.dart';
 import '../widgets/BoxIngredientItems.dart';
 
-
 var logger = Logger(
   printer: PrettyPrinter(),
 );
 
 class EditCookeryPage extends StatefulWidget {
-
   final int index;
   const EditCookeryPage(this.index, {super.key});
 
@@ -24,7 +22,6 @@ class EditCookeryPage extends StatefulWidget {
 }
 
 class _EditCookeryPageState extends State<EditCookeryPage> {
-
   final titleController = TextEditingController();
   final descController = TextEditingController();
   final testController = TextEditingController();
@@ -36,14 +33,14 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
     print("ksh test");
     // TODO: implement initState
     super.initState();
-    
   }
 
-@override
-void didChangeDependencies() {
-  super.didChangeDependencies();
-  _openBox();
-}
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _openBox();
+  }
+
   Future _openBox() async {
     //await Hive.initFlutter();
     //Hive.registerAdapter(CookeryAdapter());
@@ -60,7 +57,6 @@ void didChangeDependencies() {
   }
 
   Future<void> onAddPress() async {
-
     final cookekryConsumer = Provider.of<CookeryViewModel>(context);
 
     Ingredient ing = Ingredient(name: "name", count: 1, unit: "gram");
@@ -72,7 +68,7 @@ void didChangeDependencies() {
     await cookekryConsumer.addCookery(personModel);
   }
 
-    Cookery getCookeryValue() {
+  Cookery getCookeryValue() {
     Ingredient ing = Ingredient(name: "name", count: 1, unit: "gram");
     Cookery personModel = Cookery(
         title: titleController.text,
@@ -81,11 +77,11 @@ void didChangeDependencies() {
     return personModel;
   }
 
-
   void getListIngredient() {}
 
   Future<void> onUpdatePress(BuildContext context) async {
-    final cookekryConsumer = Provider.of<CookeryViewModel>(context, listen: false);
+    final cookekryConsumer =
+        Provider.of<CookeryViewModel>(context, listen: false);
 
     editCookery.title = titleController.text;
     editCookery.desc = descController.text;
@@ -94,7 +90,8 @@ void didChangeDependencies() {
   }
 
   Future<void> onDeletePress(BuildContext context) async {
-    var cookekryConsumer = Provider.of<CookeryViewModel>(context, listen: false);
+    var cookekryConsumer =
+        Provider.of<CookeryViewModel>(context, listen: false);
     cookekryConsumer.delete(widget.index);
     showConfirm(context);
   }
@@ -110,7 +107,6 @@ void didChangeDependencies() {
   @override
   Widget build(BuildContext context) {
     final itemConsumer = Provider.of<ItemProvider>(context);
-    
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -123,7 +119,8 @@ void didChangeDependencies() {
                 icon: const Icon(Icons.save),
                 tooltip: 'Open shopping cart',
                 onPressed: () {
-                  Provider.of<CookeryViewModel>(context, listen: false).addCookery(getCookeryValue());
+                  Provider.of<CookeryViewModel>(context, listen: false)
+                      .addCookery(getCookeryValue());
                 },
               ),
             ),
@@ -150,8 +147,7 @@ void didChangeDependencies() {
             )
           ],
         ),
-        body: 
-        SingleChildScrollView(
+        body: SingleChildScrollView(
           padding: EdgeInsets.only(
               top: 50, bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Padding(
@@ -172,10 +168,19 @@ void didChangeDependencies() {
                   keyboardType: TextInputType.text,
                 ),
                 const Padding(padding: EdgeInsets.all(10)),
+                Container(
+                  height: 1.0,
+                  width: 500.0,
+                  color: Colors.blue,
+                ),
                 Column(children: itemConsumer.getBoxItems()),
                 const SizedBox(
                   width: 60,
                   height: 60,
+                  child: DecoratedBox(
+                      decoration: BoxDecoration(
+                    color: Colors.red,
+                  )),
                 ),
                 Row(
                   children: <Widget>[

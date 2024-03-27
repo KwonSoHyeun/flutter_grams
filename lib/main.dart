@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:grams/screen/list_cookery_page.dart';
-import 'package:grams/services/hive_cookery_repository.dart';
 import 'package:grams/services/ItemProvider.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -16,8 +15,7 @@ var logger = Logger(
 Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(CookeryAdapter());
-  await HiveRepository.openBox();
-
+  await Hive.openBox<Cookery>("COOKERY_BOX");
   runApp(const MyApp());
 }
 

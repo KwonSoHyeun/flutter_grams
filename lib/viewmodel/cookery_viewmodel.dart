@@ -1,53 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:grams/model/cookery.dart';
-import 'package:grams/services/hive_cookery_repository.dart';
+import 'package:grams/services/local_controller.dart';
 
 class CookeryViewModel with ChangeNotifier {
-  late final HiveRepository _cookeryRepository;
+  late final LocalController _cookeryController;
 
   List<Cookery> _cookeryList = List.empty(growable: true);
   List<Cookery> get cookeryList => _cookeryList;
 
   CookeryViewModel() {
-    _cookeryRepository = HiveRepository();
+    _cookeryController = LocalController();
     _getCookeryList();
   }
 
-  Future<void> _getCookeryList() async {
-    _cookeryList = await _cookeryRepository.getAll();
+   _getCookeryList(){
+    _cookeryList =  _cookeryController.getAll();
     notifyListeners();
   }
 
-    List<Cookery> getCookeryList()  {
-    _cookeryList =  _cookeryRepository.getAll();
+    List<Cookery> getCookeryList()  { //todo 위에 함수와 기능이 중복인지 확인할것.
+    _cookeryList =  _cookeryController.getAll();
    // notifyListeners();
     return cookeryList;
   }
 
   Future<void> addCookery(Cookery cookery) async {
-    await _cookeryRepository.add(cookery);
+    await _cookeryController.add(cookery);
    // _cookeryList.add(cookery);
     notifyListeners();
   }
 
-  Future<Cookery> getAtIndex(int index) async {
-    Cookery item = _cookeryRepository.getAtIndex(index);
+  getAtIndex(int index) {
+    Cookery? item = _cookeryController.getAtIndex(index);
     return item;
   }
 
-  Future<void> update(int index, Cookery data) async {
-    _cookeryRepository.update(index, data);
+  update(int index, Cookery data) {
+    _cookeryController.update(index, data);
      notifyListeners();
   }
 
   delete(int index) {
-    _cookeryRepository.delete(index);
+    _cookeryController.delete(index);
      notifyListeners();
   }
 
-/*
-  static Future<void> add(Cookery cookery) async {
-    cookeryBox.add(cookery);
-  }
-*/
 }

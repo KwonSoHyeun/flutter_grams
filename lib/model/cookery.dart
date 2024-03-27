@@ -12,7 +12,7 @@ class Cookery extends HiveObject {
   @HiveField(1)
   String desc;
   @HiveField(2)
-  HiveList<Ingredient>? ingredients;
+  List<Ingredient>? ingredients;
 
   Cookery({
     required this.title,

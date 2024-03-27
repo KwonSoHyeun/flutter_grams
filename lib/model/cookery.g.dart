@@ -19,7 +19,7 @@ class CookeryAdapter extends TypeAdapter<Cookery> {
     return Cookery(
       title: fields[0] as String,
       desc: fields[1] as String,
-      ingredients: (fields[2] as HiveList?)?.castHiveList(),
+      ingredients: (fields[2] as List?)?.cast<Ingredient>(),
     );
   }
 
