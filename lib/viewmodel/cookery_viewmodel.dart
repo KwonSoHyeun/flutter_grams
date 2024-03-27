@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grams/model/cookery.dart';
+import 'package:grams/model/ingredient.dart';
 import 'package:grams/services/local_controller.dart';
 
 class CookeryViewModel with ChangeNotifier {
@@ -13,20 +14,29 @@ class CookeryViewModel with ChangeNotifier {
     _getCookeryList();
   }
 
-   _getCookeryList(){
-    _cookeryList =  _cookeryController.getAll();
+  _getCookeryList() {
+    _cookeryList = _cookeryController.getAll();
     notifyListeners();
   }
 
-    List<Cookery> getCookeryList()  { //todo 위에 함수와 기능이 중복인지 확인할것.
-    _cookeryList =  _cookeryController.getAll();
-   // notifyListeners();
+  List<Cookery> getCookeryList() {
+    //todo 위에 함수와 기능이 중복인지 확인할것.
+    _cookeryList = _cookeryController.getAll();
+    // notifyListeners();
     return cookeryList;
   }
 
-  Future<void> addCookery(Cookery cookery) async {
-    await _cookeryController.add(cookery);
-   // _cookeryList.add(cookery);
+  // Future<void> addCookery(Cookery cookery) async {
+  //   await _cookeryController.add(cookery);
+  //  // _cookeryList.add(cookery);
+  //   notifyListeners();
+  // }
+
+  Future<void> addCookery(String title, String desc, List<Ingredient>? items) async{
+    //await _cookeryController.add(cookery);
+    Cookery data = Cookery(title:title, desc:desc, ingredients:items) ;
+    await _cookeryController.add(data);
+   _cookeryList.add(data);
     notifyListeners();
   }
 
@@ -35,14 +45,14 @@ class CookeryViewModel with ChangeNotifier {
     return item;
   }
 
-  update(int index, Cookery data) {
+  update(int index, String title, String desc, List<Ingredient>? items) {
+    Cookery data = Cookery(title:title, desc:desc, ingredients:items) ;
     _cookeryController.update(index, data);
-     notifyListeners();
+    notifyListeners();
   }
 
   delete(int index) {
     _cookeryController.delete(index);
-     notifyListeners();
+    notifyListeners();
   }
-
 }

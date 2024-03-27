@@ -14,6 +14,11 @@ class Cookery extends HiveObject {
   @HiveField(2)
   List<Ingredient>? ingredients;
 
+// Cookery(String title, String desc, List<Ingredient>? ingredients){
+//   this.title = title;
+//   this.desc = desc;
+//   this.ingredients = ingredients;
+// }
   Cookery({
     required this.title,
     required this.desc,

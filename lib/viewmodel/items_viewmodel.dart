@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:grams/model/ingredient.dart';
 
-import '../widgets/BoxIngredientItems.dart';
+import '../widgets/item_widget.dart';
 
-class ItemProvider with ChangeNotifier {
-  List<BoxIngredientItem> boxItemWidget = List.empty(growable: true);
+class ItemsViewModel with ChangeNotifier {
+  List<ItemWidget> boxItemWidget = List.empty(growable: true);
   final List<Ingredient> _itemList = List.empty(growable: true);
 
   List<TextEditingController> nameControllers = [];
@@ -17,7 +17,7 @@ class ItemProvider with ChangeNotifier {
     return _itemList;
   }
 
-  List<BoxIngredientItem> getBoxItems() {
+  List<ItemWidget> getBoxItems() {
     return boxItemWidget;
   }
 
@@ -34,7 +34,7 @@ class ItemProvider with ChangeNotifier {
     rateControllers.add(rateController);
     unitControllers.add(unitController);
 
-    boxItemWidget.add(BoxIngredientItem(
+    boxItemWidget.add(ItemWidget(
         boxIndex++, nameController, rateController, unitController));
     notifyListeners();
   }

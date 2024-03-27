@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grams/screen/list_cookery_page.dart';
-import 'package:grams/services/ItemProvider.dart';
+import 'package:grams/viewmodel/items_viewmodel.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:logger/logger.dart';
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ItemProvider>(create: (_) => ItemProvider()),
+        ChangeNotifierProvider<ItemsViewModel>(create: (_) => ItemsViewModel()),
         ChangeNotifierProvider<CookeryViewModel>(create: (BuildContext context) => CookeryViewModel()),
         //Provider<String>.value(value: "Kwon")
       ],

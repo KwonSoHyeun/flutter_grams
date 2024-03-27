@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:grams/viewmodel/items_viewmodel.dart';
 import 'package:provider/provider.dart';
 
-import '../services/ItemProvider.dart';
+import 'package:grams/viewmodel/items_viewmodel.dart';
 
-class BoxIngredientItem extends StatefulWidget {
+class ItemWidget extends StatefulWidget {
   int boxIndex;
   final TextEditingController nameController;
   final TextEditingController rateController;
   final TextEditingController unitController;
 
-  BoxIngredientItem(this.boxIndex, this.nameController, this.rateController,
+  ItemWidget(this.boxIndex, this.nameController, this.rateController,
       this.unitController,
       {super.key});
 
   @override
-  State<BoxIngredientItem> createState() => _BoxIngredientItemState();
+  State<ItemWidget> createState() => _ItemWidgetState();
 }
 
-class _BoxIngredientItemState extends State<BoxIngredientItem> {
+class _ItemWidgetState extends State<ItemWidget> {
   @override
   Widget build(BuildContext context) {
-    final consumer = Provider.of<ItemProvider>(context);
+    final consumer = Provider.of<ItemsViewModel>(context);
 
     return Row(
         mainAxisAlignment: MainAxisAlignment.center,

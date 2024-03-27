@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 
 import '../model/cookery.dart';
 import '../model/ingredient.dart';
-import '../services/ItemProvider.dart';
-import '../widgets/BoxIngredientItems.dart';
+import '../viewmodel/items_viewmodel.dart';
+import '../widgets/item_widget.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -27,86 +27,33 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
   final testController = TextEditingController();
 
   late Cookery editCookery;
+  late CookeryViewModel cookeryViewModel;
+  late ItemsViewModel itemsViewModel;
 
   @override
   void initState() {
     print("ksh test");
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _openBox();
-  }
-
-  Future _openBox() async {
-    //await Hive.initFlutter();
-    //Hive.registerAdapter(CookeryAdapter());
-    //await HiveRepository.openBox();
+    cookeryViewModel = Provider.of<CookeryViewModel>(context);
+    itemsViewModel = Provider.of<ItemsViewModel>(context);
 
     if (widget.index >= 0) {
-      var cookekryConsumer = Provider.of<CookeryViewModel>(context);
-
-      editCookery = await cookekryConsumer.getAtIndex(widget.index);
+      editCookery = cookeryViewModel.getAtIndex(widget.index);
       titleController.text = editCookery.title;
       descController.text = editCookery.desc;
     }
-    return;
-  }
-
-  Future<void> onAddPress() async {
-    final cookekryConsumer = Provider.of<CookeryViewModel>(context);
-
-    Ingredient ing = Ingredient(name: "name", count: 1, unit: "gram");
-    Cookery personModel = Cookery(
-        title: titleController.text,
-        desc: descController.text,
-        ingredients: null);
-
-    await cookekryConsumer.addCookery(personModel);
-  }
-
-  Cookery getCookeryValue() {
-    Ingredient ing = Ingredient(name: "name", count: 1, unit: "gram");
-    Cookery personModel = Cookery(
-        title: titleController.text,
-        desc: descController.text,
-        ingredients: null);
-    return personModel;
-  }
-
-  void getListIngredient() {}
-
-  Future<void> onUpdatePress(BuildContext context) async {
-    final cookekryConsumer =
-        Provider.of<CookeryViewModel>(context, listen: false);
-
-    editCookery.title = titleController.text;
-    editCookery.desc = descController.text;
-    cookekryConsumer.update(widget.index, editCookery);
-    showConfirm(context);
-  }
-
-  Future<void> onDeletePress(BuildContext context) async {
-    var cookekryConsumer =
-        Provider.of<CookeryViewModel>(context, listen: false);
-    cookekryConsumer.delete(widget.index);
-    showConfirm(context);
   }
 
   var groupWidgetList = <Widget>[];
 
-  // List<Widget> getWidgets() {
-  //   //logger.i(set.elementAt(0));
-  //   logger.i("변경감지!!");
-  //   return groupWidgetList;
-  // }
-
   @override
   Widget build(BuildContext context) {
-    final itemConsumer = Provider.of<ItemProvider>(context);
+    //final itemConsumer = Provider.of<ItemProvider>(context);
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -117,10 +64,10 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
               visible: widget.index < 0,
               child: IconButton(
                 icon: const Icon(Icons.save),
-                tooltip: 'Open shopping cart',
+                tooltip: 'Save new data',
                 onPressed: () {
-                  Provider.of<CookeryViewModel>(context, listen: false)
-                      .addCookery(getCookeryValue());
+                  cookeryViewModel.addCookery(titleController.text,
+                      descController.text, null);
                 },
               ),
             ),
@@ -128,9 +75,10 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
               visible: widget.index >= 0,
               child: IconButton(
                 icon: const Icon(Icons.save_as_sharp),
-                tooltip: 'Open shopping cart',
+                tooltip: 'Update data',
                 onPressed: () {
-                  onUpdatePress(context); // handle the press
+                  cookeryViewModel.update(widget.index, titleController.text,
+                      descController.text, itemsViewModel.getItemListAll());
                 },
               ),
             ),
@@ -141,67 +89,65 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 color: Colors.redAccent,
                 tooltip: 'Open shopping cart',
                 onPressed: () {
-                  onDeletePress(context); // handle the press
+                  cookeryViewModel.delete(widget.index); // handle the press
                 },
               ),
             )
           ],
         ),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.only(
-              top: 50, bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: <Widget>[
-                Text("${itemConsumer.getSize().toString()}"),
-                TextFormField(
-                  scrollPadding: EdgeInsets.only(
+        body: Consumer<ItemsViewModel>(
+            builder: (_, itemProvider, __) => SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                      top: 50,
                       bottom: MediaQuery.of(context).viewInsets.bottom),
-                  controller: titleController,
-                  decoration: const InputDecoration(labelText: '요리명'),
-                  keyboardType: TextInputType.text,
-                ),
-                TextField(
-                  controller: descController,
-                  decoration: const InputDecoration(labelText: '간단한 설명'),
-                  keyboardType: TextInputType.text,
-                ),
-                const Padding(padding: EdgeInsets.all(10)),
-                Container(
-                  height: 1.0,
-                  width: 500.0,
-                  color: Colors.blue,
-                ),
-                Column(children: itemConsumer.getBoxItems()),
-                const SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: DecoratedBox(
-                      decoration: BoxDecoration(
-                    color: Colors.red,
-                  )),
-                ),
-                Row(
-                  children: <Widget>[
-                    SizedBox(
-                        child: IconButton(
-                      icon: Icon(Icons.add_box_outlined),
-                      onPressed: () {
-                        itemConsumer.addNewWidgetWithController();
-                        //onAddBoxPress();
-                      },
-                    ))
-                  ],
-                )
-              ],
-            ),
-          ),
-        ));
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: <Widget>[
+                        Text("${itemProvider.getSize().toString()}"),
+                        TextFormField(
+                          scrollPadding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                          controller: titleController,
+                          decoration: const InputDecoration(labelText: '요리명'),
+                          keyboardType: TextInputType.text,
+                        ),
+                        TextField(
+                          controller: descController,
+                          decoration:
+                              const InputDecoration(labelText: '간단한 설명'),
+                          keyboardType: TextInputType.text,
+                        ),
+                        const Padding(padding: EdgeInsets.all(10)),
+                        Column(children: itemProvider.getBoxItems()),
+                        const SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: DecoratedBox(
+                              decoration: BoxDecoration(
+                            color: Colors.red,
+                          )),
+                        ),
+                        Row(
+                          children: <Widget>[
+                            SizedBox(
+                                child: IconButton(
+                              icon: Icon(Icons.add_box_outlined),
+                              onPressed: () {
+                                itemProvider.addNewWidgetWithController();
+                                //onAddBoxPress();
+                              },
+                            ))
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                )));
   }
 
   void showConfirm(BuildContext context) {
-    if (!mounted) return;
+    // if (!mounted) return;
     showDialog(
         context: context,
         barrierDismissible: true, //바깥 영역 터치시 닫을지 여부 결정
@@ -222,29 +168,5 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
             ],
           );
         }));
-  }
-
-  List<TextEditingController> nameControllers = [];
-  List<TextEditingController> rateControllers = [];
-  List<TextEditingController> unitControllers = [];
-
-  int boxIndex = 0;
-
-  void onAddBoxPress() {
-    logger.d("add ingredient1");
-    TextEditingController nameController = TextEditingController();
-    TextEditingController rateController = TextEditingController();
-    TextEditingController unitController = TextEditingController();
-
-    nameControllers.add(nameController);
-    rateControllers.add(rateController);
-    unitControllers.add(unitController);
-
-    boxIndex++;
-
-    setState(() {
-      this.groupWidgetList.add(BoxIngredientItem(
-          boxIndex, nameController, rateController, unitController));
-    });
   }
 }
