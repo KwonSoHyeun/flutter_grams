@@ -11,24 +11,24 @@ class HiveRepository {
     cookeryBox = await Hive.openBox<Cookery>(COOKERY_BOX);
   }
 
-  static Future<void> add(Cookery cookery) async {
+  add(Cookery cookery) {
     cookeryBox.add(cookery);
   }
 
-  static List<Cookery> getAll() {
+  List<Cookery> getAll() {
     return cookeryBox.values.toList();
   }
 
-  static Future<Cookery> getAtIndex(int index) async {
+  Cookery getAtIndex(int index) {
     var item = cookeryBox.getAt(index) as Cookery;
     return item;
   }
 
-  static Future update(int index, Cookery data) async {
+ update(int index, Cookery data)  {
     cookeryBox.putAt(index, data);
   }
 
-  static Future delete(int index) async {
+  delete(int index)  {
     cookeryBox.deleteAt(index);
   }
 }

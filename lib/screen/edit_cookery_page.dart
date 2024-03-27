@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:grams/services/HiveRepository.dart';
+import 'package:grams/services/hive_cookery_repository.dart';
+import 'package:grams/viewmodel/cookery_viewmodel.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
@@ -8,20 +9,22 @@ import '../model/ingredient.dart';
 import '../services/ItemProvider.dart';
 import '../widgets/BoxIngredientItems.dart';
 
+
 var logger = Logger(
   printer: PrettyPrinter(),
 );
 
-class EditCookery extends StatefulWidget {
-  final int index;
+class EditCookeryPage extends StatefulWidget {
 
-  const EditCookery(this.index, {super.key});
+  final int index;
+  const EditCookeryPage(this.index, {super.key});
 
   @override
-  State<EditCookery> createState() => _EditCookeryState();
+  State<EditCookeryPage> createState() => _EditCookeryPageState();
 }
 
-class _EditCookeryState extends State<EditCookery> {
+class _EditCookeryPageState extends State<EditCookeryPage> {
+
   final titleController = TextEditingController();
   final descController = TextEditingController();
   final testController = TextEditingController();
@@ -33,16 +36,23 @@ class _EditCookeryState extends State<EditCookery> {
     print("ksh test");
     // TODO: implement initState
     super.initState();
-    _openBox();
+    
   }
 
+@override
+void didChangeDependencies() {
+  super.didChangeDependencies();
+  _openBox();
+}
   Future _openBox() async {
     //await Hive.initFlutter();
     //Hive.registerAdapter(CookeryAdapter());
     //await HiveRepository.openBox();
 
     if (widget.index >= 0) {
-      editCookery = await HiveRepository.getAtIndex(widget.index);
+      var cookekryConsumer = Provider.of<CookeryViewModel>(context);
+
+      editCookery = await cookekryConsumer.getAtIndex(widget.index);
       titleController.text = editCookery.title;
       descController.text = editCookery.desc;
     }
@@ -50,25 +60,42 @@ class _EditCookeryState extends State<EditCookery> {
   }
 
   Future<void> onAddPress() async {
+
+    final cookekryConsumer = Provider.of<CookeryViewModel>(context);
+
     Ingredient ing = Ingredient(name: "name", count: 1, unit: "gram");
     Cookery personModel = Cookery(
         title: titleController.text,
         desc: descController.text,
         ingredients: null);
-    await HiveRepository.add(personModel);
+
+    await cookekryConsumer.addCookery(personModel);
   }
+
+    Cookery getCookeryValue() {
+    Ingredient ing = Ingredient(name: "name", count: 1, unit: "gram");
+    Cookery personModel = Cookery(
+        title: titleController.text,
+        desc: descController.text,
+        ingredients: null);
+    return personModel;
+  }
+
 
   void getListIngredient() {}
 
   Future<void> onUpdatePress(BuildContext context) async {
+    final cookekryConsumer = Provider.of<CookeryViewModel>(context, listen: false);
+
     editCookery.title = titleController.text;
     editCookery.desc = descController.text;
-    HiveRepository.update(widget.index, editCookery);
+    cookekryConsumer.update(widget.index, editCookery);
     showConfirm(context);
   }
 
   Future<void> onDeletePress(BuildContext context) async {
-    HiveRepository.delete(widget.index);
+    var cookekryConsumer = Provider.of<CookeryViewModel>(context, listen: false);
+    cookekryConsumer.delete(widget.index);
     showConfirm(context);
   }
 
@@ -82,7 +109,8 @@ class _EditCookeryState extends State<EditCookery> {
 
   @override
   Widget build(BuildContext context) {
-    final consumer = Provider.of<ItemProvider>(context);
+    final itemConsumer = Provider.of<ItemProvider>(context);
+    
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -95,8 +123,7 @@ class _EditCookeryState extends State<EditCookery> {
                 icon: const Icon(Icons.save),
                 tooltip: 'Open shopping cart',
                 onPressed: () {
-                  onAddPress();
-                  // handle the press
+                  Provider.of<CookeryViewModel>(context, listen: false).addCookery(getCookeryValue());
                 },
               ),
             ),
@@ -123,14 +150,15 @@ class _EditCookeryState extends State<EditCookery> {
             )
           ],
         ),
-        body: SingleChildScrollView(
+        body: 
+        SingleChildScrollView(
           padding: EdgeInsets.only(
               top: 50, bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               children: <Widget>[
-                Text("${consumer.getSize().toString()}"),
+                Text("${itemConsumer.getSize().toString()}"),
                 TextFormField(
                   scrollPadding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -144,7 +172,7 @@ class _EditCookeryState extends State<EditCookery> {
                   keyboardType: TextInputType.text,
                 ),
                 const Padding(padding: EdgeInsets.all(10)),
-                Column(children: consumer.getBoxItems()),
+                Column(children: itemConsumer.getBoxItems()),
                 const SizedBox(
                   width: 60,
                   height: 60,
@@ -155,7 +183,7 @@ class _EditCookeryState extends State<EditCookery> {
                         child: IconButton(
                       icon: Icon(Icons.add_box_outlined),
                       onPressed: () {
-                        consumer.addNewWidgetWithController();
+                        itemConsumer.addNewWidgetWithController();
                         //onAddBoxPress();
                       },
                     ))
