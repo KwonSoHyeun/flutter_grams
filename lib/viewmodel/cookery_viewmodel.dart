@@ -36,7 +36,7 @@ class CookeryViewModel with ChangeNotifier {
     //await _cookeryController.add(cookery);
     Cookery data = Cookery(title:title, desc:desc, ingredients:items) ;
     await _cookeryController.add(data);
-   _cookeryList.add(data);
+   //_cookeryList.add(data);
     notifyListeners();
   }
 

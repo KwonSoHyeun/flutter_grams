@@ -7,9 +7,9 @@ class ItemsViewModel with ChangeNotifier {
   List<ItemWidget> boxItemWidget = List.empty(growable: true);
   final List<Ingredient> _itemList = List.empty(growable: true);
 
-  List<TextEditingController> nameControllers = [];
-  List<TextEditingController> rateControllers = [];
-  List<TextEditingController> unitControllers = [];
+  // List<TextEditingController> nameControllers = [];
+  // List<TextEditingController> rateControllers = [];
+  // List<TextEditingController> unitControllers = [];
 
   int boxIndex = 0;
 
@@ -21,6 +21,10 @@ class ItemsViewModel with ChangeNotifier {
     return boxItemWidget;
   }
 
+   ItemWidget getBoxItem(int index) {
+    return boxItemWidget[index];
+  }
+
   int getSize() {
     return boxItemWidget.length;
   }
@@ -30,9 +34,9 @@ class ItemsViewModel with ChangeNotifier {
     TextEditingController rateController = TextEditingController();
     TextEditingController unitController = TextEditingController();
 
-    nameControllers.add(nameController);
-    rateControllers.add(rateController);
-    unitControllers.add(unitController);
+    // nameControllers.add(nameController);
+    // rateControllers.add(rateController);
+    // unitControllers.add(unitController);
 
     boxItemWidget.add(ItemWidget(
         boxIndex++, nameController, rateController, unitController));

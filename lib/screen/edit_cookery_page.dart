@@ -68,6 +68,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 onPressed: () {
                   cookeryViewModel.addCookery(titleController.text,
                       descController.text, null);
+                  Navigator.of(context).pop(); //창 닫기 
                 },
               ),
             ),
@@ -79,6 +80,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 onPressed: () {
                   cookeryViewModel.update(widget.index, titleController.text,
                       descController.text, itemsViewModel.getItemListAll());
+                  Navigator.of(context).pop(); //창 닫기    
                 },
               ),
             ),
@@ -90,6 +92,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 tooltip: 'Open shopping cart',
                 onPressed: () {
                   cookeryViewModel.delete(widget.index); // handle the press
+                  Navigator.of(context).pop(); //창 닫기
                 },
               ),
             )
