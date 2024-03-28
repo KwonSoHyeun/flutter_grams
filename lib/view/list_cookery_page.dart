@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grams/model/cookery.dart';
-import 'package:grams/screen/edit_cookery_page.dart';
+import 'package:grams/view/edit_cookery_page.dart';
 import 'package:grams/services/local_repository.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -55,6 +55,7 @@ class _ListCookeryPageState extends State<ListCookeryPage> {
   }
 
   void _navigateToEditScreen(BuildContext context, int index) {
+    Provider.of<CookeryViewModel>(context, listen: false).setCurrentCookery(albumList[index]);
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => EditCookeryPage(index)));
   }

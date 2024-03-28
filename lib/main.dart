@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grams/model/ingredient.dart';
-import 'package:grams/screen/list_cookery_page.dart';
+import 'package:grams/view/list_cookery_page.dart';
 import 'package:grams/viewmodel/items_viewmodel.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
 import 'package:hive_flutter/adapters.dart';

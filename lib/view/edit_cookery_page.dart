@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:grams/services/local_repository.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
@@ -26,37 +28,27 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
   final descController = TextEditingController();
   final testController = TextEditingController();
 
-  late Cookery editCookery;
+  late Cookery currentCookery;
   late CookeryViewModel cookeryViewModel;
   late ItemsViewModel itemsViewModel;
-
-  @override
-  void initState() {
-    print("ksh test");
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    cookeryViewModel = Provider.of<CookeryViewModel>(context);
-    itemsViewModel = Provider.of<ItemsViewModel>(context);
-
-    if (widget.index >= 0) {
-      editCookery = cookeryViewModel.getAtIndex(widget.index);
-      titleController.text = editCookery.title;
-      descController.text = editCookery.desc;
-
-      print("재료의 길이값:" + editCookery.ingredients!.length.toString());
-      itemsViewModel.setItemList(editCookery.ingredients!);
-    }
-  }
 
   var groupWidgetList = <Widget>[];
 
   @override
   Widget build(BuildContext context) {
-    //final itemConsumer = Provider.of<ItemProvider>(context);
+    cookeryViewModel = Provider.of<CookeryViewModel>(context);
+    itemsViewModel = Provider.of<ItemsViewModel>(context);
+
+    if (cookeryViewModel.getCurrentCookery() != null) {
+      currentCookery = cookeryViewModel.getCurrentCookery();
+      titleController.text = currentCookery.title;
+      descController.text = currentCookery.desc;
+ 
+      print("재료의 길이값:" + currentCookery.ingredients!.length.toString());
+      itemsViewModel.setItemList(currentCookery.ingredients!);
+
+      cookeryViewModel.clearCurrentCookery() ;//최초 1회만 사용한다.
+    }
 
     return Scaffold(
         resizeToAvoidBottomInset: false,

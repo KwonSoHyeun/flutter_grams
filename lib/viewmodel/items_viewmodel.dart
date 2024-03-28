@@ -67,9 +67,15 @@ class ItemsViewModel with ChangeNotifier {
     TextEditingController rateController = TextEditingController();
     TextEditingController unitController = TextEditingController();
 
+          nameController.text = "kkk";
+      rateController.text = "10";
+      unitController.text = "gg";
+
     boxItemWidget.add(
-        ItemWidget(boxIndex++, nameController, rateController, unitController));
+        ItemWidget(boxItemWidget.length+1, nameController, rateController, unitController));
+    print ("boxItemWidget.length" + boxItemWidget.length.toString());
     notifyListeners();
+
   }
 
   void addIngredientEmpty() {
