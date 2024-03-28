@@ -46,6 +46,9 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
       editCookery = cookeryViewModel.getAtIndex(widget.index);
       titleController.text = editCookery.title;
       descController.text = editCookery.desc;
+
+      print("재료의 길이값:" + editCookery.ingredients!.length.toString());
+      itemsViewModel.setItemList(editCookery.ingredients!);
     }
   }
 
@@ -66,9 +69,9 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 icon: const Icon(Icons.save),
                 tooltip: 'Save new data',
                 onPressed: () {
-                  cookeryViewModel.addCookery(titleController.text,
-                      descController.text, null);
-                  Navigator.of(context).pop(); //창 닫기 
+                  cookeryViewModel.addCookery(
+                      titleController.text, descController.text, null);
+                  Navigator.of(context).pop();
                 },
               ),
             ),
@@ -79,8 +82,8 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 tooltip: 'Update data',
                 onPressed: () {
                   cookeryViewModel.update(widget.index, titleController.text,
-                      descController.text, itemsViewModel.getItemListAll());
-                  Navigator.of(context).pop(); //창 닫기    
+                      descController.text, itemsViewModel.getIngredientList());
+                  Navigator.of(context).pop();
                 },
               ),
             ),
@@ -91,8 +94,8 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 color: Colors.redAccent,
                 tooltip: 'Open shopping cart',
                 onPressed: () {
-                  cookeryViewModel.delete(widget.index); // handle the press
-                  Navigator.of(context).pop(); //창 닫기
+                  cookeryViewModel.delete(widget.index);
+                  Navigator.of(context).pop();
                 },
               ),
             )
