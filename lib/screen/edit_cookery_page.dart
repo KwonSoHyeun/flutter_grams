@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grams/services/local_repository.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
+import 'package:grams/widgets/column_item_widget.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
@@ -30,17 +31,12 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
   late CookeryViewModel cookeryViewModel;
   late ItemsViewModel itemsViewModel;
 
-  @override
-  void initState() {
-    print("ksh test");
-    super.initState();
-  }
+  var groupWidgetList = <Widget>[];
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  Widget build(BuildContext context) {
     cookeryViewModel = Provider.of<CookeryViewModel>(context);
-    itemsViewModel = Provider.of<ItemsViewModel>(context);
+    itemsViewModel = Provider.of<ItemsViewModel>(context, listen: false);
 
     if (widget.index >= 0) {
       editCookery = cookeryViewModel.getAtIndex(widget.index);
@@ -50,13 +46,6 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
       print("재료의 길이값:" + editCookery.ingredients!.length.toString());
       itemsViewModel.setItemList(editCookery.ingredients!);
     }
-  }
-
-  var groupWidgetList = <Widget>[];
-
-  @override
-  Widget build(BuildContext context) {
-    //final itemConsumer = Provider.of<ItemProvider>(context);
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -110,7 +99,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: <Widget>[
-                        Text("${itemProvider.getSize().toString()}"),
+
                         TextFormField(
                           scrollPadding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -125,7 +114,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                           keyboardType: TextInputType.text,
                         ),
                         const Padding(padding: EdgeInsets.all(10)),
-                        Column(children: itemProvider.getBoxItems()),
+                        ColumnItemWidget(),
                         const SizedBox(
                           width: 60,
                           height: 60,
