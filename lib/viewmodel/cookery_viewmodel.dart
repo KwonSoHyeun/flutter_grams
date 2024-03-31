@@ -7,7 +7,7 @@ class CookeryViewModel with ChangeNotifier {
   late final LocalController _cookeryController;
 
   List<Cookery> _cookeryList = List.empty(growable: true);
-  List<Cookery> get cookeryList => _cookeryList;
+ // List<Cookery> get cookeryList => _cookeryList;
 
   CookeryViewModel() {
     _cookeryController = LocalController();
@@ -15,15 +15,14 @@ class CookeryViewModel with ChangeNotifier {
   }
 
   _getCookeryList() {
-    _cookeryList = _cookeryController.getAll();
+    _cookeryList = getCookeryList();
     notifyListeners();
   }
 
   List<Cookery> getCookeryList() {
-    //todo 위에 함수와 기능이 중복인지 확인할것.
     _cookeryList = _cookeryController.getAll();
     // notifyListeners();
-    return cookeryList;
+    return _cookeryList;
   }
 
   // Future<void> addCookery(Cookery cookery) async {
@@ -41,9 +40,14 @@ class CookeryViewModel with ChangeNotifier {
   }
 
   getAtIndex(int index) {
-    Cookery? item = _cookeryController.getAtIndex(index);
+    Cookery item = _cookeryList[index];
     return item;
   }
+
+  // getAtIndex(int index) {
+  //   Cookery? item = _cookeryController.getAtIndex(index);
+  //   return item;
+  // }
 
   update(int index, String title, String desc, List<Ingredient>? items) {
     Cookery data = Cookery(title:title, desc:desc, ingredients:items) ;

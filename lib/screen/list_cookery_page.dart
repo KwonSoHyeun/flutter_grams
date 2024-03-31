@@ -36,7 +36,7 @@ class _ListCookeryPageState extends State<ListCookeryPage> {
             itemBuilder: (context, index) {
               return ListTile(
                 title : Text("${albumList[index].title}"),
-                subtitle : Text("${albumList[index].desc}"),
+                subtitle : Text("${albumList[index].desc} , ${albumList[index].ingredients!.length}"),
                 onLongPress :(){ _navigateToEditScreen(context, index);},
               );
             },

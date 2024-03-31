@@ -5,8 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:grams/viewmodel/items_viewmodel.dart';
 
 class ColumnItemWidget extends StatefulWidget {
-
-//const ListCookeryPage({super.key, required this.title});
   ColumnItemWidget({super.key});
 
   @override
@@ -16,8 +14,20 @@ class ColumnItemWidget extends StatefulWidget {
 class _ColumnItemWidgetState extends State<ColumnItemWidget> {
   @override
   Widget build(BuildContext context) {
-    final consumer = Provider.of<ItemsViewModel>(context);
-
-    return Column(children: consumer.getBoxItems());
+    return Consumer<ItemsViewModel>(
+        builder: (context, provider, child) => Column(children: <Widget>[
+              Column(children: provider.getBoxItems()),
+              Row(
+                children: <Widget>[
+                  SizedBox(
+                      child: IconButton(
+                    icon: Icon(Icons.add_box_outlined),
+                    onPressed: () {
+                      provider.addNewWidgetWithController();
+                    },
+                  ))
+                ],
+              )
+            ]));
   }
 }

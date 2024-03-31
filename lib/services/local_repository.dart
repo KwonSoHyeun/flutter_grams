@@ -15,7 +15,7 @@ class LocalRepository {
   }
 
   Cookery? getAtIndex(int index) {
-    var item = Hive.box<Cookery>(boxName).getAt(index) ;
+    Cookery? item = Hive.box<Cookery>(boxName).getAt(index) ;
     return item;
   }
 

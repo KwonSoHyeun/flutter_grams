@@ -28,13 +28,12 @@ class ItemsViewModel with ChangeNotifier {
     return data;
   }
 
-  setItemList(List<Ingredient> itemList) {
-    boxItemWidget = List.empty(growable: true);
-    _itemList = List.empty(growable: true);
+  setDataItemList(List<Ingredient> itemList) {
+    clearDataItemList();
 
     int i = 0;
-    this._itemList = itemList;
-    itemList.forEach((element) {
+    _itemList = List.from(itemList);
+    _itemList.forEach((element) {
       TextEditingController nameController = TextEditingController();
       TextEditingController rateController = TextEditingController();
       TextEditingController unitController = TextEditingController();
@@ -43,11 +42,15 @@ class ItemsViewModel with ChangeNotifier {
       rateController.text = element.count.toString();
       unitController.text = element.unit;
 
-      boxItemWidget.add(ItemWidget(i++, nameController, rateController, unitController));
-      print(nameController.text);
+      boxItemWidget
+          .add(ItemWidget(i++, nameController, rateController, unitController));
+      // print(nameController.text);
     });
-    //notifyListeners();
-    //return boxItemWidget;
+  }
+
+  clearDataItemList() {
+    boxItemWidget.clear();
+    _itemList.clear();
   }
 
   List<ItemWidget> getBoxItems() {
@@ -67,8 +70,8 @@ class ItemsViewModel with ChangeNotifier {
     TextEditingController rateController = TextEditingController();
     TextEditingController unitController = TextEditingController();
 
-    boxItemWidget.add(
-        ItemWidget(boxItemWidget.length, nameController, rateController, unitController));
+    boxItemWidget.add(ItemWidget(
+        boxItemWidget.length, nameController, rateController, unitController));
     notifyListeners();
   }
 

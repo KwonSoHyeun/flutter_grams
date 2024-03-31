@@ -35,16 +35,26 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
 
   @override
   Widget build(BuildContext context) {
-    cookeryViewModel = Provider.of<CookeryViewModel>(context);
-    itemsViewModel = Provider.of<ItemsViewModel>(context, listen: false);
+    cookeryViewModel = Provider.of<CookeryViewModel>(context,
+        listen: false); //초기 데이타 기본값을을 널어주기 위함.
+    itemsViewModel = Provider.of<ItemsViewModel>(context,
+        listen: false); //초기 데이타 기본값을을 널어주기 위함.
+
 
     if (widget.index >= 0) {
+      //진입시 1회만 수행된다.
+      //itemViewModel.
       editCookery = cookeryViewModel.getAtIndex(widget.index);
-      titleController.text = editCookery.title;
+      titleController.text = editCookery.title + ":"+ editCookery.key.toString();
       descController.text = editCookery.desc;
 
-      print("재료의 길이값:" + editCookery.ingredients!.length.toString());
-      itemsViewModel.setItemList(editCookery.ingredients!);
+       print("widget.index:" + widget.index.toString());
+      if (editCookery.ingredients != null) {
+        print("재료의 길이값:" + editCookery.ingredients!.length.toString());
+        itemsViewModel.setDataItemList(editCookery.ingredients!);
+      } else {
+        print("재료의 길이값: null" );
+      }
     }
 
     return Scaffold(
@@ -59,7 +69,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 tooltip: 'Save new data',
                 onPressed: () {
                   cookeryViewModel.addCookery(
-                      titleController.text, descController.text, null);
+                      titleController.text, descController.text, itemsViewModel.getIngredientList());
                   Navigator.of(context).pop();
                 },
               ),
@@ -90,56 +100,33 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
             )
           ],
         ),
-        body: Consumer<ItemsViewModel>(
-            builder: (_, itemProvider, __) => SingleChildScrollView(
-                  padding: EdgeInsets.only(
-                      top: 50,
+        body: SingleChildScrollView(
+          padding: EdgeInsets.only(
+              top: 50, bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  scrollPadding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      children: <Widget>[
-
-                        TextFormField(
-                          scrollPadding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          controller: titleController,
-                          decoration: const InputDecoration(labelText: '요리명'),
-                          keyboardType: TextInputType.text,
-                        ),
-                        TextField(
-                          controller: descController,
-                          decoration:
-                              const InputDecoration(labelText: '간단한 설명'),
-                          keyboardType: TextInputType.text,
-                        ),
-                        const Padding(padding: EdgeInsets.all(10)),
-                        ColumnItemWidget(),
-                        const SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: DecoratedBox(
-                              decoration: BoxDecoration(
-                            color: Colors.red,
-                          )),
-                        ),
-                        Row(
-                          children: <Widget>[
-                            SizedBox(
-                                child: IconButton(
-                              icon: Icon(Icons.add_box_outlined),
-                              onPressed: () {
-                                itemProvider.addNewWidgetWithController();
-                                //onAddBoxPress();
-                              },
-                            ))
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                )));
+                  controller: titleController,
+                  decoration: const InputDecoration(labelText: '요리명'),
+                  keyboardType: TextInputType.text,
+                ),
+                TextField(
+                  controller: descController,
+                  decoration: const InputDecoration(labelText: '간단한 설명'),
+                  keyboardType: TextInputType.text,
+                ),
+                const Padding(padding: EdgeInsets.all(10)),
+                ColumnItemWidget(),
+              ],
+            ),
+          ),
+        ));
   }
+
 
   void showConfirm(BuildContext context) {
     // if (!mounted) return;
