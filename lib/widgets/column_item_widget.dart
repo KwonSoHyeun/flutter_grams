@@ -23,7 +23,7 @@ class _ColumnItemWidgetState extends State<ColumnItemWidget> {
                       child: IconButton(
                     icon: Icon(Icons.add_box_outlined),
                     onPressed: () {
-                      provider.addNewWidgetWithController();
+                      provider.addIngredientWidget();
                     },
                   ))
                 ],

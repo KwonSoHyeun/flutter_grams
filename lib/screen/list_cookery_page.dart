@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grams/model/cookery.dart';
+import 'package:grams/screen/calculate_cookery_page.dart';
 import 'package:grams/screen/edit_cookery_page.dart';
 import 'package:grams/services/local_repository.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
@@ -37,6 +38,7 @@ class _ListCookeryPageState extends State<ListCookeryPage> {
               return ListTile(
                 title : Text("${albumList[index].title}"),
                 subtitle : Text("${albumList[index].desc} , ${albumList[index].ingredients!.length}"),
+                onTap: (){ _navigateToCalculateScreen(context, index);},
                 onLongPress :(){ _navigateToEditScreen(context, index);},
               );
             },
@@ -53,6 +55,13 @@ class _ListCookeryPageState extends State<ListCookeryPage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+
+  void _navigateToCalculateScreen(BuildContext context, int index) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => CalculateCookeryPage(index)));
+  }
+
 
   void _navigateToEditScreen(BuildContext context, int index) {
     Navigator.of(context)

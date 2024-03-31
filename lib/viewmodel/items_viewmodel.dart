@@ -4,7 +4,7 @@ import 'package:grams/model/ingredient.dart';
 import '../widgets/item_widget.dart';
 
 class ItemsViewModel with ChangeNotifier {
-  List<ItemWidget> boxItemWidget = List.empty(growable: true);
+  List<IngredientCustomWidget> boxItemWidget = List.empty(growable: true);
   List<Ingredient> _itemList = List.empty(growable: true);
 
   int boxIndex = 0;
@@ -34,17 +34,8 @@ class ItemsViewModel with ChangeNotifier {
     int i = 0;
     _itemList = List.from(itemList);
     _itemList.forEach((element) {
-      TextEditingController nameController = TextEditingController();
-      TextEditingController rateController = TextEditingController();
-      TextEditingController unitController = TextEditingController();
-
-      nameController.text = element.name;
-      rateController.text = element.count.toString();
-      unitController.text = element.unit;
-
-      boxItemWidget
-          .add(ItemWidget(i++, nameController, rateController, unitController));
-      // print(nameController.text);
+      addNewWidgetWithController(i++,
+          name: element.name, rate: element.count, unit: element.unit);
     });
   }
 
@@ -53,11 +44,11 @@ class ItemsViewModel with ChangeNotifier {
     _itemList.clear();
   }
 
-  List<ItemWidget> getBoxItems() {
+  List<IngredientCustomWidget> getBoxItems() {
     return boxItemWidget;
   }
 
-  ItemWidget getBoxItem(int index) {
+  IngredientCustomWidget getBoxItem(int index) {
     return boxItemWidget[index];
   }
 
@@ -65,13 +56,22 @@ class ItemsViewModel with ChangeNotifier {
     return boxItemWidget.length;
   }
 
-  void addNewWidgetWithController() {
+  void addNewWidgetWithController(int index,
+      {String name = "", int rate = 0, String unit = ""}) {
     TextEditingController nameController = TextEditingController();
     TextEditingController rateController = TextEditingController();
     TextEditingController unitController = TextEditingController();
 
-    boxItemWidget.add(ItemWidget(
-        boxItemWidget.length, nameController, rateController, unitController));
+    nameController.text = name;
+    rateController.text = rate.toString();
+    unitController.text = unit;
+
+    boxItemWidget.add(IngredientCustomWidget(
+        index, nameController, rateController, unitController, false));
+  }
+
+  void addIngredientWidget() {
+    addNewWidgetWithController(boxItemWidget.length);
     notifyListeners();
   }
 

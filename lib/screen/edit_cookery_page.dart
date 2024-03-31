@@ -27,7 +27,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
   final descController = TextEditingController();
   final testController = TextEditingController();
 
-  late Cookery editCookery;
+  late Cookery currCookery;
   late CookeryViewModel cookeryViewModel;
   late ItemsViewModel itemsViewModel;
 
@@ -43,18 +43,19 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
 
     if (widget.index >= 0) {
       //진입시 1회만 수행된다.
-      //itemViewModel.
-      editCookery = cookeryViewModel.getAtIndex(widget.index);
-      titleController.text = editCookery.title + ":"+ editCookery.key.toString();
-      descController.text = editCookery.desc;
+      currCookery = cookeryViewModel.getAtIndex(widget.index);
+      titleController.text = currCookery.title + ":"+ currCookery.key.toString();
+      descController.text = currCookery.desc;
 
        print("widget.index:" + widget.index.toString());
-      if (editCookery.ingredients != null) {
-        print("재료의 길이값:" + editCookery.ingredients!.length.toString());
-        itemsViewModel.setDataItemList(editCookery.ingredients!);
+      if (currCookery.ingredients != null) {
+        print("재료의 길이값:" + currCookery.ingredients!.length.toString());
+        itemsViewModel.setDataItemList(currCookery.ingredients!);
       } else {
         print("재료의 길이값: null" );
       }
+    } else {
+      itemsViewModel.clearDataItemList();
     }
 
     return Scaffold(

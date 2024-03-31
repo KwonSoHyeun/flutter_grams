@@ -1,28 +1,25 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:grams/viewmodel/items_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 import 'package:grams/viewmodel/items_viewmodel.dart';
 
-class IngredientCustomWidget extends StatefulWidget {
-
+class ItemObservedWidget extends StatefulWidget {
+  
   int boxIndex;
   final TextEditingController nameController;
   final TextEditingController rateController;
   final TextEditingController unitController;
-  final bool isObserbed; //위젯값 변경을 감시당하고 있는가?
 
-  IngredientCustomWidget(this.boxIndex, this.nameController, this.rateController,
-      this.unitController, this.isObserbed,
+  ItemObservedWidget(this.boxIndex, this.nameController, this.rateController,
+      this.unitController,
       {super.key});
 
   @override
-  State<IngredientCustomWidget> createState() => _IngredientCustomWidgetState();
+  State<ItemObservedWidget> createState() => _ItemObservedWidgetState();
 }
 
-class _IngredientCustomWidgetState extends State<IngredientCustomWidget> {
+class _ItemObservedWidgetState extends State<ItemObservedWidget> {
   @override
   Widget build(BuildContext context) {
     final consumer = Provider.of<ItemsViewModel>(context);
