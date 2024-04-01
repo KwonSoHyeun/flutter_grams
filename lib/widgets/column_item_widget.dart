@@ -5,7 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:grams/viewmodel/items_viewmodel.dart';
 
 class ColumnItemWidget extends StatefulWidget {
-  ColumnItemWidget({super.key});
+  final bool isEditable;
+  ColumnItemWidget( this.isEditable, {super.key});
 
   @override
   State<ColumnItemWidget> createState() => _ColumnItemWidgetState();
@@ -17,7 +18,9 @@ class _ColumnItemWidgetState extends State<ColumnItemWidget> {
     return Consumer<ItemsViewModel>(
         builder: (context, provider, child) => Column(children: <Widget>[
               Column(children: provider.getBoxItems()),
-              Row(
+              Visibility(
+                visible: widget.isEditable,
+                child: Row(
                 children: <Widget>[
                   SizedBox(
                       child: IconButton(
@@ -27,7 +30,8 @@ class _ColumnItemWidgetState extends State<ColumnItemWidget> {
                     },
                   ))
                 ],
-              )
+              ))
+              
             ]));
   }
 }

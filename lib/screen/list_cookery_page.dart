@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:grams/model/cookery.dart';
-import 'package:grams/screen/calculate_cookery_page.dart';
 import 'package:grams/screen/edit_cookery_page.dart';
 import 'package:grams/services/local_repository.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
@@ -59,12 +58,12 @@ class _ListCookeryPageState extends State<ListCookeryPage> {
 
   void _navigateToCalculateScreen(BuildContext context, int index) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => CalculateCookeryPage(index)));
+        .push(MaterialPageRoute(builder: (context) => EditCookeryPage(index, false)));
   }
 
 
   void _navigateToEditScreen(BuildContext context, int index) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => EditCookeryPage(index)));
+        .push(MaterialPageRoute(builder: (context) => EditCookeryPage(index, true)));
   }
 }

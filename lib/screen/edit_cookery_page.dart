@@ -16,7 +16,9 @@ var logger = Logger(
 
 class EditCookeryPage extends StatefulWidget {
   final int index;
-  const EditCookeryPage(this.index, {super.key});
+  final bool isEditable;
+
+  const EditCookeryPage(this.index, this.isEditable, {super.key});
 
   @override
   State<EditCookeryPage> createState() => _EditCookeryPageState();
@@ -40,22 +42,23 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
     itemsViewModel = Provider.of<ItemsViewModel>(context,
         listen: false); //초기 데이타 기본값을을 널어주기 위함.
 
-
+    // print("isEditable1:" + widget.isEditable.toString());
+    itemsViewModel.clearDataItemList();
     if (widget.index >= 0) {
       //진입시 1회만 수행된다.
       currCookery = cookeryViewModel.getAtIndex(widget.index);
-      titleController.text = currCookery.title + ":"+ currCookery.key.toString();
+      titleController.text =
+          currCookery.title + ":" + currCookery.key.toString();
       descController.text = currCookery.desc;
 
-       print("widget.index:" + widget.index.toString());
+      //   print("widget.index:" + widget.index.toString());
       if (currCookery.ingredients != null) {
-        print("재료의 길이값:" + currCookery.ingredients!.length.toString());
-        itemsViewModel.setDataItemList(currCookery.ingredients!);
+        print("재료의 길이값:" + currCookery.ingredients!.length.toString() + currCookery.ingredients![0].count.toString());
+        itemsViewModel.setDataItemList(
+            currCookery.ingredients!, widget.isEditable);
       } else {
-        print("재료의 길이값: null" );
+        print("재료의 길이값: null");
       }
-    } else {
-      itemsViewModel.clearDataItemList();
     }
 
     return Scaffold(
@@ -64,19 +67,19 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
           title: Text("레시피 입력/수정"),
           actions: [
             Visibility(
-              visible: widget.index < 0,
+              visible: widget.index < 0 && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.save),
                 tooltip: 'Save new data',
                 onPressed: () {
-                  cookeryViewModel.addCookery(
-                      titleController.text, descController.text, itemsViewModel.getIngredientList());
+                  cookeryViewModel.addCookery(titleController.text,
+                      descController.text, itemsViewModel.getIngredientList());
                   Navigator.of(context).pop();
                 },
               ),
             ),
             Visibility(
-              visible: widget.index >= 0,
+              visible: widget.index >= 0 && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.save_as_sharp),
                 tooltip: 'Update data',
@@ -88,7 +91,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
               ),
             ),
             Visibility(
-              visible: widget.index >= 0,
+              visible: widget.index >= 0 && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.delete),
                 color: Colors.redAccent,
@@ -121,13 +124,12 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                   keyboardType: TextInputType.text,
                 ),
                 const Padding(padding: EdgeInsets.all(10)),
-                ColumnItemWidget(),
+                ColumnItemWidget(widget.isEditable),
               ],
             ),
           ),
         ));
   }
-
 
   void showConfirm(BuildContext context) {
     // if (!mounted) return;

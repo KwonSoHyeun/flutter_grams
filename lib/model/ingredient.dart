@@ -6,7 +6,7 @@ class Ingredient extends HiveObject {
   @HiveField(0)
   String name;
   @HiveField(1)
-  int count;
+  double count;
   @HiveField(2)
   String unit;
 

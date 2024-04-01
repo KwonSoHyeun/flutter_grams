@@ -67,33 +67,7 @@ class _ItemObservedWidgetState extends State<ItemObservedWidget> {
               keyboardType: TextInputType.text,
             ),
           ),
-          SizedBox(
-              child: IconButton(
-            icon: Icon(Icons.backspace_rounded),
-            onPressed: () {
-              showDialog(
-                context: context,
-                barrierDismissible: true, //바깥 영역 터치시 닫을지 여부 결정
-                builder: ((context) {
-                  return AlertDialog(
-                    title: Text("제목"),
-                    content: Text(widget.boxIndex.toString()),
-                    actions: <Widget>[
-                      Container(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            consumer.removeIngredientItem(widget.boxIndex);
-                            Navigator.of(context).pop(); //창 닫기
-                          },
-                          child: Text("네"),
-                        ),
-                      ),
-                    ],
-                  );
-                }),
-              );
-            },
-          ))
+
         ]);
   }
 }

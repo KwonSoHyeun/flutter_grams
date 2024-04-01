@@ -7,15 +7,14 @@ import 'package:provider/provider.dart';
 import 'package:grams/viewmodel/items_viewmodel.dart';
 
 class IngredientCustomWidget extends StatefulWidget {
-
   int boxIndex;
   final TextEditingController nameController;
   final TextEditingController rateController;
   final TextEditingController unitController;
-  final bool isObserbed; //위젯값 변경을 감시당하고 있는가?
+  final bool isEditable; //위젯값 변경을 감시당하고 있는가?
 
-  IngredientCustomWidget(this.boxIndex, this.nameController, this.rateController,
-      this.unitController, this.isObserbed,
+  IngredientCustomWidget(this.boxIndex, this.nameController,
+      this.rateController, this.unitController, this.isEditable,
       {super.key});
 
   @override
@@ -35,6 +34,7 @@ class _IngredientCustomWidgetState extends State<IngredientCustomWidget> {
             child: Container(
               height: 50,
               child: TextFormField(
+                enabled:widget.isEditable ,
                 scrollPadding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom),
                 controller: widget.nameController,
@@ -65,38 +65,41 @@ class _IngredientCustomWidgetState extends State<IngredientCustomWidget> {
             width: 60,
             height: 50,
             child: TextField(
+              enabled:widget.isEditable ,
               controller: widget.unitController,
               decoration: const InputDecoration(labelText: '단위'),
               keyboardType: TextInputType.text,
             ),
           ),
-          SizedBox(
-              child: IconButton(
-            icon: Icon(Icons.backspace_rounded),
-            onPressed: () {
-              showDialog(
-                context: context,
-                barrierDismissible: true, //바깥 영역 터치시 닫을지 여부 결정
-                builder: ((context) {
-                  return AlertDialog(
-                    title: Text("제목"),
-                    content: Text(widget.boxIndex.toString()),
-                    actions: <Widget>[
-                      Container(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            consumer.removeIngredientItem(widget.boxIndex);
-                            Navigator.of(context).pop(); //창 닫기
-                          },
-                          child: Text("네"),
-                        ),
-                      ),
-                    ],
+          Visibility(
+              visible: widget.isEditable,
+              child: SizedBox(
+                  child: IconButton(
+                icon: Icon(Icons.backspace_rounded),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: true, //바깥 영역 터치시 닫을지 여부 결정
+                    builder: ((context) {
+                      return AlertDialog(
+                        title: Text("제목"),
+                        content: Text(widget.boxIndex.toString()),
+                        actions: <Widget>[
+                          Container(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                consumer.removeIngredientItem(widget.boxIndex);
+                                Navigator.of(context).pop(); //창 닫기
+                              },
+                              child: Text("네"),
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
                   );
-                }),
-              );
-            },
-          ))
+                },
+              )))
         ]);
   }
 }
