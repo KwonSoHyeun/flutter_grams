@@ -40,11 +40,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        theme: ThemeData(//d5bdaf
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
           useMaterial3: true,
         ),
-        home: const ListCookeryPage(title: 'Flutter Demo Home Page C'),
+        home: const ListCookeryPage(title: 'CookGram'),
       ),
     );
   }
