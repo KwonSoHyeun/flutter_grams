@@ -25,6 +25,8 @@ class Cookery extends HiveObject {
     this.ingredients,
   });
 
+   // Cookery.clone(Cookery cookeryObject : this(cookeryObject.));
+
   @override
   String toString() => '{title:$title, desc:$desc, ingredient:$ingredients}';
 

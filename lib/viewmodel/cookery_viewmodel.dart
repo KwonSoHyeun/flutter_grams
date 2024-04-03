@@ -40,9 +40,17 @@ class CookeryViewModel with ChangeNotifier {
   }
 
   getAtIndex(int index) {
-    Cookery item = _cookeryList[index];
+    //Cookery item = Cookery(title:"test",desc:_cookeryList[index].desc,ingredients:_cookeryList[index].ingredients );
+    Cookery item = Cookery(title:_cookeryList[index].title,desc:_cookeryList[index].desc,ingredients:_cookeryList[index].ingredients );
     return item;
   }
+
+  //   getAtIndexDeepCopy(int index) {
+  //   Cookery newItem;  
+  //   Cookery item = Cookery(title:_cookeryList[index].title,desc:_cookeryList[index].desc,ingredients:_cookeryList[index].ingredients );
+  //   newItem = item.
+  //   return item;
+  // }
 
   // getAtIndex(int index) {
   //   Cookery? item = _cookeryController.getAtIndex(index);

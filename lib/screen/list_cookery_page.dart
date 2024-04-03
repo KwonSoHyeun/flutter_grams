@@ -6,37 +6,30 @@ import 'package:grams/viewmodel/cookery_viewmodel.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
-class ListCookeryPage extends StatefulWidget {
-  const ListCookeryPage({super.key, required this.title});
+class ListCookeryPage extends StatelessWidget {
+  late List<Cookery> cookeryList;
 
-  final String title;
-
-  @override
-  State<ListCookeryPage> createState() => _ListCookeryPageState();
-}
-
-class _ListCookeryPageState extends State<ListCookeryPage> {
-  late List<Cookery> albumList;
+  ListCookeryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text("레시피 목록"),
       ),
       body: Consumer<CookeryViewModel>(
         builder: (context, provider, child) {
-          albumList = provider.getCookeryList();
+          cookeryList = provider.getCookeryList();
 
           return ListView.builder(
-            itemCount: albumList.length,
+            itemCount: cookeryList.length,
             //onPressed:  _navigateToEditScreen(context, index),
 
             itemBuilder: (context, index) {
               return ListTile(
-                title : Text("${albumList[index].title}"),
-                subtitle : Text("${albumList[index].desc} "),
+                title : Text("${cookeryList[index].title}"),
+                subtitle : Text("${cookeryList[index].desc} ///*/// ${cookeryList[index].ingredients![0].count}"),
                 onTap: (){ _navigateToCalculateScreen(context, index);},
                 onLongPress :(){ _navigateToEditScreen(context, index);},
               );

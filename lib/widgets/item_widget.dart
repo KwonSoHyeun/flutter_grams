@@ -6,22 +6,20 @@ import 'package:provider/provider.dart';
 
 import 'package:grams/viewmodel/items_viewmodel.dart';
 
-class IngredientCustomWidget extends StatefulWidget {
-  int boxIndex;
-  final TextEditingController nameController;
-  final TextEditingController rateController;
-  final TextEditingController unitController;
-  final bool isEditable; //위젯값 변경을 감시당하고 있는가?
+
+
+class IngredientCustomWidget extends StatelessWidget {
 
   IngredientCustomWidget(this.boxIndex, this.nameController,
       this.rateController, this.unitController, this.isEditable,
       {super.key});
 
-  @override
-  State<IngredientCustomWidget> createState() => _IngredientCustomWidgetState();
-}
+    int boxIndex;
+  final TextEditingController nameController;
+  final TextEditingController rateController;
+  final TextEditingController unitController;
+  final bool isEditable; //위젯값 변경을 감시당하고 있는가?
 
-class _IngredientCustomWidgetState extends State<IngredientCustomWidget> {
   @override
   Widget build(BuildContext context) {
     final consumer = Provider.of<ItemsViewModel>(context);
@@ -34,10 +32,10 @@ class _IngredientCustomWidgetState extends State<IngredientCustomWidget> {
             child: Container(
               height: 50,
               child: TextFormField(
-                enabled:widget.isEditable ,
+                enabled: isEditable ,
                 scrollPadding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom),
-                controller: widget.nameController,
+                controller: nameController,
                 decoration: const InputDecoration(labelText: '재료명'),
                 keyboardType: TextInputType.text,
               ),
@@ -51,9 +49,10 @@ class _IngredientCustomWidgetState extends State<IngredientCustomWidget> {
             child: Container(
               height: 50,
               child: TextField(
-                controller: widget.rateController,
+                controller: rateController,
                 decoration: const InputDecoration(labelText: '중량 또는 비율'),
                 keyboardType: TextInputType.text,
+                onSubmitted: (String val) {consumer.reCalculateRate(boxIndex, val);},
               ),
             ),
           ),
@@ -65,14 +64,14 @@ class _IngredientCustomWidgetState extends State<IngredientCustomWidget> {
             width: 60,
             height: 50,
             child: TextField(
-              enabled:widget.isEditable ,
-              controller: widget.unitController,
+              enabled:isEditable ,
+              controller: unitController,
               decoration: const InputDecoration(labelText: '단위'),
               keyboardType: TextInputType.text,
             ),
           ),
           Visibility(
-              visible: widget.isEditable,
+              visible: isEditable,
               child: SizedBox(
                   child: IconButton(
                 icon: Icon(Icons.backspace_rounded),
@@ -83,12 +82,12 @@ class _IngredientCustomWidgetState extends State<IngredientCustomWidget> {
                     builder: ((context) {
                       return AlertDialog(
                         title: Text("제목"),
-                        content: Text(widget.boxIndex.toString()),
+                        content: Text(boxIndex.toString()),
                         actions: <Widget>[
                           Container(
                             child: ElevatedButton(
                               onPressed: () {
-                                consumer.removeIngredientItem(widget.boxIndex);
+                                consumer.removeIngredientItem(boxIndex);
                                 Navigator.of(context).pop(); //창 닫기
                               },
                               child: Text("네"),

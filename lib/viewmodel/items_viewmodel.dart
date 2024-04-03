@@ -6,16 +6,16 @@ import 'package:grams/model/ingredient.dart';
 import '../widgets/item_widget.dart';
 
 class ItemsViewModel with ChangeNotifier {
-  List<IngredientCustomWidget> boxItemWidget = List.empty(growable: true);
   List<Ingredient> _itemList = List.empty(growable: true);
-
+  List<IngredientCustomWidget> boxItemWidget = List.empty(growable: true);
+  
   int boxIndex = 0;
 
   List<Ingredient> getItemListAll() {
     return _itemList;
   }
 
-  List<Ingredient> getIngredientList() {
+  List<Ingredient> getIngredientList() { //저장을 위해서 컨트롤러에 접근하여 재료리스트를 만들어 반환한다.
     List<Ingredient> data = List.empty(growable: true);
 
     boxItemWidget.forEach((element) {
@@ -28,7 +28,7 @@ class ItemsViewModel with ChangeNotifier {
     return data;
   }
 
-  void setDataItemList(List<Ingredient> itemList, bool isEditable) {
+  void makeItemWidgetList(List<Ingredient> itemList, bool isEditable) { // 전달받은 재료리스트를 깊은복사하야 _itemList에 담는다. boxItemWidget 생성
     clearDataItemList();
 
     int i = 0;
@@ -53,13 +53,14 @@ class ItemsViewModel with ChangeNotifier {
     countController.text = count.toStringAsFixed(2);
     unitController.text = unit;
 
-    countController.addListener(() {
-      //print("value " + rateController.value.toString());
-      if (!isEditable &&
-          !countController.value.text.isEmpty &&
-          isListenerEnable)
-        reCalculateRate(index, double.parse(countController.value.text));
-    });
+    // countController.addListener(() {
+    //   //print("value " + rateController.value.toString());
+    //   if (!isEditable &&
+    //       !countController.value.text.isEmpty &&
+    //       isListenerEnable)
+    //     reCalculateRate(index, double.parse(countController.value.text));
+    // });
+    // countController.notifyListeners()
 
     boxItemWidget.add(IngredientCustomWidget(
         index, nameController, countController, unitController, isEditable));
@@ -110,19 +111,36 @@ class ItemsViewModel with ChangeNotifier {
   }
 
   bool isListenerEnable = true;
-  void reCalculateRate(int index, double changedValue) {
+  void reCalculateRate(int index, String val) {
+
+    
     double changedRate = 0;
 
-    print("ksh chchangedValuengedRate:" + changedValue.toString());
+    double changedValue= double.parse(val);
+
+    // var long2 = double.parse($group1);
+
+      //  if (!isEditable &&
+      //     !countController.value.text.isEmpty &&
+      //     isListenerEnable)
+      //  return;
+
+
+    print("ksh chchanged Value:" + val.toString());
     //바뀐 비율을 계산하여
     if (changedValue != 0 &&
         _itemList[index].count != null &&
         _itemList[index].count != 0) {
       changedRate = (changedValue / _itemList[index].count) as double;
-      if (changedRate == 1.00) return;
+      if (changedRate == 1.00) {
+        print("ksh changed Rate: 같은비율 1");
+        return;
+      }
+    } else {
+      print("ksh changed Rate: 유효값아닌 변경");
     }
     //루프를 돌면서 모든 항목값을 계산하여 갱신한후
-    print("ksh changedRate:" + changedRate.toString());
+    print("ksh changed Rate:" + changedRate.toString());
     isListenerEnable = false;
 
     for (int i = 0; i < boxItemWidget.length; i++) {
@@ -131,7 +149,7 @@ class ItemsViewModel with ChangeNotifier {
             (_itemList[i].count * changedRate).toStringAsFixed(2);
       }
 
-      //_itemList[i].count = _itemList[i].count * changedRate;
+      _itemList[i].count = _itemList[i].count * changedRate;
     }
 
     //ui에 반영한다.
