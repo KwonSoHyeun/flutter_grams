@@ -6,15 +6,10 @@ import 'package:provider/provider.dart';
 
 import 'package:grams/viewmodel/items_viewmodel.dart';
 
-
-
 class IngredientCustomWidget extends StatelessWidget {
+  IngredientCustomWidget(this.boxIndex, this.nameController, this.rateController, this.unitController, this.isEditable, {super.key});
 
-  IngredientCustomWidget(this.boxIndex, this.nameController,
-      this.rateController, this.unitController, this.isEditable,
-      {super.key});
-
-    int boxIndex;
+  int boxIndex;
   final TextEditingController nameController;
   final TextEditingController rateController;
   final TextEditingController unitController;
@@ -32,9 +27,8 @@ class IngredientCustomWidget extends StatelessWidget {
             child: Container(
               height: 50,
               child: TextFormField(
-                enabled: isEditable ,
-                scrollPadding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                enabled: isEditable,
+                scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                 controller: nameController,
                 decoration: const InputDecoration(labelText: '재료명'),
                 keyboardType: TextInputType.text,
@@ -52,7 +46,9 @@ class IngredientCustomWidget extends StatelessWidget {
                 controller: rateController,
                 decoration: const InputDecoration(labelText: '중량 또는 비율'),
                 keyboardType: TextInputType.text,
-                onSubmitted: (String val) {consumer.reCalculateRate(boxIndex, val);},
+                onSubmitted: (String val) {
+                  consumer.reCalculateRate(boxIndex, val);
+                },
               ),
             ),
           ),
@@ -64,7 +60,7 @@ class IngredientCustomWidget extends StatelessWidget {
             width: 60,
             height: 50,
             child: TextField(
-              enabled:isEditable ,
+              enabled: isEditable,
               controller: unitController,
               decoration: const InputDecoration(labelText: '단위'),
               keyboardType: TextInputType.text,

@@ -15,4 +15,6 @@ class Ingredient extends HiveObject {
     required this.count,
     required this.unit,
   });
+
+  Ingredient deepCopy() => Ingredient(name: name, count: count, unit: unit);
 }

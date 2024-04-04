@@ -5,6 +5,7 @@ import 'package:grams/services/local_controller.dart';
 
 class CookeryViewModel with ChangeNotifier {
   late final LocalController _cookeryController;
+  late Cookery? _currCookery = null;
 
   List<Cookery> _cookeryList = List.empty(growable: true);
  // List<Cookery> get cookeryList => _cookeryList;
@@ -23,6 +24,16 @@ class CookeryViewModel with ChangeNotifier {
     _cookeryList = _cookeryController.getAll();
     // notifyListeners();
     return _cookeryList;
+  }
+
+  setCurrCookeryInit(Cookery data){
+    _currCookery = data;
+  }
+  clearCurrCookery(){
+    _currCookery = null;
+  }
+  Cookery? getCurrCookery(){
+    return _currCookery;
   }
 
   // Future<void> addCookery(Cookery cookery) async {

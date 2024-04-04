@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:grams/services/local_repository.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
 
-import 'package:grams/widgets/column_item_widget.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
@@ -14,41 +13,48 @@ var logger = Logger(
   printer: PrettyPrinter(),
 );
 
-class EditCookeryPage extends StatelessWidget {
+class EditCookeryPage extends StatefulWidget {
   final int index;
+  final Cookery? currCookery;
   final bool isEditable;
-  EditCookeryPage(this.index, this.isEditable, {super.key});
+
+  //EditCookeryPage(this.index, this.currCookery, this.isEditable, [Cookery? currcookery]);
+  EditCookeryPage({this.index=-1, this.currCookery,  this.isEditable=true});
+
+  @override
+  State<EditCookeryPage> createState() => _EditCookeryPageState();
+}
+
+class _EditCookeryPageState extends State<EditCookeryPage> {
+  late CookeryViewModel cookeryViewModel;
+  late ItemsViewModel itemsViewModel;
+  late Cookery? _currCookery;
 
   final titleController = TextEditingController();
   final descController = TextEditingController();
-  final testController = TextEditingController();
 
-  late Cookery currCookery;
-  late CookeryViewModel cookeryViewModel;
-  late ItemsViewModel itemsViewModel;
-
-  var groupWidgetList = <Widget>[];
+   @override
+  void initState() {
+    super.initState();
+    _currCookery = widget.currCookery;
+    if (_currCookery !=null){
+    titleController.text = _currCookery!.title;
+    descController.text = _currCookery!.desc;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     cookeryViewModel = Provider.of<CookeryViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
     itemsViewModel = Provider.of<ItemsViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
 
-    // print("isEditable1:" + isEditable.toString());
-    itemsViewModel.clearDataItemList();
-    if (index >= 0) {
-      //초기값을 보여줘햐는 경우이다.
-      currCookery = cookeryViewModel.getAtIndex(index);
-      titleController.text = currCookery.title + ":" + currCookery.key.toString();
-      descController.text = currCookery.desc;
-
-      if (currCookery.ingredients != null) {
-        logger.i("재료의 배열 갯수:" + currCookery.ingredients!.length.toString() + " //// " + currCookery.ingredients![0].count.toString());
-        itemsViewModel.makeItemWidgetList(currCookery.ingredients!, isEditable);
-      } else {
-        print("재료의 길이값: 없음");
-      }
-    }
+     if (widget.currCookery !=null && widget.currCookery?.ingredients != null) {
+    //   logger.i("재료의 배열 갯수:" + widget.currCookery.ingredients!.length.toString() + " :: " + widget.currCookery.ingredients![0].count.toString());
+       //itemsViewModel.makeItemWidgetList(widget.currCookery.ingredients!, widget.isEditable);
+       itemsViewModel.makeItemWidgetList(_currCookery!.ingredients!, widget.isEditable);
+    // } else {
+    //   print("재료의 길이값: 없음");
+     }
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -56,7 +62,7 @@ class EditCookeryPage extends StatelessWidget {
           title: Text("레시피 입력/수정"),
           actions: [
             Visibility(
-              visible: index < 0 && isEditable,
+              visible: widget.index < 0 && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.save),
                 tooltip: 'Save new data',
@@ -67,24 +73,24 @@ class EditCookeryPage extends StatelessWidget {
               ),
             ),
             Visibility(
-              visible: index >= 0 && isEditable,
+              visible: widget.index >= 0 && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.save_as_sharp),
                 tooltip: 'Update data',
                 onPressed: () {
-                  cookeryViewModel.update(index, titleController.text, descController.text, itemsViewModel.getIngredientList());
+                  cookeryViewModel.update(widget.index, titleController.text, descController.text, itemsViewModel.getIngredientList());
                   Navigator.of(context).pop();
                 },
               ),
             ),
             Visibility(
-              visible: index >= 0 && isEditable,
+              visible: widget.index >= 0 && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.delete),
                 color: Colors.redAccent,
                 tooltip: 'Open shopping cart',
                 onPressed: () {
-                  cookeryViewModel.delete(index);
+                  cookeryViewModel.delete(widget.index);
                   Navigator.of(context).pop();
                 },
               ),
@@ -100,16 +106,30 @@ class EditCookeryPage extends StatelessWidget {
                 TextFormField(
                   scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   controller: titleController,
+                  
                   decoration: const InputDecoration(labelText: '요리명'),
                   keyboardType: TextInputType.text,
                 ),
-                TextField(
+                TextFormField(
                   controller: descController,
                   decoration: const InputDecoration(labelText: '간단한 설명'),
                   keyboardType: TextInputType.text,
                 ),
                 const Padding(padding: EdgeInsets.all(10)),
-                ColumnItemWidget(isEditable),
+                Column(children: itemsViewModel.getBoxItemWidget()),
+                Visibility(
+                    visible: widget.isEditable,
+                    child: Row(
+                      children: <Widget>[
+                        SizedBox(
+                            child: IconButton(
+                          icon: Icon(Icons.add_box_outlined),
+                          onPressed: () {
+                            itemsViewModel.addIngredientWidget();
+                          },
+                        ))
+                      ],
+                    ))
               ],
             ),
           ),
@@ -138,5 +158,15 @@ class EditCookeryPage extends StatelessWidget {
             ],
           );
         }));
+  }
+
+
+  @override
+  void deactivate() {
+    print("edit page dispose 불림");
+    Provider.of<CookeryViewModel>(context, listen: false).clearCurrCookery();
+    Provider.of<ItemsViewModel>(context, listen: false).clearDataItemList();
+    //_currCookery = null;
+    super.deactivate();
   }
 }
