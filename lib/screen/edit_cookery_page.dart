@@ -19,7 +19,7 @@ class EditCookeryPage extends StatefulWidget {
   final bool isEditable;
 
   //EditCookeryPage(this.index, this.currCookery, this.isEditable, [Cookery? currcookery]);
-  EditCookeryPage({this.index=-1, this.currCookery,  this.isEditable=true});
+  EditCookeryPage({this.index = -1, this.currCookery, this.isEditable = true});
 
   @override
   State<EditCookeryPage> createState() => _EditCookeryPageState();
@@ -28,34 +28,28 @@ class EditCookeryPage extends StatefulWidget {
 class _EditCookeryPageState extends State<EditCookeryPage> {
   late CookeryViewModel cookeryViewModel;
   late ItemsViewModel itemsViewModel;
-  late Cookery? _currCookery;
+  //late Cookery? _currCookery;
 
   final titleController = TextEditingController();
   final descController = TextEditingController();
 
-   @override
+  @override
   void initState() {
     super.initState();
-    _currCookery = widget.currCookery;
-    if (_currCookery !=null){
-    titleController.text = _currCookery!.title;
-    descController.text = _currCookery!.desc;
+
+    cookeryViewModel = Provider.of<CookeryViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
+    itemsViewModel = Provider.of<ItemsViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
+
+    cookeryViewModel.setCurrCookery(widget.currCookery);
+    if (widget.currCookery != null) {
+      titleController.text = widget.currCookery!.title;
+      descController.text = widget.currCookery!.desc;
+      itemsViewModel.makeItemWidgetList(widget.currCookery!.ingredients!, widget.isEditable);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    cookeryViewModel = Provider.of<CookeryViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
-    itemsViewModel = Provider.of<ItemsViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
-
-     if (widget.currCookery !=null && widget.currCookery?.ingredients != null) {
-    //   logger.i("재료의 배열 갯수:" + widget.currCookery.ingredients!.length.toString() + " :: " + widget.currCookery.ingredients![0].count.toString());
-       //itemsViewModel.makeItemWidgetList(widget.currCookery.ingredients!, widget.isEditable);
-       itemsViewModel.makeItemWidgetList(_currCookery!.ingredients!, widget.isEditable);
-    // } else {
-    //   print("재료의 길이값: 없음");
-     }
-
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -106,7 +100,6 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 TextFormField(
                   scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   controller: titleController,
-                  
                   decoration: const InputDecoration(labelText: '요리명'),
                   keyboardType: TextInputType.text,
                 ),
@@ -116,7 +109,10 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                   keyboardType: TextInputType.text,
                 ),
                 const Padding(padding: EdgeInsets.all(10)),
-                Column(children: itemsViewModel.getBoxItemWidget()),
+                Center(child:Consumer<ItemsViewModel>(builder: (context, provider,child){
+                    return  Column(children: provider.boxItemWidget);
+                })),
+                //Column(children: itemsViewModel.boxItemWidget),
                 Visibility(
                     visible: widget.isEditable,
                     child: Row(
@@ -160,12 +156,11 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
         }));
   }
 
-
   @override
   void deactivate() {
     print("edit page dispose 불림");
-    Provider.of<CookeryViewModel>(context, listen: false).clearCurrCookery();
-    Provider.of<ItemsViewModel>(context, listen: false).clearDataItemList();
+    //Provider.of<CookeryViewModel>(context, listen: false).clearCurrCookery();
+    //Provider.of<ItemsViewModel>(context, listen: false).clearDataItemList();
     //_currCookery = null;
     super.deactivate();
   }

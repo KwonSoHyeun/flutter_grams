@@ -26,7 +26,8 @@ class CookeryViewModel with ChangeNotifier {
     return _cookeryList;
   }
 
-  setCurrCookeryInit(Cookery data){
+  setCurrCookery(Cookery? data){
+    data ??= Cookery(title: "", desc:"", ingredients: List.empty(growable: true));
     _currCookery = data;
   }
   clearCurrCookery(){

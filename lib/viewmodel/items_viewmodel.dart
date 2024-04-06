@@ -11,6 +11,10 @@ class ItemsViewModel with ChangeNotifier {
 
   int boxIndex = 0;
 
+  ItemsViewModel() {
+    print("ItemsViewModel constructor");
+  }
+
   List<Ingredient> getItemListAll() {
     return _itemList;
   }
@@ -29,19 +33,22 @@ class ItemsViewModel with ChangeNotifier {
   makeItemWidgetList(List<Ingredient> itemList, bool isEditable) {
     int i = 0;
 
-    if (boxItemWidget.isEmpty){
-    _itemList = itemList;
-    boxItemWidget.clear();
- 
-    _itemList.forEach((element) {
-      print(element.count);
-      
-      addNewWidgetWithController(i++, name: element.name, count: element.count, unit: element.unit, isEditable);
-    });
+    //clearCurrCookery();
+    clearDataItemList();
 
-    print("makeItemWidgetList called , 위젯길이: " + boxItemWidget.length.toString());
-    }
-    //notifyListeners(); 
+    //if (boxItemWidget.isEmpty) {
+      _itemList = itemList;
+      boxItemWidget.clear();
+
+      _itemList.forEach((element) {
+        print(element.count);
+
+        addNewWidgetWithController(i++, name: element.name, count: element.count, unit: element.unit, isEditable);
+      });
+
+      print("init:makeItemWidgetList called , 위젯길이: " + boxItemWidget.length.toString());
+   // }
+    //notifyListeners();
   }
 
   void addNewWidgetWithController(int index, bool isEditable, {String name = "", double count = 0, String unit = ""}) {
@@ -54,10 +61,14 @@ class ItemsViewModel with ChangeNotifier {
     unitController.text = unit;
 
     boxItemWidget.add(IngredientCustomWidget(index, nameController, countController, unitController, isEditable));
+    
+    
+    //notifyListeners();
   }
 
 //플러스 버튼 눌렀을때 신규 재료 입력 위젯을 추가함.
   void addIngredientWidget() {
+    print("add::addIngredientWidget called , 위젯길이: " + boxItemWidget.length.toString());
     addNewWidgetWithController(boxItemWidget.length, true);
     notifyListeners();
   }
@@ -143,7 +154,7 @@ class ItemsViewModel with ChangeNotifier {
   // }
   @override
   void dispose() {
-    clearDataItemList();
+    //clearDataItemList();
     super.dispose();
   }
 }

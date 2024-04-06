@@ -56,6 +56,7 @@ class ListCookeryPage extends StatelessWidget {
 
   void _navigateToCalculateScreen(BuildContext context, int index) {
     Cookery data = cookeryList[index].deepCopy();
+    
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(index:index, currCookery: data, isEditable: false)));
   }
 
