@@ -39,6 +39,7 @@ dependencies:
   hive_flutter: ^1.1.0
   logger: ^2.0.2+1
   provider: ^6.0.0
+  flutter_native_splash: ^2.4.0
 
 dev_dependencies:
   flutter_test:
@@ -94,3 +95,13 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+assets:
+  - assets/asset_list.json
+  - assets/photos/  
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/photos/cookgram_text.png
+  #fullscreen: true
+  web: false

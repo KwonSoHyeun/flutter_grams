@@ -15,10 +15,10 @@ class ListCookeryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("레시피 목록"),
+        title: const Text("레시피 목록") ,
       ),
       body: Consumer<CookeryViewModel>(
         builder: (context, provider, child) {

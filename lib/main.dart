@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:grams/model/ingredient.dart';
 import 'package:grams/screen/list_cookery_page.dart';
 import 'package:grams/viewmodel/items_viewmodel.dart';
@@ -6,19 +7,25 @@ import 'package:grams/viewmodel/cookery_viewmodel.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'model/cookery.dart';
 
+const primaryColor = Color(0xffee4e34);
 var logger = Logger(
   printer: PrettyPrinter(),
 );
 
 Future<void> main() async {
+  //WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   await Hive.initFlutter();
   Hive.registerAdapter(CookeryAdapter());
   Hive.registerAdapter(IngredientAdapter());
   await Hive.openBox<Cookery>("COOKERY_BOX");
   runApp(const MyApp());
+  //FlutterNativeSplash.remove();
 }
 
 @override
@@ -35,16 +42,19 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<ItemsViewModel>(create: (_) => ItemsViewModel()),
         ChangeNotifierProvider<CookeryViewModel>(create: (BuildContext context) => CookeryViewModel()),
-        //Provider<String>.value(value: "Kwon")
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        theme: ThemeData(//d5bdaf
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
+        theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+              titleTextStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+              backgroundColor: primaryColor,
+              foregroundColor: Colors.white),
           useMaterial3: true,
         ),
-        home:  ListCookeryPage(),
+        home: ListCookeryPage(),
       ),
     );
   }
