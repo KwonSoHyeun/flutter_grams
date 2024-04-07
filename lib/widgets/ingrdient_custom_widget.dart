@@ -71,6 +71,7 @@ class IngredientCustomWidget extends StatelessWidget {
               child: SizedBox(
                   child: IconButton(
                 icon: Icon(Icons.backspace_rounded),
+                color: Colors.red.shade400,
                 onPressed: () {
                   showDialog(
                     context: context,

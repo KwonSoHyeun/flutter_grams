@@ -50,6 +50,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
 
   @override
   Widget build(BuildContext context) {
+    //var msg = widget.isEditable?'Calculate mode': 'Edit mode';
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -59,6 +60,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
               visible: widget.index < 0 && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.save),
+                color: Colors.white70,
                 tooltip: 'Save new data',
                 onPressed: () {
                   cookeryViewModel.addCookery(titleController.text, descController.text, itemsViewModel.getIngredientList());
@@ -69,7 +71,8 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
             Visibility(
               visible: widget.index >= 0 && widget.isEditable,
               child: IconButton(
-                icon: const Icon(Icons.save_as_sharp),
+                icon: const Icon(Icons.save),
+                color: Colors.white70,
                 tooltip: 'Update data',
                 onPressed: () {
                   cookeryViewModel.update(widget.index, titleController.text, descController.text, itemsViewModel.getIngredientList());
@@ -81,14 +84,34 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
               visible: widget.index >= 0 && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.delete),
-                color: Colors.redAccent,
+                color: Colors.white70,
                 tooltip: 'Open shopping cart',
                 onPressed: () {
                   cookeryViewModel.delete(widget.index);
                   Navigator.of(context).pop();
                 },
               ),
-            )
+            ),
+            PopupMenuButton<int>(
+              icon: const Icon(Icons.more_vert),
+              onSelected: (item) => handleClick(item),
+              itemBuilder: (context) => [
+                 PopupMenuItem<int>(value: 0, child: Text(widget.isEditable?'Calculate mode': 'Edit mode')),
+                //PopupMenuItem<int>(value: 1, child: Text('Settings')),
+              ],
+            ),
+            // Visibility(
+            //   visible: widget.index >= 0 && widget.isEditable,
+            //   child: IconButton(
+            //     icon: const Icon(Icons.more_vert),
+            //     color: Colors.white70,
+            //     tooltip: 'Open shopping cart',
+            //     onPressed: () {
+            //       cookeryViewModel.delete(widget.index);
+            //       Navigator.of(context).pop();
+            //     },
+            //   ),
+            // )
           ],
         ),
         body: SingleChildScrollView(
@@ -109,10 +132,9 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                   keyboardType: TextInputType.text,
                 ),
                 const Padding(padding: EdgeInsets.all(10)),
-                Center(child:Consumer<ItemsViewModel>(builder: (context, provider,child){
-                    return  Column(children: provider.boxItemWidget);
+                Center(child: Consumer<ItemsViewModel>(builder: (context, provider, child) {
+                  return Column(children: provider.boxItemWidget);
                 })),
-                
                 Visibility(
                     visible: widget.isEditable,
                     child: Row(
@@ -154,5 +176,14 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
             ],
           );
         }));
+  }
+
+  void handleClick(int item) {
+    switch (item) {
+      case 0:
+        break;
+      case 1:
+        break;
+    }
   }
 }
