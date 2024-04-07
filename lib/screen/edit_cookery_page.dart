@@ -112,7 +112,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 Center(child:Consumer<ItemsViewModel>(builder: (context, provider,child){
                     return  Column(children: provider.boxItemWidget);
                 })),
-                //Column(children: itemsViewModel.boxItemWidget),
+                
                 Visibility(
                     visible: widget.isEditable,
                     child: Row(
@@ -154,14 +154,5 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
             ],
           );
         }));
-  }
-
-  @override
-  void deactivate() {
-    print("edit page dispose 불림");
-    //Provider.of<CookeryViewModel>(context, listen: false).clearCurrCookery();
-    //Provider.of<ItemsViewModel>(context, listen: false).clearDataItemList();
-    //_currCookery = null;
-    super.deactivate();
   }
 }

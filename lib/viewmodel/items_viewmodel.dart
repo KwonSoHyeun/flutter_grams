@@ -6,18 +6,9 @@ import 'package:grams/model/ingredient.dart';
 import '../widgets/ingrdient_custom_widget.dart';
 
 class ItemsViewModel with ChangeNotifier {
-  List<Ingredient> _itemList = List.empty(growable: true);
-  List<IngredientCustomWidget> boxItemWidget = List.empty(growable: true);
-
+  List<Ingredient> _itemList = List.empty(growable: true); // 현재 ingredient 목록값인데, 변경될수 있다. 왜냐하면 비율을 여러번 변경시 rate 계산의 기준값이 필요하기 때문.
+  List<IngredientCustomWidget> boxItemWidget = List.empty(growable: true); //UI 위젯 목록값
   int boxIndex = 0;
-
-  ItemsViewModel() {
-    print("ItemsViewModel constructor");
-  }
-
-  List<Ingredient> getItemListAll() {
-    return _itemList;
-  }
 
   List<Ingredient> getIngredientList() {
     //저장을 위해서 컨트롤러에 접근하여 재료리스트를 만들어 반환한다.
@@ -33,22 +24,13 @@ class ItemsViewModel with ChangeNotifier {
   makeItemWidgetList(List<Ingredient> itemList, bool isEditable) {
     int i = 0;
 
-    //clearCurrCookery();
     clearDataItemList();
+    _itemList = itemList;
+    _itemList.forEach((element) {
+      addNewWidgetWithController(i++, name: element.name, count: element.count, unit: element.unit, isEditable);
+    });
 
-    //if (boxItemWidget.isEmpty) {
-      _itemList = itemList;
-      boxItemWidget.clear();
-
-      _itemList.forEach((element) {
-        print(element.count);
-
-        addNewWidgetWithController(i++, name: element.name, count: element.count, unit: element.unit, isEditable);
-      });
-
-      print("init:makeItemWidgetList called , 위젯길이: " + boxItemWidget.length.toString());
-   // }
-    //notifyListeners();
+    print("init:makeItemWidgetList called , 위젯길이: " + boxItemWidget.length.toString());
   }
 
   void addNewWidgetWithController(int index, bool isEditable, {String name = "", double count = 0, String unit = ""}) {
@@ -61,9 +43,6 @@ class ItemsViewModel with ChangeNotifier {
     unitController.text = unit;
 
     boxItemWidget.add(IngredientCustomWidget(index, nameController, countController, unitController, isEditable));
-    
-    
-    //notifyListeners();
   }
 
 //플러스 버튼 눌렀을때 신규 재료 입력 위젯을 추가함.
@@ -92,12 +71,6 @@ class ItemsViewModel with ChangeNotifier {
     return boxItemWidget.length;
   }
 
-  void addIngredientEmpty() {
-    Ingredient item = Ingredient(name: "", count: 0, unit: "");
-    _itemList.add(item);
-    notifyListeners();
-  }
-
   void removeIngredientItem(int index) {
     boxItemWidget.removeAt(index);
     for (int i = index; i < boxItemWidget.length; i++) {
@@ -105,11 +78,6 @@ class ItemsViewModel with ChangeNotifier {
     }
     --boxIndex;
     notifyListeners();
-  }
-
-  void _setIngredientName() {
-    Ingredient item = Ingredient(name: "", count: 0, unit: "");
-    _itemList.add(item);
   }
 
   bool isListenerEnable = false;
@@ -126,6 +94,7 @@ class ItemsViewModel with ChangeNotifier {
       print("reCalculateRate 수행조건불합");
       return;
     }
+
     changedRate = (changedValue / _itemList[index].count) as double;
     if (changedRate == 1.00) {
       print("ksh changed Rate: 같은비율 1");
@@ -145,16 +114,5 @@ class ItemsViewModel with ChangeNotifier {
 
     //ui에 반영한다.
     notifyListeners();
-  }
-
-  // void clearListener() {
-  //   for (int i = 0; i < boxItemWidget.length; i++) {
-  //     boxItemWidget[i].rateController.removeListener(() {});
-  //   }
-  // }
-  @override
-  void dispose() {
-    //clearDataItemList();
-    super.dispose();
   }
 }

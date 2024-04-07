@@ -31,7 +31,7 @@ class ListCookeryPage extends StatelessWidget {
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text("${cookeryList[index].title}"),
-                subtitle: Text("${cookeryList[index].desc} ///*/// ${cookeryList[index].ingredients![0].count}"),
+                subtitle: Text("${cookeryList[index].desc} "),
                 onTap: () {
                   _navigateToCalculateScreen(context, index);
                 },
@@ -46,7 +46,7 @@ class ListCookeryPage extends StatelessWidget {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-             _navigateToNewScreen(context, -1);
+          _navigateToNewScreen(context, -1);
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
@@ -56,16 +56,15 @@ class ListCookeryPage extends StatelessWidget {
 
   void _navigateToCalculateScreen(BuildContext context, int index) {
     Cookery data = cookeryList[index].deepCopy();
-    
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(index:index, currCookery: data, isEditable: false)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(index: index, currCookery: data, isEditable: false)));
   }
 
   void _navigateToEditScreen(BuildContext context, int index) {
     Cookery data = cookeryList[index].deepCopy();
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(index:index, currCookery: data, isEditable: true)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(index: index, currCookery: data, isEditable: true)));
   }
 
-   void _navigateToNewScreen(BuildContext context, int index) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(index:index, isEditable: true)));
+  void _navigateToNewScreen(BuildContext context, int index) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(index: index, isEditable: true)));
   }
 }
