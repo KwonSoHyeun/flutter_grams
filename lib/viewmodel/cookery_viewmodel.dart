@@ -9,7 +9,7 @@ class CookeryViewModel with ChangeNotifier {
   late Cookery? _currCookery = null;
   //ItemsViewModel items = ItemsViewModel();
 
-  List<Cookery> _cookeryList = List.empty(growable: true);
+  List<Cookery> cookeryList = List.empty(growable: true);
   // List<Cookery> get cookeryList => _cookeryList;
 
   CookeryViewModel() {
@@ -18,14 +18,18 @@ class CookeryViewModel with ChangeNotifier {
   }
 
   _getCookeryList() {
-    _cookeryList = getCookeryList();
+    cookeryList = getCookeryList();
     notifyListeners();
   }
 
-  List<Cookery> getCookeryList() {
-    _cookeryList = _cookeryController.getAll();
-    // notifyListeners();
-    return _cookeryList;
+  setCookeryList({String search=""}){
+    cookeryList = _cookeryController.getAll(search: search);
+    notifyListeners();
+  }
+
+  List<Cookery> getCookeryList({String search=""}) {
+    cookeryList = _cookeryController.getAll(search: search);
+    return cookeryList;
   }
 
   setCurrCookery(Cookery? data) {
@@ -58,7 +62,7 @@ class CookeryViewModel with ChangeNotifier {
   getAtIndex(int index) {
     //Cookery item = Cookery(title:"test",desc:_cookeryList[index].desc,ingredients:_cookeryList[index].ingredients );
     Cookery item = Cookery(
-        title: _cookeryList[index].title, desc: _cookeryList[index].desc, caution: _cookeryList[index].caution, ingredients: _cookeryList[index].ingredients);
+        title: cookeryList[index].title, desc: cookeryList[index].desc, caution: cookeryList[index].caution, ingredients: cookeryList[index].ingredients);
     return item;
   }
 

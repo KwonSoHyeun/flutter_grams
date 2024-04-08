@@ -9,9 +9,18 @@ class LocalController{
     repo.add(data);
   }
 
-  List<Cookery> getAll()  {
-    return repo.getAll();
+  List<Cookery> getAll({String search=""})  {
+
+    List<Cookery> originalList = repo.getAll();
+
+    List<Cookery> filteredlList = originalList.where((i) => i.title.contains(search)).toList();
+//List<Cookery> filteredlList = originalList.where((element) { return element.title.contains(search) ;});
+
+    return filteredlList;
+
   }
+
+
 
   Cookery? getAtIndex(int index) {
     return repo.getAtIndex(index);

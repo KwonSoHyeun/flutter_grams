@@ -12,7 +12,7 @@ class ListCookeryPage extends StatelessWidget {
   List<Cookery> cookeryList = List.empty(growable: true);
   late Cookery currCookery;
   ListCookeryPage({super.key});
-
+  String _search_value = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,20 +21,33 @@ class ListCookeryPage extends StatelessWidget {
       ),
       body: Consumer<CookeryViewModel>(
         builder: (context, provider, child) {
-          cookeryList = provider.getCookeryList();
-
+          cookeryList = provider.cookeryList;
+          print(' resbuild');
           return Column(children: <Widget>[
             Padding(
                 padding: EdgeInsets.all(10.0),
                 child: SearchBar(
-                 // constraints: BoxConstraints(maxHeight: 500),
+                  // constraints: BoxConstraints(maxHeight: 500),
                   shape: MaterialStateProperty.all(ContinuousRectangleBorder(borderRadius: BorderRadius.circular(40))),
                   elevation: MaterialStatePropertyAll(1),
                   //backgroundColor: MaterialStatePropertyAll( Color(0xffeddBd0)),
                   shadowColor: MaterialStatePropertyAll(primaryBgColor),
-                  trailing: [Icon(Icons.search ,color: primaryButtonTextColor,)],
+                  trailing: [
+                    IconButton(
+                      icon: const Icon(Icons.search),
+                      color: primaryButtonTextColor,
+                      onPressed: () {
+                        provider.setCookeryList(search: _search_value);
+                      },
+                    ),
+                  ], //trailing: [Icon(Icons.search ,color: primaryButtonTextColor,)],
                   hintText: "검색어를 입력하세요",
-                  onSubmitted: (value) {},
+                  onChanged: (value) {
+                    _search_value = value;
+                  },
+                  onSubmitted: (value) {
+                    print(value);
+                  },
                 )),
             Expanded(
                 child: ListView.separated(
@@ -46,7 +59,7 @@ class ListCookeryPage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       //return buildRecipeCard(cookeryList[index], context, index);
                       return ListTile(
-                        leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
+                        // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
                         title: Text("${cookeryList[index].title}"),
                         subtitle: Text("${cookeryList[index].desc} "),
                         onTap: () {
