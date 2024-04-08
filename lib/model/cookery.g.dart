@@ -19,19 +19,22 @@ class CookeryAdapter extends TypeAdapter<Cookery> {
     return Cookery(
       title: fields[0] as String,
       desc: fields[1] as String,
-      ingredients: (fields[2] as List?)?.cast<Ingredient>(),
+      caution: fields[2] as String,
+      ingredients: (fields[3] as List?)?.cast<Ingredient>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Cookery obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
       ..write(obj.desc)
       ..writeByte(2)
+      ..write(obj.caution)
+      ..writeByte(3)
       ..write(obj.ingredients);
   }
 

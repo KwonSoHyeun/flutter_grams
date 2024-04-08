@@ -8,7 +8,7 @@ class CookeryViewModel with ChangeNotifier {
   late Cookery? _currCookery = null;
 
   List<Cookery> _cookeryList = List.empty(growable: true);
- // List<Cookery> get cookeryList => _cookeryList;
+  // List<Cookery> get cookeryList => _cookeryList;
 
   CookeryViewModel() {
     _cookeryController = LocalController();
@@ -26,14 +26,16 @@ class CookeryViewModel with ChangeNotifier {
     return _cookeryList;
   }
 
-  setCurrCookery(Cookery? data){
-    data ??= Cookery(title: "", desc:"", ingredients: List.empty(growable: true));
+  setCurrCookery(Cookery? data) {
+    data ??= Cookery(title: "", desc: "", caution:"", ingredients: List.empty(growable: true));
     _currCookery = data;
   }
-  clearCurrCookery(){
+
+  clearCurrCookery() {
     _currCookery = null;
   }
-  Cookery? getCurrCookery(){
+
+  Cookery? getCurrCookery() {
     return _currCookery;
   }
 
@@ -43,22 +45,23 @@ class CookeryViewModel with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<void> addCookery(String title, String desc, List<Ingredient>? items) async{
+  Future<void> addCookery(String title, String desc, String caution, List<Ingredient>? items) async {
     //await _cookeryController.add(cookery);
-    Cookery data = Cookery(title:title, desc:desc, ingredients:items) ;
+    Cookery data = Cookery(title: title, desc: desc, caution: caution, ingredients: items);
     await _cookeryController.add(data);
-   //_cookeryList.add(data);
+    //_cookeryList.add(data);
     notifyListeners();
   }
 
   getAtIndex(int index) {
     //Cookery item = Cookery(title:"test",desc:_cookeryList[index].desc,ingredients:_cookeryList[index].ingredients );
-    Cookery item = Cookery(title:_cookeryList[index].title,desc:_cookeryList[index].desc,ingredients:_cookeryList[index].ingredients );
+    Cookery item = Cookery(
+        title: _cookeryList[index].title, desc: _cookeryList[index].desc, caution: _cookeryList[index].caution, ingredients: _cookeryList[index].ingredients);
     return item;
   }
 
   //   getAtIndexDeepCopy(int index) {
-  //   Cookery newItem;  
+  //   Cookery newItem;
   //   Cookery item = Cookery(title:_cookeryList[index].title,desc:_cookeryList[index].desc,ingredients:_cookeryList[index].ingredients );
   //   newItem = item.
   //   return item;
@@ -69,8 +72,8 @@ class CookeryViewModel with ChangeNotifier {
   //   return item;
   // }
 
-  update(int index, String title, String desc, List<Ingredient>? items) {
-    Cookery data = Cookery(title:title, desc:desc, ingredients:items) ;
+  update(int index, String title, String desc, String caution, List<Ingredient>? items) {
+    Cookery data = Cookery(title: title, desc: desc, caution: caution, ingredients: items);
     _cookeryController.update(index, data);
     notifyListeners();
   }

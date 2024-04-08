@@ -32,6 +32,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
 
   final titleController = TextEditingController();
   final descController = TextEditingController();
+  final cautionController = TextEditingController();
 
   @override
   void initState() {
@@ -44,6 +45,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
     if (widget.currCookery != null) {
       titleController.text = widget.currCookery!.title;
       descController.text = widget.currCookery!.desc;
+      cautionController.text = widget.currCookery!.caution;
       itemsViewModel.makeItemWidgetList(widget.currCookery!.ingredients!, widget.isEditable);
     }
   }
@@ -54,7 +56,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text("레시피 입력/수정"),
+          title: Text(widget.isEditable ? 'Receipe' : 'Calculating'),
           actions: [
             Visibility(
               visible: widget.index < 0 && widget.isEditable,
@@ -63,7 +65,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 color: Colors.white70,
                 tooltip: 'Save new data',
                 onPressed: () {
-                  cookeryViewModel.addCookery(titleController.text, descController.text, itemsViewModel.getIngredientList());
+                  cookeryViewModel.addCookery(titleController.text, descController.text, cautionController.text, itemsViewModel.getIngredientList());
                   Navigator.of(context).pop();
                 },
               ),
@@ -75,7 +77,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 color: Colors.white70,
                 tooltip: 'Update data',
                 onPressed: () {
-                  cookeryViewModel.update(widget.index, titleController.text, descController.text, itemsViewModel.getIngredientList());
+                  cookeryViewModel.update(widget.index, titleController.text, descController.text, cautionController.text, itemsViewModel.getIngredientList());
                   Navigator.of(context).pop();
                 },
               ),
@@ -96,26 +98,13 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
               icon: const Icon(Icons.more_vert),
               onSelected: (item) => handleClick(item),
               itemBuilder: (context) => [
-                 PopupMenuItem<int>(value: 0, child: Text(widget.isEditable?'Calculate mode': 'Edit mode')),
-                //PopupMenuItem<int>(value: 1, child: Text('Settings')),
+                PopupMenuItem<int>(value: widget.isEditable ? 0 : 1, child: Text(widget.isEditable ? 'save as copy' : 'edit mode')),
               ],
             ),
-            // Visibility(
-            //   visible: widget.index >= 0 && widget.isEditable,
-            //   child: IconButton(
-            //     icon: const Icon(Icons.more_vert),
-            //     color: Colors.white70,
-            //     tooltip: 'Open shopping cart',
-            //     onPressed: () {
-            //       cookeryViewModel.delete(widget.index);
-            //       Navigator.of(context).pop();
-            //     },
-            //   ),
-            // )
           ],
         ),
         body: SingleChildScrollView(
-          padding: EdgeInsets.only(top: 50, bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding: EdgeInsets.only(top: 0, bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -128,7 +117,13 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 ),
                 TextFormField(
                   controller: descController,
-                  decoration: const InputDecoration(labelText: '간단한 설명'),
+                  decoration: const InputDecoration(labelText: '레시피 작성'),
+                  keyboardType: TextInputType.text,
+                  maxLines: null,
+                ),
+                TextFormField(
+                  controller: cautionController,
+                  decoration: const InputDecoration(labelText: '주의사항'),
                   keyboardType: TextInputType.text,
                 ),
                 const Padding(padding: EdgeInsets.all(10)),
@@ -183,6 +178,12 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
       case 0:
         break;
       case 1:
+        print("goto edit page");
+        Cookery curr_data =
+            Cookery(title: titleController.text, desc: descController.text, caution: cautionController.text, ingredients: itemsViewModel.getIngredientList());
+        Navigator.pop(context);
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(index: widget.index, currCookery: curr_data, isEditable: true)));
+
         break;
     }
   }

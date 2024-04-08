@@ -13,18 +13,21 @@ class Cookery extends HiveObject {
   @HiveField(1)
   String desc;
   @HiveField(2)
+  String caution;
+  @HiveField(3)
   List<Ingredient>? ingredients;
 
   Cookery({
     required this.title,
     required this.desc,
+    required this.caution,
     this.ingredients,
   });
 
-  Cookery deepCopy()=>Cookery(title:title, desc: desc, ingredients: ingredients!.map((e) => e.deepCopy()).toList());
+  Cookery deepCopy()=>Cookery(title:title, desc: desc, caution:caution ,ingredients: ingredients!.map((e) => e.deepCopy()).toList());
 
   @override
-  String toString() => '{title:$title, desc:$desc, ingredient:$ingredients}';
+  String toString() => '{title:$title, desc:$desc, caution:$caution, ingredient:$ingredients}';
 
   String getIngredients() {
     var ret = '';

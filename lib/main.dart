@@ -11,7 +11,10 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'model/cookery.dart';
 
-const primaryColor = Color(0xffee4e34);
+const primaryColor = Color(0xffe44805);//ee4e34
+//const primaryColor = Color(0xffe44805);//ee4e34
+const primaryTextColor = Color(0xffeee0a3);
+
 var logger = Logger(
   printer: PrettyPrinter(),
 );
@@ -51,7 +54,7 @@ class MyApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(
               titleTextStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
               backgroundColor: primaryColor,
-              foregroundColor: Colors.white),
+              foregroundColor: primaryTextColor),
           useMaterial3: true,
         ),
         home: ListCookeryPage(),
