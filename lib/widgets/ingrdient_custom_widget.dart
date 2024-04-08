@@ -1,8 +1,10 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:grams/viewmodel/items_viewmodel.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
 import 'package:grams/viewmodel/items_viewmodel.dart';
 
@@ -45,9 +47,13 @@ class IngredientCustomWidget extends StatelessWidget {
               child: TextField(
                 controller: rateController,
                 decoration: const InputDecoration(labelText: '중량 또는 비율'),
-                keyboardType: TextInputType.text,
+                // keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.done,
+                inputFormatters: [
+                  FilteringTextInputFormatter(RegExp('[0-9 | .]'), allow:true,)
+                ],
                 onSubmitted: (String val) {
-                  consumer.reCalculateRate(boxIndex, val);
+                  if (!isEditable) consumer.reCalculateRate(boxIndex, val);
                 },
               ),
             ),

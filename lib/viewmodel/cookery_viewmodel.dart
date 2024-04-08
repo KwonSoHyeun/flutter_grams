@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:grams/model/cookery.dart';
 import 'package:grams/model/ingredient.dart';
 import 'package:grams/services/local_controller.dart';
+import 'package:grams/viewmodel/items_viewmodel.dart';
 
 class CookeryViewModel with ChangeNotifier {
   late final LocalController _cookeryController;
   late Cookery? _currCookery = null;
+  //ItemsViewModel items = ItemsViewModel();
 
   List<Cookery> _cookeryList = List.empty(growable: true);
   // List<Cookery> get cookeryList => _cookeryList;

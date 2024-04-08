@@ -40,14 +40,14 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
 
     cookeryViewModel = Provider.of<CookeryViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
     itemsViewModel = Provider.of<ItemsViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
-
+    itemsViewModel.clearDataItemList();
     cookeryViewModel.setCurrCookery(widget.currCookery);
     if (widget.currCookery != null) {
       titleController.text = widget.currCookery!.title;
       descController.text = widget.currCookery!.desc;
       cautionController.text = widget.currCookery!.caution;
       itemsViewModel.makeItemWidgetList(widget.currCookery!.ingredients!, widget.isEditable);
-    }
+    } 
   }
 
   @override
@@ -114,17 +114,20 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                   controller: titleController,
                   decoration: const InputDecoration(labelText: '요리명'),
                   keyboardType: TextInputType.text,
+                
                 ),
                 TextFormField(
                   controller: descController,
                   decoration: const InputDecoration(labelText: '레시피 작성'),
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.multiline,
+                  minLines: 3,
                   maxLines: null,
                 ),
                 TextFormField(
                   controller: cautionController,
                   decoration: const InputDecoration(labelText: '주의사항'),
                   keyboardType: TextInputType.text,
+                 
                 ),
                 const Padding(padding: EdgeInsets.all(10)),
                 Center(child: Consumer<ItemsViewModel>(builder: (context, provider, child) {
