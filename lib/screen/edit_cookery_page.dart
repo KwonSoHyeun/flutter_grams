@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:grams/services/local_repository.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
@@ -8,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../model/cookery.dart';
 import '../model/ingredient.dart';
 import '../viewmodel/items_viewmodel.dart';
+import 'package:image_picker/image_picker.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -28,11 +31,13 @@ class EditCookeryPage extends StatefulWidget {
 class _EditCookeryPageState extends State<EditCookeryPage> {
   late CookeryViewModel cookeryViewModel;
   late ItemsViewModel itemsViewModel;
-  //late Cookery? _currCookery;
+  XFile? _image;
+  final picker = ImagePicker();
 
   final titleController = TextEditingController();
   final descController = TextEditingController();
   final cautionController = TextEditingController();
+
 
   @override
   void initState() {
@@ -47,7 +52,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
       descController.text = widget.currCookery!.desc;
       cautionController.text = widget.currCookery!.caution;
       itemsViewModel.makeItemWidgetList(widget.currCookery!.ingredients!, widget.isEditable);
-    } 
+    }
   }
 
   @override
@@ -114,7 +119,6 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                   controller: titleController,
                   decoration: const InputDecoration(labelText: '요리명'),
                   keyboardType: TextInputType.text,
-                
                 ),
                 TextFormField(
                   controller: descController,
@@ -123,11 +127,19 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                   minLines: 3,
                   maxLines: null,
                 ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 30, width: double.infinity),
+                    _buildPhotoArea(),
+                    SizedBox(height: 20),
+                    _buildButton(),
+                  ],
+                ),
                 TextFormField(
                   controller: cautionController,
                   decoration: const InputDecoration(labelText: '주의사항'),
                   keyboardType: TextInputType.text,
-                 
                 ),
                 const Padding(padding: EdgeInsets.all(10)),
                 Center(child: Consumer<ItemsViewModel>(builder: (context, provider, child) {
@@ -189,5 +201,51 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
 
         break;
     }
+  }
+    // 비동기 처리를 통해 카메라와 갤러리에서 이미지를 가져온다.
+  Future getImage(ImageSource imageSource) async {
+    //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
+    final XFile? pickedFile = await picker.pickImage(source: imageSource,  imageQuality: 50, maxWidth: 600, maxHeight: 600);
+    
+    if (pickedFile != null) {
+      setState(() {
+        _image = XFile(pickedFile.path); //가져온 이미지를 _image에 저장
+      });
+    }
+  }
+
+  Widget _buildPhotoArea() {
+    return _image != null
+        ? Container(
+            width: 300,
+            height: 300,
+            child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
+          )
+        : Container(
+            width: 300,
+            height: 300,
+            color: Colors.grey,
+          );
+  }
+
+  Widget _buildButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            getImage(ImageSource.camera); //getImage 함수를 호출해서 카메라로 찍은 사진 가져오기
+          },
+          child: Text("카메라"),
+        ),
+        SizedBox(width: 30),
+        ElevatedButton(
+          onPressed: () {
+            getImage(ImageSource.gallery); //getImage 함수를 호출해서 갤러리에서 사진 가져오기
+          },
+          child: Text("갤러리"),
+        ),
+      ],
+    );
   }
 }
