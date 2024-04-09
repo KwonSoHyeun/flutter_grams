@@ -5,12 +5,14 @@ import 'package:grams/services/local_repository.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
 
 import 'package:logger/logger.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../model/cookery.dart';
 import '../model/ingredient.dart';
 import '../viewmodel/items_viewmodel.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -32,12 +34,12 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
   late CookeryViewModel cookeryViewModel;
   late ItemsViewModel itemsViewModel;
   XFile? _image;
+  String _imageFilePath="";
   final picker = ImagePicker();
 
   final titleController = TextEditingController();
   final descController = TextEditingController();
   final cautionController = TextEditingController();
-
 
   @override
   void initState() {
@@ -130,6 +132,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Text('$_imageFilePath'),
                     SizedBox(height: 30, width: double.infinity),
                     _buildPhotoArea(),
                     SizedBox(height: 20),
@@ -202,14 +205,32 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
         break;
     }
   }
-    // 비동기 처리를 통해 카메라와 갤러리에서 이미지를 가져온다.
+
+  // 비동기 처리를 통해 카메라와 갤러리에서 이미지를 가져온다.
   Future getImage(ImageSource imageSource) async {
     //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
-    final XFile? pickedFile = await picker.pickImage(source: imageSource,  imageQuality: 50, maxWidth: 600, maxHeight: 600);
-    
-    if (pickedFile != null) {
+    final XFile? pickedFile = await picker.pickImage(source: imageSource, imageQuality: 50, maxWidth: 600, maxHeight: 600);
+
+    Directory documentDirectory = await getApplicationDocumentsDirectory();
+    //pickedFile.saveTo(documentDirectory+)
+    // File file = new File()
+
+    // String dir = (await getApplicationDocumentsDirectory()).path;
+    // String newPath = path.join(dir,(DateTime.now().microsecond.toString()) + '.' + file.path.split('.').last);
+    // File f = await File(file.path).copy(newPath);
+
+    final extension = pickedFile!.path.split('.').last;
+
+final now = DateTime.now();
+    final newname = "KSH" + now.year.toString() + now.month.toString() + now.day.toString() + now.hour.toString() + now.microsecond.toString();
+    final newFile = File('${Directory.systemTemp.path}/$newname.$extension');
+    await pickedFile.saveTo(newFile.path);
+    print("New path: ${newFile.path}");
+
+    if (newFile != null) {
       setState(() {
-        _image = XFile(pickedFile.path); //가져온 이미지를 _image에 저장
+        _image = XFile(newFile.path); //가져온 이미지를 _image에 저장
+        _imageFilePath = newFile.path;
       });
     }
   }

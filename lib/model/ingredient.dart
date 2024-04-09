@@ -16,5 +16,9 @@ class Ingredient extends HiveObject {
     required this.unit,
   });
 
+
+  @override
+  String toString() => '{name:$name, count:$count, unit:$unit}';
+
   Ingredient deepCopy() => Ingredient(name: name, count: count, unit: unit);
 }

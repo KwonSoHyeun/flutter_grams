@@ -19,6 +19,7 @@ class CookeryViewModel with ChangeNotifier {
 
   _getCookeryList() {
     cookeryList = getCookeryList();
+    
     notifyListeners();
   }
 
