@@ -101,9 +101,11 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 
-assets:
-  - assets/asset_list.json
-  - assets/photos/  
+  assets:
+    - assets/asset_list.json
+    - assets/photos/ic_cupcake.png
+    - assets/photos/
+  
 
 flutter_native_splash:
   color: "#ffffff"

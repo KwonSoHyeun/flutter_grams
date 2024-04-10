@@ -18,23 +18,35 @@ class CookeryAdapter extends TypeAdapter<Cookery> {
     };
     return Cookery(
       title: fields[0] as String,
-      desc: fields[1] as String,
-      caution: fields[2] as String,
-      ingredients: (fields[3] as List?)?.cast<Ingredient>(),
+      kind: fields[1] as String,
+      img: fields[2] as String,
+      desc: fields[3] as String,
+      caution: fields[4] as String,
+      heart: fields[5] as bool,
+      hit: fields[6] as int,
+      ingredients: (fields[7] as List?)?.cast<Ingredient>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Cookery obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
-      ..write(obj.desc)
+      ..write(obj.kind)
       ..writeByte(2)
-      ..write(obj.caution)
+      ..write(obj.img)
       ..writeByte(3)
+      ..write(obj.desc)
+      ..writeByte(4)
+      ..write(obj.caution)
+      ..writeByte(5)
+      ..write(obj.heart)
+      ..writeByte(6)
+      ..write(obj.hit)
+      ..writeByte(7)
       ..write(obj.ingredients);
   }
 

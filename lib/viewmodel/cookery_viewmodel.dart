@@ -34,7 +34,7 @@ class CookeryViewModel with ChangeNotifier {
   }
 
   setCurrCookery(Cookery? data) {
-    data ??= Cookery(title: "", desc: "", caution:"", ingredients: List.empty(growable: true));
+    data ??= Cookery(title: "", kind:"", img:"", desc: "", caution:"", heart:false, hit:0, ingredients: List.empty(growable: true));
     _currCookery = data;
   }
 
@@ -52,18 +52,20 @@ class CookeryViewModel with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<void> addCookery(String title, String desc, String caution, List<Ingredient>? items) async {
+  Future<void> addCookery (String title, String kind, String img, String desc, String caution, bool heart, int hit, List<Ingredient>? items) async {
     //await _cookeryController.add(cookery);
-    Cookery data = Cookery(title: title, desc: desc, caution: caution, ingredients: items);
+    Cookery data = Cookery(title: title, kind: kind, img: img, desc: desc, caution: caution, heart: heart, hit:hit, ingredients: items);
     await _cookeryController.add(data);
+    //_getCookeryList();
     //_cookeryList.add(data);
+    cookeryList.add(data);
     notifyListeners();
   }
 
   getAtIndex(int index) {
     //Cookery item = Cookery(title:"test",desc:_cookeryList[index].desc,ingredients:_cookeryList[index].ingredients );
     Cookery item = Cookery(
-        title: cookeryList[index].title, desc: cookeryList[index].desc, caution: cookeryList[index].caution, ingredients: cookeryList[index].ingredients);
+        title: cookeryList[index].title, kind:cookeryList[index].kind, img: cookeryList[index].img, desc: cookeryList[index].desc, caution: cookeryList[index].caution, heart:cookeryList[index].heart, hit:cookeryList[index].hit, ingredients: cookeryList[index].ingredients);
     return item;
   }
 
@@ -79,8 +81,8 @@ class CookeryViewModel with ChangeNotifier {
   //   return item;
   // }
 
-  update(int index, String title, String desc, String caution, List<Ingredient>? items) {
-    Cookery data = Cookery(title: title, desc: desc, caution: caution, ingredients: items);
+  update(int index, String title, String kind, String img, String desc, String caution, bool heart, int hit, List<Ingredient>? items) {
+    Cookery data = Cookery(title: title, kind: kind, img: img, desc: desc, caution: caution, heart: heart, hit:hit, ingredients: items);
     _cookeryController.update(index, data);
     notifyListeners();
   }
