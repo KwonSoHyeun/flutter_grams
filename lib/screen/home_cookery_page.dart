@@ -22,57 +22,74 @@ class HomeCookeryPage extends StatelessWidget {
       body: Consumer<CookeryViewModel>(
         builder: (context, provider, child) {
           cookeryList = provider.cookeryList;
-          print(' resbuild');
-          return Container(
-              color: primaryColor,
-              child: Column(children: <Widget>[
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: SearchBar(
-                      elevation: MaterialStatePropertyAll(1),
-                      trailing: [
-                        IconButton(
-                          icon: const Icon(Icons.search),
-                          color: primaryButtonTextColor,
-                          onPressed: () {
-                            provider.setCookeryList(search: _search_value);
-                          },
-                        ),
-                      ], //trailing: [Icon(Icons.search ,color: primaryButtonTextColor,)],
-                      hintText: "검색어를 입력하세요",
-                      onChanged: (value) {
-                        _search_value = value;
+          return SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child:
+          Column(children: <Widget>[
+            Padding(
+                padding: EdgeInsets.all(10.0),
+                child: SearchBar(
+                  elevation: MaterialStatePropertyAll(1),
+                  trailing: [
+                    IconButton(
+                      icon: const Icon(Icons.search),
+                      color: primaryButtonTextColor,
+                      onPressed: () {
+                        provider.setCookeryList(search: _search_value);
                       },
-                      onSubmitted: (value) {
-                        print(value);
-                      },
-                    )),
-                Container(color: primaryColor, child: HomeKindWidget()),
-                Expanded(
-                  child: Container(
-                      color: Colors.white,
-                      child: ListView.separated(
-                          itemCount: cookeryList.length,
-                          //onPressed:  _navigateToEditScreen(context, index),
-                          separatorBuilder: (BuildContext context, int index) {
-                            return Divider(thickness: 1);
-                          },
-                          itemBuilder: (context, index) {
-                            //return buildRecipeCard(cookeryList[index], context, index);
-                            return ListTile(
-                              // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
-                              title: Text("${cookeryList[index].title}"),
-                              subtitle: Text("${cookeryList[index].desc} "),
-                              onTap: () {
-                                _navigateToCalculateScreen(context, index);
-                              },
-                              onLongPress: () {
-                                _navigateToEditScreen(context, index);
-                              },
-                            );
-                          })),
-                )
-              ]));
+                    ),
+                  ], //trailing: [Icon(Icons.search ,color: primaryButtonTextColor,)],
+                  hintText: "검색어를 입력하세요",
+                  onChanged: (value) {
+                    _search_value = value;
+                  },
+                  onSubmitted: (value) {
+                    print(value);
+                  },
+                )),
+            SingleChildScrollView(
+                child: IntrinsicHeight(
+                    // added widget
+                    child: HomeKindWidget())),
+
+            ListTile(
+                // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
+                title: Text("${cookeryList[0].title}"),
+                subtitle: Text("${cookeryList[0].desc} ")),
+            ListTile(
+                // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
+                title: Text("${cookeryList[1].title}"),
+                subtitle: Text("${cookeryList[1].desc} ")),
+
+                            ListTile(
+                // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
+                title: Text("${cookeryList[1].title}"),
+                subtitle: Text("${cookeryList[1].desc} ")),
+            // Expanded(
+            //   child: Container(
+            //       color: Colors.white,
+            //       child: ListView.separated(
+            //           itemCount: cookeryList.length,
+            //           //onPressed:  _navigateToEditScreen(context, index),
+            //           separatorBuilder: (BuildContext context, int index) {
+            //             return Divider(thickness: 1);
+            //           },
+            //           itemBuilder: (context, index) {
+            //             //return buildRecipeCard(cookeryList[index], context, index);
+            //             return ListTile(
+            //               // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
+            //               title: Text("${cookeryList[index].title}"),
+            //               subtitle: Text("${cookeryList[index].desc} "),
+            //               onTap: () {
+            //                 _navigateToCalculateScreen(context, index);
+            //               },
+            //               onLongPress: () {
+            //                 _navigateToEditScreen(context, index);
+            //               },
+            //             );
+            //           })),
+            // )
+          ]));
         },
       ),
 
