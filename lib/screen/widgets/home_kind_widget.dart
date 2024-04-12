@@ -35,17 +35,6 @@ class HomeKindWidget extends StatelessWidget {
                           onPressed: () {},
                           child: const Text('ALL'))
                           )),
-
-              /* child: Container(
-                    decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/photos/dish_all.jpg'), fit: BoxFit.fill)),
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        textStyle: TextStyle(fontSize: 20),
-                      ),
-                      onPressed: () {},
-                      child: const Text('ALL'),
-                    ),
-                  )),*/
               const SizedBox(
                 width: 8,
               ),
