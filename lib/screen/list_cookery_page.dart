@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:grams/model/cookery.dart';
 import 'package:grams/screen/edit_cookery_page.dart';
-import 'package:grams/services/local_repository.dart';
 import 'package:grams/util/colorvalue.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
-import 'package:grams/viewmodel/items_viewmodel.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
 class ListCookeryPage extends StatelessWidget {
@@ -31,7 +28,7 @@ class ListCookeryPage extends StatelessWidget {
                   shape: MaterialStateProperty.all(ContinuousRectangleBorder(borderRadius: BorderRadius.circular(40))),
                   elevation: MaterialStatePropertyAll(1),
                   //backgroundColor: MaterialStatePropertyAll( Color(0xffeddBd0)),
-                  shadowColor: MaterialStatePropertyAll(primaryBgColor),
+                  shadowColor: MaterialStatePropertyAll(primaryShadowColor),
                   trailing: [
                     IconButton(
                       icon: const Icon(Icons.search),

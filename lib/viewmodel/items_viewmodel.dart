@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:grams/model/ingredient.dart';
 
-import '../widgets/ingrdient_custom_widget.dart';
+import '../screen/widgets/ingrdient_custom_widget.dart';
 
 class ItemsViewModel with ChangeNotifier {
   List<Ingredient> _itemList = List.empty(growable: true); // 현재 ingredient 목록값인데, 변경될수 있다. 왜냐하면 비율을 여러번 변경시 rate 계산의 기준값이 필요하기 때문.
