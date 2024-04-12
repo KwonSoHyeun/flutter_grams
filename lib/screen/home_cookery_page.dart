@@ -6,15 +6,23 @@ import 'package:grams/util/colorvalue.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
 import 'package:provider/provider.dart';
 
+import 'widgets/home_kind_grid_widget.dart';
 import 'widgets/home_kind_widget.dart';
+import 'dart:ui';
+/*
 
+*/
 class HomeCookeryPage extends StatelessWidget {
   List<Cookery> cookeryList = List.empty(growable: true);
   late Cookery currCookery;
   HomeCookeryPage({super.key});
   String _search_value = "";
+
+  
   @override
   Widget build(BuildContext context) {
+    var widget1 = _searchWidget();
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text("레시피 목록"),
@@ -22,79 +30,46 @@ class HomeCookeryPage extends StatelessWidget {
       body: Consumer<CookeryViewModel>(
         builder: (context, provider, child) {
           cookeryList = provider.cookeryList;
-          return SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child:
-          Column(children: <Widget>[
-            Padding(
-                padding: EdgeInsets.all(10.0),
-                child: SearchBar(
-                  elevation: MaterialStatePropertyAll(1),
-                  trailing: [
-                    IconButton(
-                      icon: const Icon(Icons.search),
-                      color: primaryButtonTextColor,
-                      onPressed: () {
-                        provider.setCookeryList(search: _search_value);
-                      },
-                    ),
-                  ], //trailing: [Icon(Icons.search ,color: primaryButtonTextColor,)],
-                  hintText: "검색어를 입력하세요",
-                  onChanged: (value) {
-                    _search_value = value;
-                  },
-                  onSubmitted: (value) {
-                    print(value);
-                  },
-                )),
-            SingleChildScrollView(
-                child: IntrinsicHeight(
-                    // added widget
-                    child: HomeKindWidget())),
-
-            ListTile(
-                // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
-                title: Text("${cookeryList[0].title}"),
-                subtitle: Text("${cookeryList[0].desc} ")),
-            ListTile(
-                // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
-                title: Text("${cookeryList[1].title}"),
-                subtitle: Text("${cookeryList[1].desc} ")),
-
-                            ListTile(
-                // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
-                title: Text("${cookeryList[1].title}"),
-                subtitle: Text("${cookeryList[1].desc} ")),
-            // Expanded(
-            //   child: Container(
-            //       color: Colors.white,
-            //       child: ListView.separated(
-            //           itemCount: cookeryList.length,
-            //           //onPressed:  _navigateToEditScreen(context, index),
-            //           separatorBuilder: (BuildContext context, int index) {
-            //             return Divider(thickness: 1);
-            //           },
-            //           itemBuilder: (context, index) {
-            //             //return buildRecipeCard(cookeryList[index], context, index);
-            //             return ListTile(
-            //               // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
-            //               title: Text("${cookeryList[index].title}"),
-            //               subtitle: Text("${cookeryList[index].desc} "),
-            //               onTap: () {
-            //                 _navigateToCalculateScreen(context, index);
-            //               },
-            //               onLongPress: () {
-            //                 _navigateToEditScreen(context, index);
-            //               },
-            //             );
-            //           })),
-            // )
-          ]));
+          return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            SizedBox(height: 50 , child:widget1),
+            
+            SizedBox(
+                height: MediaQuery.of(context).size.height // 전체 화면 높이
+                    - View.of(context).padding.top / View.of(context).devicePixelRatio //MediaQuery.of(context).padding.top // 상태바 높이
+                    - AppBar().preferredSize.height // 앱바 높이 :Scaffold.of(context).appBarMaxHeight!.toInt() , _appBar.preferredSize.height
+                    - 50,
+                    //-70,
+                child: ListView(children: [
+                  HomeKindGridWidget(),
+                  ListTile(
+                      // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
+                      title: Text("${cookeryList[0].title}"),
+                      subtitle: Text("${cookeryList[0].desc} ")),
+                  ListTile(
+                      // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
+                      title: Text("${cookeryList[1].title}"),
+                      subtitle: Text("${cookeryList[1].desc} ")),
+                  ListTile(
+                      // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
+                      title: Text("${cookeryList[1].title}"),
+                      subtitle: Text("${cookeryList[1].desc} ")),
+                  ListTile(
+                      // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
+                      title: Text("${cookeryList[1].title}"),
+                      subtitle: Text("${cookeryList[1].desc} ")),
+                  ListTile(
+                      // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
+                      title: Text("${cookeryList[1].title}"),
+                      subtitle: Text("${cookeryList[1].desc} "))
+                ]))
+          ]);
         },
       ),
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+         // print("kToolbarHeight" + kToolbarHeight.toString() + ":" + Scaffold.of(context).appBarMaxHeight!.toString()+":" + AppBar().preferredSize.height.toString());
+          print("kToolbarHeight" + kToolbarHeight.toString() + ":" +AppBar().preferredSize.height.toString());
           _navigateToNewScreen(context, -1);
         },
         tooltip: 'Increment',
@@ -102,6 +77,29 @@ class HomeCookeryPage extends StatelessWidget {
         backgroundColor: Color(0xffeddBd0), //#EDDBD0
         foregroundColor: Color(0xffd84a09),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  Widget _searchWidget() {
+    return SearchBar(
+      elevation: MaterialStatePropertyAll(1),
+      constraints: BoxConstraints(maxHeight: 50, minHeight: 50),
+      trailing: [
+        IconButton(
+          icon: const Icon(Icons.search),
+          color: primaryButtonTextColor,
+          onPressed: () {
+            // provider.setCookeryList(search: _search_value);
+          },
+        ),
+      ], //trailing: [Icon(Icons.search ,color: primaryButtonTextColor,)],
+      hintText: "검색어를 입력하세요",
+      onChanged: (value) {
+        _search_value = value;
+      },
+      onSubmitted: (value) {
+        print(value);
+      },
     );
   }
 
