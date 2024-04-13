@@ -10,5 +10,5 @@ const primaryButtonTextColor = Color(0xff101082   );//Color(0xffd84a09);
 
 const ButtonTextBGColor = Color(0x50d84a09);
 
-const List<String> cookingKindList = ['Main dish', 'Side dish', 'Dressing', 'Drink', 'Gravy', 'Dessert', 'etc.'];
+const List<String> cookingKindList = ['Main dish', 'Side dish', 'Dressing', 'Drink', 'Dessert', 'etc.'];
 const String initCookingKind ="Main dish";

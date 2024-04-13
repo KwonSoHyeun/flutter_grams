@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'widgets/home_kind_grid_widget.dart';
 import 'widgets/home_kind_widget.dart';
 import 'dart:ui';
+
 /*
 
 */
@@ -18,11 +19,8 @@ class HomeCookeryPage extends StatelessWidget {
   HomeCookeryPage({super.key});
   String _search_value = "";
 
-  
   @override
   Widget build(BuildContext context) {
-    var widget1 = _searchWidget();
-    
     return Scaffold(
       appBar: AppBar(
         title: const Text("레시피 목록"),
@@ -31,16 +29,25 @@ class HomeCookeryPage extends StatelessWidget {
         builder: (context, provider, child) {
           cookeryList = provider.cookeryList;
           return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            SizedBox(height: 50 , child:widget1),
-            
+            SizedBox(
+                height: 50,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: primaryColor),
+                  child: _searchWidget(),
+                )),
             SizedBox(
                 height: MediaQuery.of(context).size.height // 전체 화면 높이
-                    - View.of(context).padding.top / View.of(context).devicePixelRatio //MediaQuery.of(context).padding.top // 상태바 높이
-                    - AppBar().preferredSize.height // 앱바 높이 :Scaffold.of(context).appBarMaxHeight!.toInt() , _appBar.preferredSize.height
-                    - 50,
-                    //-70,
+                    -
+                    View.of(context).padding.top / View.of(context).devicePixelRatio //MediaQuery.of(context).padding.top // 상태바 높이
+                    -
+                    AppBar().preferredSize.height // 앱바 높이 :Scaffold.of(context).appBarMaxHeight!.toInt() , _appBar.preferredSize.height
+                    -
+                    50,
                 child: ListView(children: [
+                  SizedBox(height: 4, child: DecoratedBox(decoration: BoxDecoration(color: primaryColor))),
                   HomeKindGridWidget(),
+                  SizedBox(height: 4, child: DecoratedBox(decoration: BoxDecoration(color: primaryColor))),
+                  
                   ListTile(
                       // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
                       title: Text("${cookeryList[0].title}"),
@@ -68,8 +75,8 @@ class HomeCookeryPage extends StatelessWidget {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-         // print("kToolbarHeight" + kToolbarHeight.toString() + ":" + Scaffold.of(context).appBarMaxHeight!.toString()+":" + AppBar().preferredSize.height.toString());
-          print("kToolbarHeight" + kToolbarHeight.toString() + ":" +AppBar().preferredSize.height.toString());
+          // print("kToolbarHeight" + kToolbarHeight.toString() + ":" + Scaffold.of(context).appBarMaxHeight!.toString()+":" + AppBar().preferredSize.height.toString());
+          print("kToolbarHeight" + kToolbarHeight.toString() + ":" + AppBar().preferredSize.height.toString());
           _navigateToNewScreen(context, -1);
         },
         tooltip: 'Increment',

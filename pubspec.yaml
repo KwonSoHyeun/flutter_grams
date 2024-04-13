@@ -107,11 +107,12 @@ flutter:
   assets:
     - assets/asset_list.json
     - assets/photos/ic_cupcake.png
-    - assets/photos/dish_all.jpg
-    - assets/photos/dish_cake.jpg
-    - assets/photos/dish_drink.jpg
+    - assets/photos/dish_main.jpg
     - assets/photos/dish_side.jpg
-    - assets/photos/dish_source.jpg
+    - assets/photos/dish_dessert.jpg
+    - assets/photos/dish_drink.jpg
+    - assets/photos/dish_etc.jpg
+    - assets/photos/dish_sauce.jpg
 
 flutter_native_splash:
   color: "#ffffff"
