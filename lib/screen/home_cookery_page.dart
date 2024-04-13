@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grams/model/cookery.dart';
@@ -25,6 +26,7 @@ class HomeCookeryPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("레시피 목록"),
       ),
+      backgroundColor: primaryColor,
       body: Consumer<CookeryViewModel>(
         builder: (context, provider, child) {
           cookeryList = provider.cookeryList;
@@ -43,32 +45,33 @@ class HomeCookeryPage extends StatelessWidget {
                     AppBar().preferredSize.height // 앱바 높이 :Scaffold.of(context).appBarMaxHeight!.toInt() , _appBar.preferredSize.height
                     -
                     50,
-                child: ListView(children: [
-                  SizedBox(height: 4, child: DecoratedBox(decoration: BoxDecoration(color: primaryColor))),
-                  HomeKindGridWidget(),
-                  SizedBox(height: 4, child: DecoratedBox(decoration: BoxDecoration(color: primaryColor))),
-                  
-                  ListTile(
-                      // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
-                      title: Text("${cookeryList[0].title}"),
-                      subtitle: Text("${cookeryList[0].desc} ")),
-                  ListTile(
-                      // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
-                      title: Text("${cookeryList[1].title}"),
-                      subtitle: Text("${cookeryList[1].desc} ")),
-                  ListTile(
-                      // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
-                      title: Text("${cookeryList[1].title}"),
-                      subtitle: Text("${cookeryList[1].desc} ")),
-                  ListTile(
-                      // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
-                      title: Text("${cookeryList[1].title}"),
-                      subtitle: Text("${cookeryList[1].desc} ")),
-                  ListTile(
-                      // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
-                      title: Text("${cookeryList[1].title}"),
-                      subtitle: Text("${cookeryList[1].desc} "))
-                ]))
+                child: ListView(
+                  children:
+
+                      //Card(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)), child: Text("dddd")),
+                      //BigCard(cookeryList[0]), BigCard(cookeryList[1])
+                      setListViewItems(),
+                  // ListTile(
+                  //     // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
+                  //     title: Text("${cookeryList[0].title}"),
+                  //     subtitle: Text("${cookeryList[0].desc} ")),
+                  // ListTile(
+                  //     // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
+                  //     title: Text("${cookeryList[1].title}"),
+                  //     subtitle: Text("${cookeryList[1].desc} ")),
+                  // ListTile(
+                  //     // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
+                  //     title: Text("${cookeryList[1].title}"),
+                  //     subtitle: Text("${cookeryList[1].desc} ")),
+                  // ListTile(
+                  //     // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
+                  //     title: Text("${cookeryList[1].title}"),
+                  //     subtitle: Text("${cookeryList[1].desc} ")),
+                  // ListTile(
+                  //     // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
+                  //     title: Text("${cookeryList[1].title}"),
+                  //     subtitle: Text("${cookeryList[1].desc} "))
+                ))
           ]);
         },
       ),
@@ -81,8 +84,8 @@ class HomeCookeryPage extends StatelessWidget {
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-        backgroundColor: Color(0xffeddBd0), //#EDDBD0
-        foregroundColor: Color(0xffd84a09),
+        backgroundColor: primaryButtonColor, //#EDDBD0
+        foregroundColor: Colors.white,
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
@@ -107,6 +110,81 @@ class HomeCookeryPage extends StatelessWidget {
       onSubmitted: (value) {
         print(value);
       },
+    );
+  }
+
+  List<Widget> cardWidgets = List.empty(growable: true);
+
+  List<Widget> setListViewItems() {
+    cardWidgets.add(SizedBox(height: 8, child: DecoratedBox(decoration: BoxDecoration(color: primaryColor))));
+    cardWidgets.add(HomeKindGridWidget());
+    cardWidgets.add(SizedBox(height: 8, child: DecoratedBox(decoration: BoxDecoration(color: primaryColor))));
+
+    int i = 0;
+    for( Cookery value in cookeryList) {
+      if (i++ >4) break;
+      cardWidgets.add(BigCard(value));
+    };
+    return cardWidgets;
+  }
+
+  Card BigCard(Cookery data) {
+    return Card(
+      // Define the shape of the card
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+      ),
+      // Define how the card's content should be clipped
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      // Define the child widget of the card
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          // Add padding around the row widget
+          Padding(
+            padding: const EdgeInsets.all(15),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                // Add an image widget to display an image
+                Image.asset(
+                  "assets/photos/ic_dish.png",
+                  height: 80,
+                  width: 80,
+                  fit: BoxFit.cover,
+                ),
+                // Add some spacing between the image and the text
+                Container(width: 20),
+                // Add an expanded widget to take up the remaining horizontal space
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      // Add some spacing between the top of the card and the title
+                      Container(height: 5),
+                      // Add a title widget
+                      Text(data.title),
+                      // Add some spacing between the title and the subtitle
+                      Container(height: 5),
+                      // Add a subtitle widget
+                      Text(
+                        data.kind,
+                      ),
+                      // Add some spacing between the subtitle and the text
+                      Container(height: 10),
+                      // Add a text widget to display some text
+                      Text(
+                        data.desc,
+                        maxLines: 2,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

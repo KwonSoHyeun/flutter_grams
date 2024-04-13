@@ -107,6 +107,8 @@ flutter:
   assets:
     - assets/asset_list.json
     - assets/photos/ic_cupcake.png
+    - assets/photos/ic_dish.png
+    - assets/photos/ic_launcher.png
     - assets/photos/dish_main.jpg
     - assets/photos/dish_side.jpg
     - assets/photos/dish_dessert.jpg
