@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grams/model/home_item.dart';
+import 'package:grams/screen/list_cookery_page.dart';
 import 'package:grams/util/colorvalue.dart';
 
 class HomeKindGridWidget extends StatelessWidget {
@@ -41,7 +42,10 @@ class HomeKindGridWidget extends StatelessWidget {
           itemBuilder: (context, index) => Container(
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 23, 24, 24),
-                image: DecorationImage(image: AssetImage(_items[index].image!), colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.8), BlendMode.dstATop),fit: BoxFit.cover),
+                image: DecorationImage(
+                    image: AssetImage(_items[index].image!),
+                    colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.8), BlendMode.dstATop),
+                    fit: BoxFit.cover),
               ),
               child: TextButton(
                   style: TextButton.styleFrom(
@@ -50,7 +54,9 @@ class HomeKindGridWidget extends StatelessWidget {
                     backgroundColor: Colors.transparent,
                     shape: BeveledRectangleBorder(),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ListCookeryPage()));
+                  },
                   child: Text('${_items[index].name!.toUpperCase()}')) //               //subtitle: Text('Item ${_items[index].target}'),
 
               )),
