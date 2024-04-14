@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:grams/model/cookery.dart';
 import 'package:grams/screen/edit_cookery_page.dart';
+import 'package:grams/screen/widgets/select_kind_widget.dart';
 import 'package:grams/util/colorvalue.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -21,31 +23,35 @@ class ListCookeryPage extends StatelessWidget {
           cookeryList = provider.cookeryList;
           print(' resbuild');
           return Column(children: <Widget>[
-            Padding(
-                padding: EdgeInsets.all(10.0),
-                child: SearchBar(
-                  // constraints: BoxConstraints(maxHeight: 500),
-                  shape: MaterialStateProperty.all(ContinuousRectangleBorder(borderRadius: BorderRadius.circular(40))),
-                  elevation: MaterialStatePropertyAll(1),
-                  //backgroundColor: MaterialStatePropertyAll( Color(0xffeddBd0)),
-                  shadowColor: MaterialStatePropertyAll(primaryShadowColor),
-                  trailing: [
-                    IconButton(
-                      icon: const Icon(Icons.search),
-                      color: primaryButtonTextColor,
-                      onPressed: () {
-                        provider.setCookeryList(search: _search_value);
-                      },
-                    ),
-                  ], //trailing: [Icon(Icons.search ,color: primaryButtonTextColor,)],
-                  hintText: "검색어를 입력하세요",
-                  onChanged: (value) {
-                    _search_value = value;
-                  },
-                  onSubmitted: (value) {
-                    print(value);
-                  },
-                )),
+            Row(children: [
+              Expanded(
+                  flex: 2,
+                  child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: SearchBar(
+                        shape: MaterialStateProperty.all(ContinuousRectangleBorder(borderRadius: BorderRadius.circular(40))),
+                        elevation: MaterialStatePropertyAll(1),
+
+                        shadowColor: MaterialStatePropertyAll(primaryShadowColor),
+                        trailing: [
+                          IconButton(
+                            icon: const Icon(Icons.search),
+                            color: primaryButtonTextColor,
+                            onPressed: () {
+                              provider.setCookeryList(search: _search_value);
+                            },
+                          ),
+                        ], //trailing: [Icon(Icons.search ,color: primaryButtonTextColor,)],
+                        hintText: "검색어를 입력하세요",
+                        onChanged: (value) {
+                          _search_value = value;
+                        },
+                        onSubmitted: (value) {
+                          print(value);
+                        },
+                      ))),
+              Expanded(flex: 1, child: SelectKindWidget(init: "Main dish", callback: (value) => print(value))),
+            ]),
             Expanded(
                 child: ListView.separated(
                     itemCount: cookeryList.length,

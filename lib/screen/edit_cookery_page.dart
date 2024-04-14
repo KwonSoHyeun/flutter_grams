@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grams/screen/widgets/select_kind_widget.dart';
 import 'package:grams/util/colorvalue.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
 import 'package:logger/logger.dart';
@@ -149,7 +150,11 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                           keyboardType: TextInputType.text,
                         ),
                       ),
-                      _buildKind(),
+                      SelectKindWidget(
+                          callback: (value) => setState(() {
+                                dropDownValue = value;
+                                print(value);
+                              }), init: dropDownValue,),
                     ]),
                     TextFormField(
                       validator: (value) {
@@ -312,32 +317,6 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
           child: Text("갤러리"),
         ),
       ],
-    );
-  }
-
-  Widget _buildKind() {
-    var dropDownList = cookingKindList;
-
-    if (dropDownValue == "") {
-      dropDownValue = dropDownList.first;
-    }
-
-    return DropdownButton(
-      value: dropDownValue, //초기 선택값
-      items: dropDownList.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-
-      onChanged: (String? value) {
-        // 드롭다운의 값을 선택했을 경우
-        setState(() {
-          dropDownValue = value!;
-          print(dropDownValue);
-        });
-      },
     );
   }
 }
