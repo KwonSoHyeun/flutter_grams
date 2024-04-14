@@ -55,7 +55,7 @@ class HomeKindGridWidget extends StatelessWidget {
                     shape: BeveledRectangleBorder(),
                   ),
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ListCookeryPage()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ListCookeryPage("","")));
                   },
                   child: Text('${_items[index].name!.toUpperCase()}')) //               //subtitle: Text('Item ${_items[index].target}'),
 

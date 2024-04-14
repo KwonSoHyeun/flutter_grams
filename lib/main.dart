@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:grams/model/ingredient.dart';
 import 'package:grams/screen/home_cookery_page.dart';
-import 'package:grams/screen/list_cookery_page.dart';
 import 'package:grams/util/colorvalue.dart';
-import 'package:grams/viewmodel/items_viewmodel.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
+import 'package:grams/viewmodel/items_viewmodel.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'model/cookery.dart'; 
 
@@ -59,7 +56,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: primaryTextColor),
           useMaterial3: true,
         ),
-        home: ListCookeryPage(),
+        home: HomeCookeryPage(),
       ),
     );
   }

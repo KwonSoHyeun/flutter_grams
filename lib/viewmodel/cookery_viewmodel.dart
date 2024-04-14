@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:grams/model/cookery.dart';
 import 'package:grams/model/ingredient.dart';
 import 'package:grams/services/local_controller.dart';
-import 'package:grams/viewmodel/items_viewmodel.dart';
 
 class CookeryViewModel with ChangeNotifier {
   late final LocalController _cookeryController;
@@ -19,7 +18,6 @@ class CookeryViewModel with ChangeNotifier {
 
   _getCookeryList() {
     cookeryList = getCookeryList();
-    
     notifyListeners();
   }
 

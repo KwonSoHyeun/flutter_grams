@@ -10,6 +10,7 @@ const primaryShadowColor = Colors.black;
 const primaryButtonTextColor = Color(0xff101082   );//Color(0xffd84a09);
 
 const ButtonTextBGColor = Color(0x50d84a09);
-
+const ButtonKindBGColor = Color(0xccD8E4EC);
+const lineColor1 = Color(0xccD8E4EC);
 const List<String> cookingKindList = ['Main dish', 'Side dish', 'Dressing', 'Drink', 'Dessert', 'etc.'];
 const String initCookingKind ="Main dish";
