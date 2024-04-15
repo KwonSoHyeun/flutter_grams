@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:grams/model/cookery.dart';
 import 'package:grams/screen/edit_cookery_page.dart';
 import 'package:grams/screen/list_cookery_page.dart';
@@ -14,6 +16,7 @@ class HomeCookeryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffD5DFDF),
       // appBar: AppBar(
       //   title: const Text("CookGram"),
       // ),
@@ -32,21 +35,22 @@ class HomeCookeryPage extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(20, 10, 20, 8),
                 alignment: Alignment(0.0, 0.0),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xff94C4C7),
                   image: DecorationImage(
                       image: AssetImage('assets/photos/bg_kitchen5.jpg'), //0xffB1BDA9
-                     // colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.7), BlendMode.dstATop),
+                      // colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.7), BlendMode.dstATop),
                       fit: BoxFit.cover),
                 ),
                 child: Column(children: <Widget>[
-                  const Text("CookGram",
+                  const Text(
+                    "CookGram",
                     //"CookGram is an easy ratio calculator to use with cooking recipes. ",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, fontFamily: 'palatino', color: Colors.white),//Color(0xff303C7B)
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, fontFamily: 'palatino', color: Colors.white), //Color(0xff303C7B)
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  _searchWidget(),
+                  _searchWidget(context),
                   SizedBox(
                     height: 6,
                   ),
@@ -54,37 +58,32 @@ class HomeCookeryPage extends StatelessWidget {
                     TextButton(
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ButtonKindBGColor)),
                       onPressed: () {
-                        // Respond to button press
-                        _navigateToListScreen(context, 0);
+                        _navigateToListScreen(context, "", "");
                       },
-                      //icon: Icon(Icons.add, size: 8),
                       child: Text("All"),
                     ),
                     Spacer(),
                     TextButton(
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ButtonKindBGColor)),
                       onPressed: () {
-                        // Respond to button press
+                        _navigateToListScreen(context, "", "main");
                       },
-                      //icon: Icon(Icons.add, size: 8),
-                      child: Text("MainD."),
+                      child: Text("Main"),
                     ),
                     Spacer(),
                     TextButton(
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ButtonKindBGColor)),
                       onPressed: () {
-                        // Respond to button press
+                        _navigateToListScreen(context, "", "side");
                       },
-                      //icon: Icon(Icons.add, size: 8),
-                      child: Text("SideD."),
+                      child: Text("Side"),
                     ),
-                                        Spacer(),
+                    Spacer(),
                     TextButton(
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ButtonKindBGColor)),
                       onPressed: () {
-                        // Respond to button press
+                        _navigateToListScreen(context, "", "sauce");
                       },
-                      //icon: Icon(Icons.add, size: 8),
                       child: Text("Sauce"),
                     ),
                   ]),
@@ -92,43 +91,27 @@ class HomeCookeryPage extends StatelessWidget {
                     TextButton(
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ButtonKindBGColor)),
                       onPressed: () {
-                        // Respond to button press
+                        _navigateToListScreen(context, "", "dessert");
                       },
-                      //icon: Icon(Icons.add, size: 8),
                       child: Text("Dessert"),
                     ),
                     Spacer(),
                     TextButton(
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ButtonKindBGColor)),
                       onPressed: () {
-                        // Respond to button press
+                        _navigateToListScreen(context, "", "drink");
                       },
-                      //icon: Icon(Icons.add, size: 8),
                       child: Text("Drink"),
                     ),
-
                     Spacer(),
                     TextButton(
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ButtonKindBGColor)),
                       onPressed: () {
-                        // Respond to button press
+                        _navigateToListScreen(context, "", "etc");
                       },
-                      //icon: Icon(Icons.add, size: 8),
                       child: Text("ETC"),
                     ),
-
-
-                                        Spacer(),
-                    IconButton(
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ButtonKindBGColor)),
-                      onPressed: () {
-                        // Respond to button press
-                      },
-                      //icon: Icon(Icons.add, size: 8),
-                      icon:Icon(Icons.favorite),
-                      color: Colors.red,
-                    ),
-
+                    Spacer(),
                   ]),
                 ])),
             Container(
@@ -137,26 +120,10 @@ class HomeCookeryPage extends StatelessWidget {
               color: primaryColor,
             ),
             Expanded(
-                child: ListView.separated(
-                    itemCount: cookeryList.length,
-                    //onPressed:  _navigateToEditScreen(context, index),
-                    separatorBuilder: (BuildContext context, int index) {
-                      return Divider(thickness: 1);
-                    },
-                    itemBuilder: (context, index) {
-                      //return buildRecipeCard(cookeryList[index], context, index);
-                      return ListTile(
-                        // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
-                        title: Text("${cookeryList[index].title}"),
-                        subtitle: Text("${cookeryList[index].desc} "),
-                        onTap: () {
-                          _navigateToCalculateScreen(context, index);
-                        },
-                        onLongPress: () {
-                          _navigateToEditScreen(context, index);
-                        },
-                      );
-                    })),
+                child: ListView(
+              children: setListViewItems(context),
+            )),
+
           ]));
         },
       ),
@@ -165,7 +132,7 @@ class HomeCookeryPage extends StatelessWidget {
         onPressed: () {
           _navigateToNewScreen(context, -1);
         },
-        tooltip: 'Increment',
+        tooltip: 'New Receipy',
         child: const Icon(Icons.add),
         backgroundColor: primaryButtonColor, //#EDDBD0
         foregroundColor: Colors.white,
@@ -173,9 +140,8 @@ class HomeCookeryPage extends StatelessWidget {
     );
   }
 
-  void _navigateToListScreen(BuildContext context, int index) {
-    Cookery data = cookeryList[index].deepCopy();
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ListCookeryPage("","")));
+  void _navigateToListScreen(BuildContext context, String search, String kind) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ListCookeryPage(search, kind)));
   }
 
   void _navigateToCalculateScreen(BuildContext context, int index) {
@@ -192,7 +158,7 @@ class HomeCookeryPage extends StatelessWidget {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(index: index, isEditable: true)));
   }
 
-  Widget _searchWidget() {
+  Widget _searchWidget(BuildContext context) {
     return SearchBar(
       //backgroundColor: MaterialStatePropertyAll(Colors.transparent),
       side: MaterialStateProperty.all(BorderSide(color: Colors.black, width: 1)),
@@ -204,6 +170,7 @@ class HomeCookeryPage extends StatelessWidget {
           color: primaryButtonTextColor,
           onPressed: () {
             // provider.setCookeryList(search: _search_value);
+             _navigateToListScreen(context, _search_value, "");
           },
         ),
       ], //trailing: [Icon(Icons.search ,color: primaryButtonTextColor,)],
@@ -214,6 +181,91 @@ class HomeCookeryPage extends StatelessWidget {
       onSubmitted: (value) {
         print(value);
       },
+    );
+  }
+
+  List<Widget> cardWidgets = List.empty(growable: true);
+
+  List<Widget> setListViewItems(BuildContext context) {
+    //cardWidgets.add(SizedBox(height: 8, child: DecoratedBox(decoration: BoxDecoration(color: primaryColor))));
+    cardWidgets.add(SizedBox(
+        height: 50, child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.favorite, color: AccentColor), Text(" 내가 좋아하는 레시피")])));
+    //cardWidgets.add(SizedBox(height: 8, child: DecoratedBox(decoration: BoxDecoration(color: primaryColor))));
+
+    //int i = 0;
+
+    List<Cookery> listData = cookeryList.where((element) {
+      return element.heart == true;
+    }).toList();
+
+    for (Cookery value in listData) {
+      cardWidgets.add(BigCard(context, value));
+    }
+    ;
+    return cardWidgets;
+  }
+
+  Card BigCard(BuildContext context, Cookery data) {
+    return Card(
+      // Define the shape of the card
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      // Define the child widget of the card
+
+      child: InkWell(
+          onTap: () {
+            print("onpress" + data.key.toString());
+            _navigateToCalculateScreen(context, data.key);
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              // Add padding around the row widget
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    // Add an image widget to display an image
+                    Image.asset(
+                      "assets/photos/ic_dish.png",
+                      height: 80,
+                      width: 80,
+                      fit: BoxFit.cover,
+                    ),
+                    // Add some spacing between the image and the text
+                    Container(width: 20),
+                    // Add an expanded widget to take up the remaining horizontal space
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          // Add some spacing between the top of the card and the title
+                          Container(height: 5),
+                          // Add a title widget
+                          Text(data.title),
+                          // Add some spacing between the title and the subtitle
+                          Container(height: 5),
+                          // Add a subtitle widget
+                          Text(
+                            data.kind,
+                          ),
+                          // Add some spacing between the subtitle and the text
+                          Container(height: 10),
+                          // Add a text widget to display some text
+                          Text(
+                            data.desc,
+                            maxLines: 2,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )),
     );
   }
 }

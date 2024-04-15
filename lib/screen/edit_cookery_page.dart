@@ -39,7 +39,8 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
   final titleController = TextEditingController();
   final descController = TextEditingController();
   final cautionController = TextEditingController();
-  late String dropDownValue = initCookingKind;
+  late String dropDownValue = "";
+  bool isFavorit = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -60,6 +61,11 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
       descController.text = widget.currCookery!.desc;
       cautionController.text = widget.currCookery!.caution;
       itemsViewModel.makeItemWidgetList(widget.currCookery!.ingredients!, widget.isEditable);
+      isFavorit = widget.currCookery!.heart;
+    }
+
+    if (widget.index < 0) {
+      itemsViewModel.defaultIngredientWidget();
     }
   }
 
@@ -80,15 +86,9 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 onPressed: () {
                   final formKeyState = _formKey.currentState!;
                   if (formKeyState.validate()) {
-                    print("ok");
-                    cookeryViewModel.addCookery(titleController.text, dropDownValue, _imageFilePath, descController.text, cautionController.text, false, 0,
+                    cookeryViewModel.addCookery(titleController.text, dropDownValue, _imageFilePath, descController.text, cautionController.text, isFavorit, 0,
                         itemsViewModel.getIngredientList()); //todo 구현
                     Navigator.of(context).pop();
-                  } else {
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //   const SnackBar(content: Text('Processing Data')),
-                    // );
-                    print("not ok");
                   }
                 },
               ),
@@ -100,9 +100,12 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 color: Colors.white70,
                 tooltip: 'Update data',
                 onPressed: () {
-                  cookeryViewModel.update(widget.index, titleController.text, dropDownValue, _imageFilePath, descController.text, cautionController.text, false,
-                      0, itemsViewModel.getIngredientList()); //todo 구현
-                  Navigator.of(context).pop();
+                  final formKeyState = _formKey.currentState!;
+                  if (formKeyState.validate()) {
+                    cookeryViewModel.update(widget.index, titleController.text, dropDownValue, _imageFilePath, descController.text, cautionController.text,
+                        isFavorit, 0, itemsViewModel.getIngredientList()); //todo 구현
+                    Navigator.of(context).pop();
+                  }
                 },
               ),
             ),
@@ -152,10 +155,12 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                         ),
                       ),
                       SelectKindWidget(
-                          callback: (value) => setState(() {
-                                dropDownValue = value;
-                                print(value);
-                              }), init: dropDownValue,),
+                        callback: (value) => setState(() {
+                          dropDownValue = value;
+                          print(value);
+                        }),
+                        init: dropDownValue,
+                      ),
                     ]),
                     TextFormField(
                       validator: (value) {
@@ -203,7 +208,16 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                               },
                             ))
                           ],
-                        ))
+                        )),
+                    IconButton(
+                        icon: Icon(Icons.favorite),
+                        color: isFavorit ? Colors.red[600] : Colors.grey,
+                        iconSize: 30,
+                        onPressed: () {
+                          setState(() {
+                            isFavorit = !isFavorit;
+                          });
+                        })
                   ],
                 ),
               ),

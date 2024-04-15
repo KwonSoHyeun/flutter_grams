@@ -11,6 +11,15 @@ const primaryButtonTextColor = Color(0xff101082   );//Color(0xffd84a09);
 
 const ButtonTextBGColor = Color(0x50d84a09);
 const ButtonKindBGColor = Color(0xccD8E4EC);
+const AccentColor = Color(0xffE8530F);
 const lineColor1 = Color(0xccD8E4EC);
-const List<String> cookingKindList = ['Main dish', 'Side dish', 'Dressing', 'Drink', 'Dessert', 'etc.'];
-const String initCookingKind ="Main dish";
+const List<String> cookingKindList = ['main', 'side', 'dressing', 'drink', 'dessert', 'sauce', 'etc'];
+//const String initCookingKind ="Main dish";
+
+/*
+Shadow Greenn:  #94C4C7 
+
+& Sidecar —
+
+The quick, brown, shadow green, and sidecar fox jumped over the lazy dog.
+*/

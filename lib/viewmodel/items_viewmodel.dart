@@ -50,6 +50,11 @@ class ItemsViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  void defaultIngredientWidget() {
+    clearDataItemList();
+    addNewWidgetWithController(0, true);
+  }
+
   clearDataItemList() {
     boxItemWidget = List.empty(growable: true);
     boxItemWidget.clear();

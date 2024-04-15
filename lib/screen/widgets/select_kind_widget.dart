@@ -10,16 +10,17 @@ class SelectKindWidget extends StatelessWidget {
   
   final String init;
   const SelectKindWidget({Key? key, required this.callback, required this.init}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var dropDownList = cookingKindList;
-
-    // if (selectedItem == "") {
-    //   selectedItem = dropDownList.first;
-    // }
+    String _init = cookingKindList[0];
+    if (!init.isEmpty) {
+      _init = init;
+    }
 
     return DropdownButton(
-      value: "Side dish", //초기 선택값
+      value: _init, //초기 선택값
       items: dropDownList.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,

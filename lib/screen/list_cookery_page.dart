@@ -8,23 +8,31 @@ import 'package:provider/provider.dart';
 class ListCookeryPage extends StatelessWidget {
   List<Cookery> cookeryList = List.empty(growable: true);
   late Cookery currCookery;
-  String _search_value = "";
-   
-  String search_value="";
-  String kind="";
-  
-  ListCookeryPage(this.search_value, this.kind);
-  
+  String search = "";
+  String kind = "";
+
+  ListCookeryPage(this.search, this.kind);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(
-         title: const Text("CookGram"),
-       ),
+      appBar: AppBar(
+        title: kind.isNotEmpty? Text("List / "+ kind!.toUpperCase().toString()): Text("List / All"),
+      ),
       body: Consumer<CookeryViewModel>(
         builder: (context, provider, child) {
-          //if (cookeryList.)
+          print("search:" + search);
+
           cookeryList = provider.cookeryList;
+
+          if (search.isNotEmpty) {
+            cookeryList = cookeryList.where((element) => element.title.contains(search) == true).toList();
+          } else {
+            if (kind.isNotEmpty) {
+              cookeryList = cookeryList.where((element) => element.kind == kind).toList();
+            }
+          }
+
           return SafeArea(
               child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
             Container(
@@ -32,7 +40,6 @@ class ListCookeryPage extends StatelessWidget {
               width: 500.0,
               color: primaryColor,
             ),
-
             Expanded(
                 child: ListView.separated(
                     itemCount: cookeryList.length,
@@ -46,12 +53,14 @@ class ListCookeryPage extends StatelessWidget {
                         // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
                         title: Text("${cookeryList[index].title}"),
                         subtitle: Text("${cookeryList[index].desc} "),
+                        trailing: Icon(Icons.favorite, color: cookeryList[index].heart? Colors.redAccent: Colors.grey),
                         onTap: () {
                           _navigateToCalculateScreen(context, index);
                         },
                         onLongPress: () {
                           _navigateToEditScreen(context, index);
                         },
+                        
                       );
                     })),
           ]));
@@ -82,30 +91,5 @@ class ListCookeryPage extends StatelessWidget {
 
   void _navigateToNewScreen(BuildContext context, int index) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(index: index, isEditable: true)));
-  }
-
-  Widget _searchWidget() {
-    return SearchBar(
-      //backgroundColor: MaterialStatePropertyAll(Colors.transparent),
-      side: MaterialStateProperty.all(BorderSide(color: Colors.black, width: 1)),
-      elevation: MaterialStatePropertyAll(1),
-      constraints: BoxConstraints(maxHeight: 50, minHeight: 50),
-      trailing: [
-        IconButton(
-          icon: const Icon(Icons.search),
-          color: primaryButtonTextColor,
-          onPressed: () {
-            // provider.setCookeryList(search: _search_value);
-          },
-        ),
-      ], //trailing: [Icon(Icons.search ,color: primaryButtonTextColor,)],
-      hintText: "검색어를 입력하세요",
-      onChanged: (value) {
-        _search_value = value;
-      },
-      onSubmitted: (value) {
-        print(value);
-      },
-    );
   }
 }
