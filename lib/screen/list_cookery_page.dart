@@ -23,7 +23,8 @@ class ListCookeryPage extends StatelessWidget {
         builder: (context, provider, child) {
           print("search:" + search);
 
-          cookeryList = provider.cookeryList;
+          //cookeryList = provider.cookeryList;
+          cookeryList = provider.getCookeryList();
 
           if (search.isNotEmpty) {
             cookeryList = cookeryList.where((element) => element.title.contains(search) == true).toList();
@@ -81,15 +82,15 @@ class ListCookeryPage extends StatelessWidget {
 
   void _navigateToCalculateScreen(BuildContext context, int index) {
     Cookery data = cookeryList[index].deepCopy();
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(index: index, currCookery: data, isEditable: false)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey:cookeryList[index].key, currCookery: data, isEditable: false)));
   }
 
   void _navigateToEditScreen(BuildContext context, int index) {
     Cookery data = cookeryList[index].deepCopy();
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(index: index, currCookery: data, isEditable: true)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey:cookeryList[index].key, currCookery: data, isEditable: true)));
   }
 
   void _navigateToNewScreen(BuildContext context, int index) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(index: index, isEditable: true)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(isEditable: true)));
   }
 }

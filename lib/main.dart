@@ -8,7 +8,8 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
-import 'model/cookery.dart'; 
+import 'model/cookery.dart';
+import 'services/hive_data.dart'; 
 
 //const primaryColor = Color(0xffe44805);//ee4e34
 //const primaryColor = Color(0xffe44805);//ee4e34
@@ -19,13 +20,13 @@ var logger = Logger(
 );
 
 Future<void> main() async {
+   WidgetsFlutterBinding.ensureInitialized();
+   
   //WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  await Hive.initFlutter();
-  Hive.registerAdapter(CookeryAdapter());
-  Hive.registerAdapter(IngredientAdapter());
-  await Hive.openBox<Cookery>("COOKERY_BOX");
+  await HiveData.init();
+
   runApp(const MyApp());
   //FlutterNativeSplash.remove();
 }

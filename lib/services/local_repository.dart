@@ -4,26 +4,32 @@ import '../model/cookery.dart';
 
 const String boxName = 'COOKERY_BOX';
 
+class Boxes{
+  static Box<Cookery> getTask() => Hive.box<Cookery>(boxName);
+}
+
 class LocalRepository {
+  static Box userBox = Boxes.getTask();
 
   Future<void> add(Cookery data) async {
-    await Hive.box<Cookery>(boxName).add(data);
+    String   key = DateTime.now().millisecondsSinceEpoch.toString();
+    await userBox.put(key, data);
   }
 
   List<Cookery> getAll() {
-    return Hive.box<Cookery>(boxName).values.toList();
+    return  userBox.values.toList() as List<Cookery>;
   }
 
   Cookery? getAtIndex(int index) {
-    Cookery? item = Hive.box<Cookery>(boxName).getAt(index) ;
+    Cookery? item = userBox.getAt(index) ;
     return item;
   }
 
-  Future<void> update(int index, Cookery data) async {
-    await Hive.box<Cookery>(boxName).putAt(index, data);
+  Future<void> update(String key, Cookery data) async {
+    await userBox.put(key, data);
   }
 
-  Future<void> delete(int id) async {
-    Hive.box<Cookery>(boxName).deleteAt(id);
+  Future<void> delete(String key) async {
+    userBox.delete(key);
   }
 }

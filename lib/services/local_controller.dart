@@ -7,7 +7,7 @@ class LocalController {
   final repo = LocalRepository();
 
   add(Cookery data) {
-    repo.add(data);
+    repo.add( data);
   }
 
   List<Cookery> getAll({String search = ""}) {
@@ -22,17 +22,17 @@ class LocalController {
     return repo.getAtIndex(index);
   }
 
-  update(int index, Cookery data) {
-    repo.update(index, data);
+  update(String key, Cookery data) {
+    repo.update(key, data);
   }
 
-  delete(int id) {
-    repo.delete(id);
+  delete(String key) {
+    repo.delete(key);
   }
 
   addTestData() {
     List<Cookery> list = [
-      Cookery(title: '새우볶음밥', kind: 'main', img: '', desc: '1. 크고 맛있는 새우를 산다. ', caution: '익은 새우를 사용할것', heart: false, hit: 0, ingredients: [
+      Cookery( title: '새우볶음밥', kind: 'main', img: '', desc: '1. 크고 맛있는 새우를 산다. ', caution: '익은 새우를 사용할것', heart: false, hit: 0, ingredients: [
         Ingredient(name: '새우', count: 200.0, unit: 'g'),
         Ingredient(name: '새우젓', count: 1.0, unit: '스푼'),
         Ingredient(name: '양파', count: 50.0, unit: 'g'),
@@ -94,12 +94,8 @@ class LocalController {
     ];
 
     for (Cookery value in list) {
-      //if (i++ > 4) break;
       repo.add( value);
     }
-    // repo.add(list[0]);
-    // repo.add(list[1]);
-    //     repo.add(list[0]);
-    // repo.add(list[1]);
+
   }
 }

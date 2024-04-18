@@ -7,6 +7,7 @@ part 'cookery.g.dart';
 
 @HiveType(typeId: 1)
 class Cookery extends HiveObject {
+
   @HiveField(0)
   String title;
   @HiveField(1)
@@ -25,6 +26,7 @@ class Cookery extends HiveObject {
   List<Ingredient>? ingredients;
 
   Cookery({
+  
     required this.title,
     required this.kind,
     required this.img,
@@ -39,7 +41,7 @@ class Cookery extends HiveObject {
       Cookery(title: title, kind: kind, img: img, desc: desc, caution: caution, heart: heart, hit:hit, ingredients: ingredients!.map((e) => e.deepCopy()).toList());
 
   @override
-  String toString() => '{ title:$title, kind:$kind, img:$img, desc:$desc, caution:$caution, heart:$heart,hit:$hit, ingredient:$ingredients}';
+  String toString() => '{title:$title, kind:$kind, img:$img, desc:$desc, caution:$caution, heart:$heart,hit:$hit, ingredient:$ingredients}';
 
   String getIngredients() {
     var ret = '';

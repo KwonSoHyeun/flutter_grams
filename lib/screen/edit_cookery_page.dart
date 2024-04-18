@@ -1,5 +1,6 @@
 import 'dart:io';
 
+
 import 'package:flutter/material.dart';
 import 'package:grams/screen/widgets/select_kind_widget.dart';
 import 'package:grams/util/colorvalue.dart';
@@ -17,12 +18,12 @@ var logger = Logger(
 );
 
 class EditCookeryPage extends StatefulWidget {
-  final int index;
-  final Cookery? currCookery;
+  final String? currKey;
+  final Cookery? currCookery ;
   final bool isEditable;
-
+  
   //EditCookeryPage(this.index, this.currCookery, this.isEditable, [Cookery? currcookery]);
-  EditCookeryPage({this.index = -1, this.currCookery, this.isEditable = true});
+  EditCookeryPage({ this.currKey, this.currCookery, this.isEditable = true});
 
   @override
   State<EditCookeryPage> createState() => _EditCookeryPageState();
@@ -39,7 +40,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
   final titleController = TextEditingController();
   final descController = TextEditingController();
   final cautionController = TextEditingController();
-  late String dropDownValue = "";
+  late String dropDownValue = cookingKindList[0];
   bool isFavorit = false;
 
   final _formKey = GlobalKey<FormState>();
@@ -68,7 +69,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
       isFavorit = widget.currCookery!.heart;
     }
 
-    if (widget.index < 0) {
+    if (widget.currCookery == null) {
       itemsViewModel.defaultIngredientWidget();
     }
   }
@@ -76,13 +77,15 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
   @override
   Widget build(BuildContext context) {
     //var msg = widget.isEditable?'Calculate mode': 'Edit mode';
+    print("edit page:새로그림:" + widget.currKey.toString());
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text(widget.isEditable ? 'Receipe' : 'Calculating'),
+          title: Text(widget.isEditable ? 'Recipe' : 'Calculating'),
           actions: [
+//앱바 : 신규저장            
             Visibility(
-              visible: widget.index < 0 && widget.isEditable,
+              visible: widget.currCookery == null && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.save),
                 color: Colors.white70,
@@ -97,8 +100,9 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 },
               ),
             ),
+//앱바: 업데이트 저장            
             Visibility(
-              visible: widget.index >= 0 && widget.isEditable,
+              visible: widget.currCookery != null && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.save),
                 color: Colors.white70,
@@ -106,26 +110,27 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 onPressed: () {
                   final formKeyState = _formKey.currentState!;
                   if (formKeyState.validate()) {
-                    //int index = query.map((e) => box.values.toList().indexOf(e)).first;
-                    cookeryViewModel.update(widget.index, titleController.text, dropDownValue, _imageFilePath, descController.text, cautionController.text,
+                    cookeryViewModel.update(widget.currKey!,  titleController.text, dropDownValue, _imageFilePath, descController.text, cautionController.text,
                         isFavorit, 0, itemsViewModel.getIngredientList()); //todo 구현
                     Navigator.of(context).pop();
                   }
                 },
               ),
             ),
+//앱바: 삭제 
             Visibility(
-              visible: widget.index >= 0 && widget.isEditable,
+              visible: widget.currCookery != null && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.delete),
                 color: Colors.white70,
-                tooltip: 'Open shopping cart',
+                tooltip: 'Delete',
                 onPressed: () {
-                  cookeryViewModel.delete(widget.index);
+                  cookeryViewModel.delete(widget.currKey!);
                   Navigator.of(context).pop();
                 },
               ),
             ),
+//앱바: 에디트 모드로 이동            
             PopupMenuButton<int>(
               icon: const Icon(Icons.more_vert),
               onSelected: (item) => handleClick(item),
@@ -263,8 +268,8 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
       case 0:
         break;
       case 1:
-        print("goto edit page");
-        Cookery curr_data = Cookery(
+       
+        Cookery? data = Cookery(
             title: titleController.text,
             kind: dropDownValue,
             img: _imageFilePath,
@@ -273,8 +278,10 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
             heart: isFavorit,
             hit: 0,
             ingredients: itemsViewModel.getIngredientList());
+
+             //print("goto edit page" + data.title + data.key.toString());
         Navigator.pop(context);
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(index: widget.index, currCookery: curr_data, isEditable: true)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey:widget.currKey!, currCookery: widget.currCookery, isEditable: true)));
 
         break;
     }

@@ -18,6 +18,7 @@ class CookeryViewModel with ChangeNotifier {
 
   _getCookeryList() {
     cookeryList = getCookeryList();
+    print("_getCookeryList()::"+cookeryList.toString());
     notifyListeners();
   }
 
@@ -32,7 +33,7 @@ class CookeryViewModel with ChangeNotifier {
   }
 
   setCurrCookery(Cookery? data) {
-    data ??= Cookery(title: "", kind:"", img:"", desc: "", caution:"", heart:false, hit:0, ingredients: List.empty(growable: true));
+    data ??= Cookery( title: "", kind:"", img:"", desc: "", caution:"", heart:false, hit:0, ingredients: List.empty(growable: true));
     _currCookery = data;
   }
 
@@ -52,6 +53,7 @@ class CookeryViewModel with ChangeNotifier {
 
   Future<void> addCookery (String title, String kind, String img, String desc, String caution, bool heart, int hit, List<Ingredient>? items) async {
     //await _cookeryController.add(cookery);
+    
     Cookery data = Cookery(title: title, kind: kind, img: img, desc: desc, caution: caution, heart: heart, hit:hit, ingredients: items);
     await _cookeryController.add(data);
 
@@ -79,14 +81,14 @@ class CookeryViewModel with ChangeNotifier {
   //   return item;
   // }
 
-  update(int index, String title, String kind, String img, String desc, String caution, bool heart, int hit, List<Ingredient>? items) {
-    Cookery data = Cookery(title: title, kind: kind, img: img, desc: desc, caution: caution, heart: heart, hit:hit, ingredients: items);
-    _cookeryController.update(index, data);
+  update(String key, String title, String kind, String img, String desc, String caution, bool heart, int hit, List<Ingredient>? items) {
+    Cookery data = Cookery( title: title, kind: kind, img: img, desc: desc, caution: caution, heart: heart, hit:hit, ingredients: items);
+    _cookeryController.update(key, data);
     notifyListeners();
   }
 
-  delete(int index) {
-    _cookeryController.delete(index);
+  delete(String key) {
+    _cookeryController.delete(key);
     notifyListeners();
   }
 }
