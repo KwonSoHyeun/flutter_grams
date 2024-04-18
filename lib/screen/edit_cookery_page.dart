@@ -54,12 +54,16 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
     cookeryViewModel.setCurrCookery(widget.currCookery);
     if (widget.currCookery != null) {
       titleController.text = widget.currCookery!.title;
+
+      if (widget.currCookery!.img.isNotEmpty){
       _imageFilePath = widget.currCookery!.img;
       _image = XFile(_imageFilePath); //가져온 이미지를 _image에 저장
+      }
 
       dropDownValue = widget.currCookery!.kind;
       descController.text = widget.currCookery!.desc;
       cautionController.text = widget.currCookery!.caution;
+
       itemsViewModel.makeItemWidgetList(widget.currCookery!.ingredients!, widget.isEditable);
       isFavorit = widget.currCookery!.heart;
     }
@@ -102,6 +106,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 onPressed: () {
                   final formKeyState = _formKey.currentState!;
                   if (formKeyState.validate()) {
+                    //int index = query.map((e) => box.values.toList().indexOf(e)).first;
                     cookeryViewModel.update(widget.index, titleController.text, dropDownValue, _imageFilePath, descController.text, cautionController.text,
                         isFavorit, 0, itemsViewModel.getIngredientList()); //todo 구현
                     Navigator.of(context).pop();
@@ -176,12 +181,16 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                       maxLength: 500,
                       maxLines: null,
                     ),
+//사진등록
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text('$_imageFilePath'),
-                        SizedBox(height: 30, width: double.infinity),
-                        _buildPhotoArea(),
+                        Text('사진경로: $_imageFilePath'),
+                     //   SizedBox(height: 30, width: double.infinity),
+                        Visibility(
+                          visible: true ,//_imageFilePath.isNotEmpty,
+                          child: _buildPhotoArea(),
+                        ),
                         SizedBox(height: 20),
                         _buildButton(),
                       ],
@@ -193,6 +202,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                       keyboardType: TextInputType.text,
                     ),
                     const Padding(padding: EdgeInsets.all(10)),
+                    //재료명, 중량, 단위를 다수개 등록
                     Center(child: Consumer<ItemsViewModel>(builder: (context, provider, child) {
                       return Column(children: provider.boxItemWidget);
                     })),
@@ -256,11 +266,11 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
         print("goto edit page");
         Cookery curr_data = Cookery(
             title: titleController.text,
-            kind: "",
-            img: "",
+            kind: dropDownValue,
+            img: _imageFilePath,
             desc: descController.text,
             caution: cautionController.text,
-            heart: false,
+            heart: isFavorit,
             hit: 0,
             ingredients: itemsViewModel.getIngredientList());
         Navigator.pop(context);
@@ -305,8 +315,8 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
             ),
           )
         : Container(
-            width: 100,
-            height: 100,
+            width: 50,
+            height: 50,
             decoration: const BoxDecoration(
               image: DecorationImage(image: AssetImage('assets/photos/ic_cupcake.png'), fit: BoxFit.cover),
             ),
