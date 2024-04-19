@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -6,6 +8,7 @@ import 'package:grams/screen/edit_cookery_page.dart';
 import 'package:grams/screen/list_cookery_page.dart';
 import 'package:grams/util/colorvalue.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class HomeCookeryPage extends StatelessWidget {
@@ -167,6 +170,14 @@ class HomeCookeryPage extends StatelessWidget {
   // }
 
   Card BigCard(BuildContext context, Cookery data) {
+    XFile? _image;
+    String _imageFilePath = "";
+
+    if (data.img.isNotEmpty) {
+      _imageFilePath = data.img;
+      _image = XFile(_imageFilePath); //가져온 이미지를 _image에 저장
+    }
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -175,7 +186,7 @@ class HomeCookeryPage extends StatelessWidget {
           onTap: () {
             //final pIndex = favoriteList.indexWhere((element) => element.id == data.id);
             print("onpress" + data.key.toString());
-            //print("onpress" + index.toString());
+            print("onpress" + data.img.toString());
 
             _navigateToCalculateScreen(context, data);
           },
@@ -188,11 +199,25 @@ class HomeCookeryPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     // Add an image widget to display an image
-                    Image.asset(
-                      "assets/photos/ic_dish.png",
-                      height: 80,
-                      width: 80,
-                      fit: BoxFit.cover,
+                    Visibility(
+                      visible: true,
+                      //child: PhotoAreaWidget(_image),
+                      child: _imageFilePath.isNotEmpty
+                          ? Container(
+                              width: 80,
+                              height: 80,
+                              //child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
+                              decoration: BoxDecoration(
+                                image: DecorationImage(image: FileImage(File(_image!.path)), fit: BoxFit.cover),
+                              ),
+                            )
+                          : Container(
+                              width: 80,
+                              height: 80,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(image: AssetImage('assets/photos/ic_cupcake.png'), fit: BoxFit.cover),
+                              ),
+                            ),
                     ),
 
                     Container(width: 20),
@@ -228,17 +253,17 @@ class HomeCookeryPage extends StatelessWidget {
   }
 
   void _navigateToCalculateScreen(BuildContext context, Cookery data) {
-   // Cookery data = cookeryList[index].deepCopy();
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey:data.key, currCookery: data, isEditable: false)));
+    // Cookery data = cookeryList[index].deepCopy();
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey: data.key, currCookery: data, isEditable: false)));
   }
 
   void _navigateToEditScreen(BuildContext context, int index) {
     Cookery data = cookeryList[index].deepCopy();
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey:data.key, currCookery: data, isEditable: true)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey: data.key, currCookery: data, isEditable: true)));
   }
 
   void _navigateToNewScreen(BuildContext context, int index) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage( isEditable: true)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(isEditable: true)));
   }
 
   Widget _searchWidget(BuildContext context) {
