@@ -33,7 +33,7 @@ class HomeCookeryPage extends StatelessWidget {
             return element.heart == true;
           }).toList();
 
-          print("다시 부름 홈, " + favoriteList.length.toString());
+          print("home_page: consumer: 총 하트 리스트 갯수 " + favoriteList.length.toString());
           return SafeArea(
               child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
             Container(
@@ -185,8 +185,8 @@ class HomeCookeryPage extends StatelessWidget {
       child: InkWell(
           onTap: () {
             //final pIndex = favoriteList.indexWhere((element) => element.id == data.id);
-            print("onpress" + data.key.toString());
-            print("onpress" + data.img.toString());
+            print("list_page: card on press : key:" + data.key.toString());
+            //print("onpress" + data.img.toString());
 
             _navigateToCalculateScreen(context, data);
           },
@@ -287,7 +287,7 @@ class HomeCookeryPage extends StatelessWidget {
         _search_value = value;
       },
       onSubmitted: (value) {
-        print(value);
+     //   print(value);
       },
     );
   }

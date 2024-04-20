@@ -24,7 +24,9 @@ class EditCookeryPage extends StatefulWidget {
 
 
   //EditCookeryPage(this.index, this.currCookery, this.isEditable, [Cookery? currcookery]);
-  EditCookeryPage({this.currKey, this.currCookery, this.isEditable = true});
+  EditCookeryPage({
+    this.currKey, this.currCookery, this.isEditable = true}
+    );
 
   @override
   State<EditCookeryPage> createState() => _EditCookeryPageState();
@@ -33,7 +35,7 @@ class EditCookeryPage extends StatefulWidget {
 class _EditCookeryPageState extends State<EditCookeryPage> {
   late CookeryViewModel cookeryViewModel;
   late ItemsViewModel itemsViewModel;
-  late Cookery currCookery_origin;
+  Cookery? editCookery = null;
   XFile? _image;
   String _imageFilePath = "";
   final picker = ImagePicker();
@@ -55,26 +57,25 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
     cookeryViewModel = Provider.of<CookeryViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
     itemsViewModel = Provider.of<ItemsViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
     itemsViewModel.clearDataItemList();
-    cookeryViewModel.setCurrCookery(widget.currCookery);
+    cookeryViewModel.setCurrCookery(editCookery);
     if (widget.currCookery != null) {
-      
-      currCookery_origin = widget.currCookery!.deepCopy();
-      titleController.text = widget.currCookery!.title;
+      editCookery = widget.currCookery!.deepCopy();
+      titleController.text = editCookery!.title;
 
-      if (widget.currCookery!.img.isNotEmpty) {
-        _imageFilePath = widget.currCookery!.img;
+      if (editCookery!.img.isNotEmpty) {
+        _imageFilePath = editCookery!.img;
         _image = XFile(_imageFilePath); //가져온 이미지를 _image에 저장
       }
 
-      dropDownValue = widget.currCookery!.kind;
-      descController.text = widget.currCookery!.desc;
-      cautionController.text = widget.currCookery!.caution;
+      dropDownValue = editCookery!.kind;
+      descController.text = editCookery!.desc;
+      cautionController.text = editCookery!.caution;
 
-      itemsViewModel.makeItemWidgetList(widget.currCookery!.ingredients!, widget.isEditable);
-      isFavorit = widget.currCookery!.heart;
+      itemsViewModel.makeItemWidgetList(editCookery!.ingredients!, widget.isEditable);
+      isFavorit = editCookery!.heart;
     }
 
-    if (widget.currCookery == null) {
+    if (editCookery == null) {
       itemsViewModel.defaultIngredientWidget();
     }
   }
@@ -91,7 +92,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
           actions: [
 //앱바 : 신규저장
             Visibility(
-              visible: widget.currCookery == null && widget.isEditable,
+              visible: editCookery == null && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.save),
                 color: Colors.white70,
@@ -108,7 +109,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
             ),
 //앱바: 업데이트 저장
             Visibility(
-              visible: widget.currCookery != null && widget.isEditable,
+              visible: editCookery != null && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.save),
                 color: Colors.white70,
@@ -116,8 +117,8 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 onPressed: () {
                   final formKeyState = _formKey.currentState!;
                   if (formKeyState.validate()) {
-                    cookeryViewModel.update(widget.currKey!, titleController.text, dropDownValue, _imageFilePath, descController.text, cautionController.text,
-                        isFavorit, 0, itemsViewModel.getIngredientList()); //todo 구현
+                    cookeryViewModel.update(widget.currKey!, titleController.text, dropDownValue, _imageFilePath, descController.text, cautionController.text, isFavorit, 0,
+                        itemsViewModel.getIngredientList()); //todo 구현
                     Navigator.of(context).pop();
                   }
                 },
@@ -125,7 +126,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
             ),
 //앱바: 삭제
             Visibility(
-              visible: widget.currCookery != null && widget.isEditable,
+              visible: editCookery != null && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.delete),
                 color: Colors.white70,
@@ -170,17 +171,17 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                                 maxLength: 100,
                                 keyboardType: TextInputType.text,
                               )
-                            : Text(widget.currCookery!.title),
+                            : Text(editCookery!.title),
                       ),
                       widget.isEditable
                           ? SelectKindWidget(
                               callback: (value) => setState(() {
                                 dropDownValue = value;
-                                print(value);
+                              //  print(value);
                               }),
                               init: dropDownValue,
                             )
-                          : Text(widget.currCookery!.kind),
+                          : Text(editCookery!.kind),
                     ]),
                     widget.isEditable
                         ? TextFormField(
@@ -201,7 +202,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                             width: double.infinity,
                             padding: EdgeInsets.fromLTRB(0, 20, 10, 30),
                             // alignment: Alignment(0.0, 0.0),
-                            child: Text(widget.currCookery!.desc, textAlign: TextAlign.left),
+                            child: Text(editCookery!.desc, textAlign: TextAlign.left),
                           ),
 //사진등록
                     Column(
@@ -244,7 +245,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                             width: double.infinity,
                             padding: EdgeInsets.fromLTRB(0, 20, 10, 30),
                             // alignment: Alignment(0.0, 0.0),
-                            child: Text(widget.currCookery!.caution, textAlign: TextAlign.left),
+                            child: Text(editCookery!.caution, textAlign: TextAlign.left),
                           ),
 //사진등록
                     const Padding(padding: EdgeInsets.all(10)),
@@ -271,10 +272,10 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                         color: isFavorit ? Colors.red[600] : Colors.grey,
                         iconSize: 30,
                         onPressed: () {
-                          if (widget.currCookery?.ingredients == null){
+                          if (editCookery?.ingredients == null){
                              print("4:edit_page:ingredient empty");                       
                           } else {
-                             print("4:edit_page:ingredient length:" + widget.currCookery!.ingredients!.length.toString());
+                             print("4:edit_page:ingredient length:" + editCookery!.ingredients!.length.toString());
                           }
                          
                           setState(() {
@@ -362,7 +363,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
       setState(() {
         _image = XFile(newFile.path); //가져온 이미지를 _image에 저장
         _imageFilePath = newFile.path;
-        print("New path: $_imageFilePath");
+        print("edit_page: Img New path: $_imageFilePath");
       });
     }
   }

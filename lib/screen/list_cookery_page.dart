@@ -17,11 +17,11 @@ class ListCookeryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: kind.isNotEmpty? Text("List / "+ kind!.toUpperCase().toString()): Text("List / All"),
+        title: kind.isNotEmpty ? Text("List / " + kind!.toUpperCase().toString()) : Text("List / All"),
       ),
       body: Consumer<CookeryViewModel>(
         builder: (context, provider, child) {
-          print("search:" + search);
+          print("list_page:search word:" + search);
 
           //cookeryList = provider.cookeryList;
           cookeryList = provider.getCookeryList();
@@ -54,14 +54,22 @@ class ListCookeryPage extends StatelessWidget {
                         // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
                         title: Text("${cookeryList[index].title}"),
                         subtitle: Text("${cookeryList[index].desc} "),
-                        trailing: Icon(Icons.favorite, color: cookeryList[index].heart? Colors.redAccent: Colors.grey),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.favorite),
+                          color: cookeryList[index].heart ? Colors.redAccent : Colors.grey,
+                          tooltip: 'Save my favorite',
+                          onPressed: () {
+                            cookeryList[index].heart = !cookeryList[index].heart;
+                            provider.updateCookeryObject(cookeryList[index].key, cookeryList[index]); //todo 구현
+                          },
+                        ),
+                        //IconButton(icons:Icon.favorite, color: cookeryList[index].heart? Colors.redAccent: Colors.grey),
                         onTap: () {
                           _navigateToCalculateScreen(context, index);
                         },
                         onLongPress: () {
                           _navigateToEditScreen(context, index);
                         },
-                        
                       );
                     })),
           ]));
@@ -82,12 +90,12 @@ class ListCookeryPage extends StatelessWidget {
 
   void _navigateToCalculateScreen(BuildContext context, int index) {
     Cookery data = cookeryList[index].deepCopy();
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey:cookeryList[index].key, currCookery: data, isEditable: false)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey: cookeryList[index].key, currCookery: data, isEditable: false)));
   }
 
   void _navigateToEditScreen(BuildContext context, int index) {
     Cookery data = cookeryList[index].deepCopy();
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey:cookeryList[index].key, currCookery: data, isEditable: true)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey: cookeryList[index].key, currCookery: data, isEditable: true)));
   }
 
   void _navigateToNewScreen(BuildContext context, int index) {

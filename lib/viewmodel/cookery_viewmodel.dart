@@ -87,6 +87,11 @@ class CookeryViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+    updateCookeryObject(String key, Cookery data) {
+    _cookeryController.update(key, data);
+    notifyListeners();
+  }
+
   delete(String key) {
     _cookeryController.delete(key);
     notifyListeners();
