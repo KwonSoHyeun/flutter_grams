@@ -27,7 +27,8 @@ class ListCookeryPage extends StatelessWidget {
           cookeryList = provider.getCookeryList();
 
           if (search.isNotEmpty) {
-            cookeryList = cookeryList.where((element) => element.title.contains(search) == true).toList();
+            cookeryList = cookeryList.where((element) => element.title.contains(search) == true 
+            || element.getIngredients().contains(search)).toList();
           } else {
             if (kind.isNotEmpty) {
               cookeryList = cookeryList.where((element) => element.kind == kind).toList();

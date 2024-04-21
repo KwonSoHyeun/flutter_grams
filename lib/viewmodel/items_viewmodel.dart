@@ -16,6 +16,7 @@ class ItemsViewModel with ChangeNotifier {
       data.add(Ingredient(name: element.nameController.text, count: double.parse(element.rateController.text), unit: element.unitController.text));
     });
 
+    print("현재 얻은 재료값:" + data.toString());
     return data;
   }
 

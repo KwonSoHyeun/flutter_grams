@@ -131,6 +131,9 @@ class HomeCookeryPage extends StatelessWidget {
               color: primaryColor,
             ),
             SizedBox(
+              height: 10,
+            ),
+            SizedBox(
                 height: 50,
                 child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.favorite, color: AccentColor), Text(" 내가 좋아하는 레시피")])),
             Expanded(
@@ -206,8 +209,8 @@ class HomeCookeryPage extends StatelessWidget {
                           ? Container(
                               width: 80,
                               height: 80,
-                              //child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
                               decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
                                 image: DecorationImage(image: FileImage(File(_image!.path)), fit: BoxFit.cover),
                               ),
                             )
@@ -287,7 +290,7 @@ class HomeCookeryPage extends StatelessWidget {
         _search_value = value;
       },
       onSubmitted: (value) {
-     //   print(value);
+        //   print(value);
       },
     );
   }

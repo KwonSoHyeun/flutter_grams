@@ -52,6 +52,8 @@ class IngredientCustomWidget extends StatelessWidget {
                 inputFormatters: [
                   FilteringTextInputFormatter(RegExp('[0-9 | .]'), allow:true,)
                 ],
+                onTap: () => rateController.selection = TextSelection(baseOffset: 0, extentOffset: rateController.value.text.length),
+
                 onSubmitted: (String val) {
                   if (!isEditable) consumer.reCalculateRate(boxIndex, val);
                 },

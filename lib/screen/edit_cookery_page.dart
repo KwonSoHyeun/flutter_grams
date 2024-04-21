@@ -22,11 +22,8 @@ class EditCookeryPage extends StatefulWidget {
   final Cookery? currCookery;
   final bool isEditable;
 
-
   //EditCookeryPage(this.index, this.currCookery, this.isEditable, [Cookery? currcookery]);
-  EditCookeryPage({
-    this.currKey, this.currCookery, this.isEditable = true}
-    );
+  EditCookeryPage({this.currKey, this.currCookery, this.isEditable = true});
 
   @override
   State<EditCookeryPage> createState() => _EditCookeryPageState();
@@ -53,7 +50,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
   void initState() {
     super.initState();
     print("1:edit_page:initState:");
-    
+
     cookeryViewModel = Provider.of<CookeryViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
     itemsViewModel = Provider.of<ItemsViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
     itemsViewModel.clearDataItemList();
@@ -117,8 +114,8 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 onPressed: () {
                   final formKeyState = _formKey.currentState!;
                   if (formKeyState.validate()) {
-                    cookeryViewModel.update(widget.currKey!, titleController.text, dropDownValue, _imageFilePath, descController.text, cautionController.text, isFavorit, 0,
-                        itemsViewModel.getIngredientList()); //todo 구현
+                    cookeryViewModel.update(widget.currKey!, titleController.text, dropDownValue, _imageFilePath, descController.text, cautionController.text,
+                        isFavorit, 0, itemsViewModel.getIngredientList()); //todo 구현
                     Navigator.of(context).pop();
                   }
                 },
@@ -177,7 +174,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                           ? SelectKindWidget(
                               callback: (value) => setState(() {
                                 dropDownValue = value;
-                              //  print(value);
+                                //  print(value);
                               }),
                               init: dropDownValue,
                             )
@@ -215,16 +212,17 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                           //child: PhotoAreaWidget(_image),
                           child: _image != null
                               ? Container(
-                                  width: 100,
-                                  height: 100,
+                                  width: 150,
+                                  height: 150,
                                   //child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
                                   decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
                                     image: DecorationImage(image: FileImage(File(_image!.path)), fit: BoxFit.cover),
                                   ),
                                 )
                               : Container(
-                                  width: 50,
-                                  height: 50,
+                                  width: 100,
+                                  height: 100,
                                   decoration: const BoxDecoration(
                                     image: DecorationImage(image: AssetImage('assets/photos/ic_cupcake.png'), fit: BoxFit.cover),
                                   ),
@@ -247,7 +245,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                             // alignment: Alignment(0.0, 0.0),
                             child: Text(editCookery!.caution, textAlign: TextAlign.left),
                           ),
-//사진등록
+
                     const Padding(padding: EdgeInsets.all(10)),
                     //재료명, 중량, 단위를 다수개 등록
                     Center(child: Consumer<ItemsViewModel>(builder: (context, provider, child) {
@@ -272,12 +270,12 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                         color: isFavorit ? Colors.red[600] : Colors.grey,
                         iconSize: 30,
                         onPressed: () {
-                          if (editCookery?.ingredients == null){
-                             print("4:edit_page:ingredient empty");                       
+                          if (editCookery?.ingredients == null) {
+                            print("4:edit_page:ingredient empty");
                           } else {
-                             print("4:edit_page:ingredient length:" + editCookery!.ingredients!.length.toString());
+                            print("4:edit_page:ingredient length:" + editCookery!.ingredients!.length.toString());
                           }
-                         
+
                           setState(() {
                             isFavorit = !isFavorit;
                             cookeryViewModel.update(
@@ -327,21 +325,11 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
       case 0:
         break;
       case 1:
-        Cookery? data = Cookery(
-            title: titleController.text,
-            kind: dropDownValue,
-            img: _imageFilePath,
-            desc: descController.text,
-            caution: cautionController.text,
-            heart: isFavorit,
-            hit: 0,
-            ingredients: itemsViewModel.getIngredientList());
-
+        widget.currCookery!.ingredients = itemsViewModel.getIngredientList();
         //print("goto edit page" + data.title + data.key.toString());
         Navigator.pop(context);
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey: widget.currKey!, currCookery: widget.currCookery, isEditable: true)));
-
         break;
     }
   }
