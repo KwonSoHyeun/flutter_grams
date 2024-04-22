@@ -27,7 +27,7 @@ class HomeKindGridWidget extends StatelessWidget {
 
     return SizedBox(
         child: DecoratedBox(
-      decoration: BoxDecoration(color: primaryColor),
+      decoration:const BoxDecoration(color: AppColor.primaryColor),
       child: GridView.builder(
           primary: false,
           physics: NeverScrollableScrollPhysics(),

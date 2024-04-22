@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grams/util/colorvalue.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SelectKindWidget extends StatelessWidget {
  //final VoidCallback callback;
@@ -13,8 +14,8 @@ class SelectKindWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var dropDownList = cookingKindList;
-    String _init = cookingKindList[0];
+    var dropDownList = AppConst.cookingKindList;
+    String _init = AppConst.cookingKindList[0];
     if (!init.isEmpty) {
       _init = init;
     }
@@ -24,7 +25,7 @@ class SelectKindWidget extends StatelessWidget {
       items: dropDownList.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: Text(value),
+          child: Text(AppLocalizations.of(context)!.cookType(value)),
         );
       }).toList(),
 

@@ -7,13 +7,10 @@ import 'package:grams/viewmodel/items_viewmodel.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-
 import 'model/cookery.dart';
 import 'services/hive_data.dart'; 
-
-//const primaryColor = Color(0xffe44805);//ee4e34
-//const primaryColor = Color(0xffe44805);//ee4e34
-//const primaryTextColor = Color(0xffeee0a3);
+import 'package:flutter_localizations/flutter_localizations.dart'; // Add this line
+import 'package:flutter_gen/gen_l10n/app_localizations.dart'; 
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -49,12 +46,23 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+          localizationsDelegates: const [
+        AppLocalizations.delegate, // Add this line
+        GlobalMaterialLocalizations.delegate, // Add this line
+        GlobalWidgetsLocalizations.delegate, // Add this line
+        GlobalCupertinoLocalizations.delegate, // Add this line
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('ko'),
+      ],
+
         title: 'Flutter Demo',
         theme: ThemeData(
           appBarTheme: const AppBarTheme(
-              titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: primaryTextColor),
-              backgroundColor: primaryColor,
-              foregroundColor: primaryTextColor),
+              titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColor.primaryTextColor),
+              backgroundColor: AppColor.primaryColor,
+              foregroundColor: AppColor.primaryTextColor),
           useMaterial3: true,
         ),
         home: HomeCookeryPage(),

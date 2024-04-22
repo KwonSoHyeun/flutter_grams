@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:grams/screen/widgets/select_kind_widget.dart';
@@ -12,6 +13,7 @@ import 'package:provider/provider.dart';
 import '../model/cookery.dart';
 import '../viewmodel/items_viewmodel.dart';
 import 'widgets/photo_area_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -41,7 +43,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
   final titleController = TextEditingController();
   final descController = TextEditingController();
   final cautionController = TextEditingController();
-  late String dropDownValue = cookingKindList[0];
+  late String dropDownValue = AppConst.cookingKindList[0];
   bool isFavorit = false;
 
   final _formKey = GlobalKey<FormState>();
@@ -49,7 +51,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
   @override
   void initState() {
     super.initState();
-    print("1:edit_page:initState:");
+    //print("1:edit_page:initState:" + PlatformDispatcher.instance.locale.languageCode     );
 
     cookeryViewModel = Provider.of<CookeryViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
     itemsViewModel = Provider.of<ItemsViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
@@ -85,7 +87,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text(widget.isEditable ? 'Recipe' : 'Calculating'),
+          title: Text(widget.isEditable ? AppLocalizations.of(context)!.title_edit : AppLocalizations.of(context)!.title_calculate),
           actions: [
 //앱바 : 신규저장
             Visibility(
@@ -158,7 +160,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                             ? TextFormField(
                                 validator: (value) {
                                   if (value!.isEmpty)
-                                    return '3자 이상 입력해 주세요';
+                                    return AppLocalizations.of(context)!.validation_msg1;
                                   else
                                     return null;
                                 },
@@ -168,7 +170,9 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                                 maxLength: 100,
                                 keyboardType: TextInputType.text,
                               )
-                            : Text(editCookery!.title),
+                            : Text(
+                                editCookery!.title,
+                              ),
                       ),
                       widget.isEditable
                           ? SelectKindWidget(
@@ -178,18 +182,22 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                               }),
                               init: dropDownValue,
                             )
-                          : Text(editCookery!.kind),
+                          : Text(AppLocalizations.of(context)!.cookType(editCookery!.kind),
+                              style: const TextStyle(
+                                //fontSize: 15, // 폰트 크기
+                                color: AppColor.primaryTextColor
+                              )), // TextStyle
                     ]),
                     widget.isEditable
                         ? TextFormField(
                             validator: (value) {
                               if (value!.isEmpty)
-                                return '10자 이상 입력해 주세요';
+                                return AppLocalizations.of(context)!.validation_msg2;
                               else
                                 return null;
                             },
                             controller: descController,
-                            decoration: const InputDecoration(labelText: '레시피 작성'),
+                            decoration:  InputDecoration(labelText: AppLocalizations.of(context)!.hint_desc),
                             keyboardType: TextInputType.multiline,
                             minLines: 3,
                             maxLength: 500,
@@ -235,7 +243,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                     widget.isEditable
                         ? TextFormField(
                             controller: cautionController,
-                            decoration: const InputDecoration(labelText: '주의사항'),
+                            decoration:  InputDecoration(labelText: AppLocalizations.of(context)!.hint_caution),
                             maxLength: 200,
                             keyboardType: TextInputType.text,
                           )
@@ -302,29 +310,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
             )));
   }
 
-  void showConfirm(BuildContext context) {
-    // if (!mounted) return;
-    showDialog(
-        context: context,
-        barrierDismissible: true, //바깥 영역 터치시 닫을지 여부 결정
-        builder: ((context) {
-          return AlertDialog(
-            title: Text("제목"),
-            content: Text('처리 되었습니다.'),
-            actions: <Widget>[
-              Container(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); //창 닫기
-                    Navigator.pop(context);
-                  },
-                  child: Text("네"),
-                ),
-              ),
-            ],
-          );
-        }));
-  }
+
 
   void handleClick(int item) {
     switch (item) {

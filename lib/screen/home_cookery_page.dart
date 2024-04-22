@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,9 @@ import 'package:grams/screen/edit_cookery_page.dart';
 import 'package:grams/screen/list_cookery_page.dart';
 import 'package:grams/util/colorvalue.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
+
+//import 'package:flutter_localizations/flutter_localizations.dart'; // Add this line
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -33,13 +37,12 @@ class HomeCookeryPage extends StatelessWidget {
             return element.heart == true;
           }).toList();
 
-          print("home_page: consumer: 총 하트 리스트 갯수 " + favoriteList.length.toString());
           return SafeArea(
               child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
             Container(
               height: 1.0,
               width: 500.0,
-              color: primaryColor,
+              color: AppColor.primaryColor,
             ),
             Container(
                 //height: 150,
@@ -53,11 +56,21 @@ class HomeCookeryPage extends StatelessWidget {
                       fit: BoxFit.cover),
                 ),
                 child: Column(children: <Widget>[
-                  const Text(
-                    "CookGram",
-                    //"CookGram is an easy ratio calculator to use with cooking recipes. ",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, fontFamily: 'palatino', color: Colors.white), //Color(0xff303C7B)
-                  ),
+                  Center(
+                      child: Column( 
+                    children: [
+                      SizedBox(height: 30,),
+                      Text(
+                        AppLocalizations.of(context)!.app_title,
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, fontFamily: 'palatino', color: Colors.white), //Color(0xff303C7B)
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.app_sub_title,
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, fontFamily: 'palatino', color: Colors.white), //Color(0xff303C7B)
+                      ),
+                      SizedBox(height: 20,),
+                    ],
+                  )),
                   const SizedBox(
                     height: 10,
                   ),
@@ -67,60 +80,60 @@ class HomeCookeryPage extends StatelessWidget {
                   ),
                   Row(children: [
                     TextButton(
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ButtonKindBGColor)),
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.ButtonKindBGColor)),
                       onPressed: () {
                         _navigateToListScreen(context, "", "");
                       },
-                      child: Text("All"),
+                      child: Text(AppLocalizations.of(context)!.kind_all),
                     ),
                     Spacer(),
                     TextButton(
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ButtonKindBGColor)),
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.ButtonKindBGColor)),
                       onPressed: () {
                         _navigateToListScreen(context, "", "main");
                       },
-                      child: Text("Main"),
+                      child: Text(AppLocalizations.of(context)!.kind_main),
                     ),
                     Spacer(),
                     TextButton(
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ButtonKindBGColor)),
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.ButtonKindBGColor)),
                       onPressed: () {
                         _navigateToListScreen(context, "", "side");
                       },
-                      child: Text("Side"),
+                      child: Text(AppLocalizations.of(context)!.kind_side),
                     ),
                     Spacer(),
                     TextButton(
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ButtonKindBGColor)),
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.ButtonKindBGColor)),
                       onPressed: () {
                         _navigateToListScreen(context, "", "sauce");
                       },
-                      child: Text("Sauce"),
+                      child: Text(AppLocalizations.of(context)!.kind_sauce),
                     ),
                   ]),
                   Row(children: [
                     TextButton(
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ButtonKindBGColor)),
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.ButtonKindBGColor)),
                       onPressed: () {
                         _navigateToListScreen(context, "", "dessert");
                       },
-                      child: Text("Dessert"),
+                      child: Text(AppLocalizations.of(context)!.kind_dessert),
                     ),
                     Spacer(),
                     TextButton(
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ButtonKindBGColor)),
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.ButtonKindBGColor)),
                       onPressed: () {
                         _navigateToListScreen(context, "", "drink");
                       },
-                      child: Text("Drink"),
+                      child: Text(AppLocalizations.of(context)!.kind_drink),
                     ),
                     Spacer(),
                     TextButton(
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ButtonKindBGColor)),
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.ButtonKindBGColor)),
                       onPressed: () {
                         _navigateToListScreen(context, "", "etc");
                       },
-                      child: Text("ETC"),
+                      child: Text(AppLocalizations.of(context)!.kind_etc),
                     ),
                     Spacer(),
                   ]),
@@ -128,14 +141,16 @@ class HomeCookeryPage extends StatelessWidget {
             Container(
               height: 1.0,
               width: 500.0,
-              color: primaryColor,
+              color: AppColor.primaryColor,
             ),
             SizedBox(
               height: 10,
             ),
             SizedBox(
                 height: 50,
-                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.favorite, color: AccentColor), Text(" 내가 좋아하는 레시피")])),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [Icon(Icons.favorite, color: AppColor.AccentColor), SizedBox(width: 4), Text(AppLocalizations.of(context)!.title_myfavorite)])),
             Expanded(
                 child: ListView.builder(
                     itemCount: favoriteList.length,
@@ -152,34 +167,32 @@ class HomeCookeryPage extends StatelessWidget {
         },
         tooltip: 'New Receipy',
         child: const Icon(Icons.add),
-        backgroundColor: primaryButtonColor, //#EDDBD0
+        backgroundColor: AppColor.primaryButtonColor, //#EDDBD0
         foregroundColor: Colors.white,
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
-  //List<Widget> cardWidgets = List.empty(growable: true);
-
-  // List<Widget> setListViewItems(BuildContext context) {
-  //   favoriteList = cookeryList.where((element) {
-  //     return element.heart == true;
-  //   }).toList();
-
-  //   for (Cookery value in favoriteList) {
-  //     cardWidgets.add(BigCard(context, value));
-  //   }
-  //   ;
-  //   return cardWidgets;
-  // }
-
   Card BigCard(BuildContext context, Cookery data) {
     XFile? _image;
     String _imageFilePath = "";
+    late FileImage fileImage;
+    print("ksh1");
 
-    if (data.img.isNotEmpty) {
-      _imageFilePath = data.img;
-      _image = XFile(_imageFilePath); //가져온 이미지를 _image에 저장
+    try {
+      if (data.img.isNotEmpty) {
+        _imageFilePath = data.img;
+        _image = XFile(_imageFilePath); //가져온 이미지를 _image에 저장
+        fileImage = FileImage(File(_image!.path));
+        if (!File(_image!.path).existsSync()) {
+          _imageFilePath = "";
+        }
+      }
+    } catch (e) {
+      _imageFilePath = "";
+      print(e.toString());
     }
+    print("ksh2");
 
     return Card(
       shape: RoundedRectangleBorder(
@@ -208,7 +221,7 @@ class HomeCookeryPage extends StatelessWidget {
                               height: 80,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(image: FileImage(File(_image!.path)), fit: BoxFit.cover),
+                                image: DecorationImage(image: fileImage, fit: BoxFit.cover),
                               ),
                             )
                           : Container(
@@ -325,14 +338,14 @@ class HomeCookeryPage extends StatelessWidget {
       trailing: [
         IconButton(
           icon: const Icon(Icons.search),
-          color: primaryButtonTextColor,
+          color: AppColor.primaryButtonTextColor,
           onPressed: () {
             // provider.setCookeryList(search: _search_value);
             _navigateToListScreen(context, _search_value, "");
           },
         ),
       ], //trailing: [Icon(Icons.search ,color: primaryButtonTextColor,)],
-      hintText: "검색어를 입력하세요",
+      hintText: AppLocalizations.of(context)!.hint_search,
       onChanged: (value) {
         _search_value = value;
       },

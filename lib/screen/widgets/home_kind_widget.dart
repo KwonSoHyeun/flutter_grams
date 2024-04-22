@@ -27,9 +27,9 @@ class HomeKindWidget extends StatelessWidget {
                       child: TextButton(
                           
                           style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 40, color: Colors.white),
+                            textStyle: const TextStyle(fontSize: 40, color: Colors.white),
                             foregroundColor: Colors.white,
-                            backgroundColor: ButtonTextBGColor,
+                            backgroundColor: AppColor.ButtonTextBGColor,
                             shape:BeveledRectangleBorder(),
                           ),
                           onPressed: () {},
