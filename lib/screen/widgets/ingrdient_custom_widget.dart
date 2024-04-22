@@ -29,10 +29,13 @@ class IngredientCustomWidget extends StatelessWidget {
             child: Container(
               height: 50,
               child: TextFormField(
-                enabled: isEditable,
+                // enabled: isEditable,
+                readOnly: !isEditable,
                 scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                 controller: nameController,
-                decoration: const InputDecoration(labelText: '재료명'),
+                decoration:  InputDecoration(labelText: '재료명', 
+                 enabledBorder:UnderlineInputBorder(borderSide:isEditable?BorderSide(width: 1):BorderSide.none)
+		),
                 keyboardType: TextInputType.text,
               ),
             ),
@@ -50,7 +53,10 @@ class IngredientCustomWidget extends StatelessWidget {
                 // keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
                 inputFormatters: [
-                  FilteringTextInputFormatter(RegExp('[0-9 | .]'), allow:true,)
+                  FilteringTextInputFormatter(
+                    RegExp('[0-9 | .]'),
+                    allow: true,
+                  )
                 ],
                 onTap: () => rateController.selection = TextSelection(baseOffset: 0, extentOffset: rateController.value.text.length),
 
@@ -68,12 +74,14 @@ class IngredientCustomWidget extends StatelessWidget {
             width: 60,
             height: 50,
             child: TextField(
-              enabled: isEditable,
+              readOnly: !isEditable,
               controller: unitController,
-              decoration: const InputDecoration(labelText: '단위'),
+              decoration:  InputDecoration(labelText: '단위', enabledBorder:UnderlineInputBorder(borderSide:isEditable?BorderSide(width: 1):BorderSide.none)),
               keyboardType: TextInputType.text,
+              
             ),
           ),
+         
           Visibility(
               visible: isEditable,
               child: SizedBox(

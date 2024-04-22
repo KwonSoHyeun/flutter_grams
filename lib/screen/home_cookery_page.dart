@@ -187,10 +187,7 @@ class HomeCookeryPage extends StatelessWidget {
       ),
       child: InkWell(
           onTap: () {
-            //final pIndex = favoriteList.indexWhere((element) => element.id == data.id);
             print("list_page: card on press : key:" + data.key.toString());
-            //print("onpress" + data.img.toString());
-
             _navigateToCalculateScreen(context, data);
           },
           child: Column(
@@ -217,10 +214,20 @@ class HomeCookeryPage extends StatelessWidget {
                           : Container(
                               width: 80,
                               height: 80,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.amber[400],
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: _getDefaultIcon(data.kind)),
+
+                      /*Container(
+                              width: 80,
+                              height: 80,
                               decoration: const BoxDecoration(
                                 image: DecorationImage(image: AssetImage('assets/photos/ic_cupcake.png'), fit: BoxFit.cover),
                               ),
-                            ),
+                            ),*/
                     ),
 
                     Container(width: 20),
@@ -230,7 +237,7 @@ class HomeCookeryPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(height: 5),
-                          Text("*" + data.title),
+                          Text(data.title),
                           Container(height: 5),
                           Text(
                             data.kind,
@@ -267,6 +274,46 @@ class HomeCookeryPage extends StatelessWidget {
 
   void _navigateToNewScreen(BuildContext context, int index) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(isEditable: true)));
+  }
+
+  Container _getDefaultIcon(String kind) {
+    var _color = Colors.amber[400];
+    IconData _icon = Icons.dinner_dining;
+    Container ret;
+
+    if (kind == 'main') {
+    } else if (kind == 'side') {
+      _icon = Icons.kebab_dining;
+      _color = Colors.green[300];
+    } else if (kind == 'sauce') {
+      _icon = Icons.science;
+      _color = Colors.pink[300];
+    } else if (kind == 'dessert') {
+      _icon = Icons.icecream;
+      _color = Colors.orange[700];//amberAccent[700];
+    } else if (kind == 'drink') {
+      _icon = Icons.local_cafe;
+      _color = Colors.lightBlue[200];
+    } else if (kind == 'etc') {
+      _icon = Icons.local_dining;
+      _color = Colors.grey[600];
+    }
+
+    ret = Container(
+        width: 80,
+        height: 80,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: _color,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Icon(
+          size: 50,
+          color: Colors.white,
+          _icon,
+        ));
+
+    return ret;
   }
 
   Widget _searchWidget(BuildContext context) {

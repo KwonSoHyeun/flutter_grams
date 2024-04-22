@@ -13,7 +13,7 @@ const ButtonTextBGColor = Color(0x50d84a09);
 const ButtonKindBGColor = Color(0xccD8E4EC);
 const AccentColor = Color(0xffE8530F);
 const lineColor1 = Color(0xccD8E4EC);
-const List<String> cookingKindList = ['main', 'side', 'dressing', 'drink', 'dessert', 'sauce', 'etc'];
+const List<String> cookingKindList = ['main', 'side', 'sauce', 'dessert', 'drink', 'etc'];
 //const String initCookingKind ="Main dish";
 
 /*

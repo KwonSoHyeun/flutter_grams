@@ -265,6 +265,10 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                             ))
                           ],
                         )),
+
+                    SizedBox(
+                      height: 10,
+                    ),
                     IconButton(
                         icon: Icon(Icons.favorite),
                         color: isFavorit ? Colors.red[600] : Colors.grey,
@@ -278,16 +282,18 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
 
                           setState(() {
                             isFavorit = !isFavorit;
-                            cookeryViewModel.update(
-                                widget.currKey!,
-                                widget.currCookery!.title,
-                                widget.currCookery!.kind,
-                                widget.currCookery!.img,
-                                widget.currCookery!.desc,
-                                widget.currCookery!.caution,
-                                isFavorit,
-                                widget.currCookery!.hit,
-                                widget.currCookery!.ingredients); //todo 구현
+                            if (widget.currKey != null) {
+                              cookeryViewModel.update(
+                                  widget.currKey!,
+                                  widget.currCookery!.title,
+                                  widget.currCookery!.kind,
+                                  widget.currCookery!.img,
+                                  widget.currCookery!.desc,
+                                  widget.currCookery!.caution,
+                                  isFavorit,
+                                  widget.currCookery!.hit,
+                                  widget.currCookery!.ingredients); //todo 구현
+                            }
                           });
                         })
                   ],
