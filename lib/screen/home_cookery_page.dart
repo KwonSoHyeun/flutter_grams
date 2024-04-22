@@ -289,7 +289,7 @@ class HomeCookeryPage extends StatelessWidget {
       _icon = Icons.science;
       _color = Colors.pink[300];
     } else if (kind == 'dessert') {
-      _icon = Icons.icecream;
+      _icon = Icons.bakery_dining;
       _color = Colors.orange[700];//amberAccent[700];
     } else if (kind == 'drink') {
       _icon = Icons.local_cafe;
