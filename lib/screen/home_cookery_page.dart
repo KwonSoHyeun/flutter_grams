@@ -51,7 +51,7 @@ class HomeCookeryPage extends StatelessWidget {
                 decoration: const BoxDecoration(
                   color: Color(0xff94C4C7),
                   image: DecorationImage(
-                      image: AssetImage('assets/photos/bg_kitchen5.jpg'), //0xffB1BDA9
+                      image: AssetImage('assets/photos/bg_kitchen2.jpg'), //0xffB1BDA9
                       // colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.7), BlendMode.dstATop),
                       fit: BoxFit.cover),
                 ),
