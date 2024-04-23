@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grams/model/cookery.dart';
@@ -25,7 +26,7 @@ class HomeCookeryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffD5DFDF),
+      backgroundColor: AppColor.bgHome,
       // appBar: AppBar(
       //   title: const Text("CookGram"),
       // ),
@@ -42,33 +43,34 @@ class HomeCookeryPage extends StatelessWidget {
             Container(
               height: 1.0,
               width: 500.0,
-              color: AppColor.primaryColor,
+              color: AppColor.lineColor2,
             ),
             Container(
                 //height: 150,
                 padding: EdgeInsets.fromLTRB(20, 10, 20, 8),
                 alignment: Alignment(0.0, 0.0),
                 decoration: const BoxDecoration(
-                  color: Color(0xff94C4C7),
-                  image: DecorationImage(
-                      image: AssetImage('assets/photos/bg_kitchen2.jpg'), //0xffB1BDA9
-                      // colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.7), BlendMode.dstATop),
-                      fit: BoxFit.cover),
+                  color: AppColor.bgHomeTitle,
                 ),
                 child: Column(children: <Widget>[
                   Center(
-                      child: Column( 
+                      child: Column(
                     children: [
-                      SizedBox(height: 30,),
+                      SizedBox(
+                        height: 30,
+                      ),
                       Text(
                         AppLocalizations.of(context)!.app_title,
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, fontFamily: 'palatino', color: Colors.white), //Color(0xff303C7B)
+                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, fontFamily: 'palatino', color: AppColor.textHome1), //Color(0xff303C7B)
                       ),
                       Text(
                         AppLocalizations.of(context)!.app_sub_title,
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, fontFamily: 'palatino', color: Colors.white), //Color(0xff303C7B)
+                        style:
+                            TextStyle(fontSize: 14, fontWeight: FontWeight.w400, fontFamily: 'palatino', color: AppColor.primaryTextColor), //Color(0xff303C7B)
                       ),
-                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 20,
+                      ),
                     ],
                   )),
                   const SizedBox(
@@ -141,7 +143,7 @@ class HomeCookeryPage extends StatelessWidget {
             Container(
               height: 1.0,
               width: 500.0,
-              color: AppColor.primaryColor,
+              color: AppColor.lineColor2,
             ),
             SizedBox(
               height: 10,
@@ -168,7 +170,7 @@ class HomeCookeryPage extends StatelessWidget {
         tooltip: 'New Receipy',
         child: const Icon(Icons.add),
         backgroundColor: AppColor.primaryButtonColor, //#EDDBD0
-        foregroundColor: Colors.white,
+        foregroundColor: AppColor.textHome1,
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
@@ -195,6 +197,7 @@ class HomeCookeryPage extends StatelessWidget {
     print("ksh2");
 
     return Card(
+      color: Color(0xffF9F1E7),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
@@ -233,14 +236,6 @@ class HomeCookeryPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: _getDefaultIcon(data.kind)),
-
-                      /*Container(
-                              width: 80,
-                              height: 80,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(image: AssetImage('assets/photos/ic_cupcake.png'), fit: BoxFit.cover),
-                              ),
-                            ),*/
                     ),
 
                     Container(width: 20),
@@ -250,15 +245,14 @@ class HomeCookeryPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(height: 5),
-                          Text(data.title),
+                          Text(data.title, style: TextStyle(fontSize: 16, color: Colors.black87)),
+                          Container(height: 0),
+                          Text(AppLocalizations.of(context)!.cookType(data.kind, ), style: TextStyle(fontSize: 14, color: AppColor.lineColor1)),
                           Container(height: 5),
-                          Text(
-                            data.kind,
-                          ),
-                          Container(height: 10),
                           Text(
                             data.desc,
                             maxLines: 2,
+                            style: TextStyle(fontSize: 14, color: Colors.black87)
                           ),
                         ],
                       ),
@@ -332,13 +326,13 @@ class HomeCookeryPage extends StatelessWidget {
   Widget _searchWidget(BuildContext context) {
     return SearchBar(
       //backgroundColor: MaterialStatePropertyAll(Colors.transparent),
-      side: MaterialStateProperty.all(BorderSide(color: Colors.black, width: 1)),
+      side: MaterialStateProperty.all(BorderSide(color: AppColor.textHome1, width: 1)),
       elevation: MaterialStatePropertyAll(1),
       constraints: BoxConstraints(maxHeight: 50, minHeight: 50),
       trailing: [
         IconButton(
           icon: const Icon(Icons.search),
-          color: AppColor.primaryButtonTextColor,
+          color: AppColor.textHome1,
           onPressed: () {
             // provider.setCookeryList(search: _search_value);
             _navigateToListScreen(context, _search_value, "");
@@ -346,11 +340,15 @@ class HomeCookeryPage extends StatelessWidget {
         ),
       ], //trailing: [Icon(Icons.search ,color: primaryButtonTextColor,)],
       hintText: AppLocalizations.of(context)!.hint_search,
+
+      //  hintStyle: MaterialStateProperty.all(TextStyle(
+      //     color: AppColor.textHome1, )),
+
       onChanged: (value) {
         _search_value = value;
       },
       onSubmitted: (value) {
-        //   print(value);
+        _navigateToListScreen(context, _search_value, "");
       },
     );
   }

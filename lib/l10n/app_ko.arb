@@ -1,6 +1,6 @@
 {
 "app_title":"쿡그램",
-"app_sub_title":"레시피에 사용하는 편리한 요리용 계산기",
+"app_sub_title":"레시피에서 사용하는 편리한 요리용 계산기",
 "kind_all":"전체",
 "kind_main":"메인",
 "kind_side":"반찬",
@@ -25,12 +25,19 @@
 "button_new":"새로운 레시피를 등록하세요",
 
 "hint_ingredient_title":"재료명",
-"hint_ingredient_rate":"중량 또는 비율",
+"hint_ingredient_rate":"비율(중량)",
 "hint_ingredient_unit":"단위",
 
 "validation_msg1":"3자 이상 입력해 주세요",
 "validation_msg2":"10자 이상 입력해 주세요",
 
+"description_msg1":"* 한개의 비율값을 조정하면 자동 계산됩니다.",
+
+"dialog_button_ok":"네",
+"dialog_button_cancel":"취소",
+
+"dialog_msg_delete_confirm":"삭제확인",
+"dialog_msg_delete":"삭제하시겠습니까?",
 
 "cookType": "{cookType, select, main{메인} side{반찬} sauce{소스} dessert{디저트} drink{음료} etc{기타} other{etc}}",
     "@cookType": {

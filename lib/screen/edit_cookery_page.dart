@@ -2,6 +2,9 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
+import 'package:grams/screen/widgets/ingrdient_custom_widget.dart';
 import 'package:grams/screen/widgets/select_kind_widget.dart';
 import 'package:grams/util/colorvalue.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
@@ -25,7 +28,7 @@ class EditCookeryPage extends StatefulWidget {
   final bool isEditable;
 
   //EditCookeryPage(this.index, this.currCookery, this.isEditable, [Cookery? currcookery]);
-  EditCookeryPage({this.currKey, this.currCookery, this.isEditable = true});
+  EditCookeryPage({this.currKey = "", this.currCookery, this.isEditable = true});
 
   @override
   State<EditCookeryPage> createState() => _EditCookeryPageState();
@@ -74,9 +77,9 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
       isFavorit = editCookery!.heart;
     }
 
-    if (editCookery == null) {
-      itemsViewModel.defaultIngredientWidget();
-    }
+    // if (editCookery == null) {
+    //   itemsViewModel.defaultIngredientWidget();
+    // }
   }
 
   @override
@@ -88,13 +91,19 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(widget.isEditable ? AppLocalizations.of(context)!.title_edit : AppLocalizations.of(context)!.title_calculate),
+          shape: const Border(
+            bottom: BorderSide(
+              color: AppColor.lineColor2,
+              width: 1,
+            ),
+          ),
           actions: [
 //앱바 : 신규저장
             Visibility(
               visible: editCookery == null && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.save),
-                color: Colors.white70,
+                color: AppColor.primaryMenuColor,
                 tooltip: 'Save new data',
                 onPressed: () {
                   final formKeyState = _formKey.currentState!;
@@ -111,13 +120,13 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
               visible: editCookery != null && widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.save),
-                color: Colors.white70,
+                color: AppColor.primaryMenuColor,
                 tooltip: 'Update data',
                 onPressed: () {
                   final formKeyState = _formKey.currentState!;
                   if (formKeyState.validate()) {
-                    cookeryViewModel.update(widget.currKey!, titleController.text, dropDownValue, _imageFilePath, descController.text, cautionController.text,
-                        isFavorit, 0, itemsViewModel.getIngredientList()); //todo 구현
+                    cookeryViewModel.update(widget.currKey!, widget.currCookery!.img, titleController.text, dropDownValue, _imageFilePath, descController.text,
+                        cautionController.text, isFavorit, 0, itemsViewModel.getIngredientList()); //todo 구현
                     Navigator.of(context).pop();
                   }
                 },
@@ -125,141 +134,161 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
             ),
 //앱바: 삭제
             Visibility(
-              visible: editCookery != null && widget.isEditable,
+              visible: widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.delete),
-                color: Colors.white70,
+                color: widget.currKey!.isNotEmpty ? AppColor.AccentColor : Colors.grey[400],
                 tooltip: 'Delete',
-                onPressed: () {
-                  cookeryViewModel.delete(widget.currKey!);
-                  Navigator.of(context).pop();
-                },
+                onPressed: widget.currKey!.isEmpty
+                    ? null
+                    : () {
+                        _showdialog(context);
+                      },
               ),
             ),
 //앱바: 에디트 모드로 이동
-            PopupMenuButton<int>(
-              icon: const Icon(Icons.more_vert),
-              onSelected: (item) => handleClick(item),
-              itemBuilder: (context) => [
-                PopupMenuItem<int>(value: widget.isEditable ? 0 : 1, child: Text(widget.isEditable ? 'save as copy' : 'edit mode')),
-              ],
-            ),
+            Visibility(
+              visible: editCookery != null && !widget.isEditable,
+              child: PopupMenuButton<int>(
+                icon: const Icon(Icons.more_vert),
+                onSelected: (item) => handleClick(item),
+                itemBuilder: (context) => [
+                  PopupMenuItem<int>(value: widget.isEditable ? 0 : 1, child: Text(widget.isEditable ? 'save as copy' : 'edit mode')),
+                ],
+              ),
+            )
           ],
         ),
         body: SingleChildScrollView(
             padding: EdgeInsets.only(top: 0, bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(0),
               child: Form(
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    Row(children: <Widget>[
-                      Expanded(
-                        child: widget.isEditable
-                            ? TextFormField(
-                                validator: (value) {
-                                  if (value!.isEmpty)
-                                    return AppLocalizations.of(context)!.validation_msg1;
-                                  else
-                                    return null;
-                                },
-                                scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                controller: titleController,
-                                decoration: const InputDecoration(labelText: '요리명'),
-                                maxLength: 100,
-                                keyboardType: TextInputType.text,
-                              )
-                            : Text(
-                                editCookery!.title,
+                    Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          children: [
+                            Row(children: <Widget>[
+                              Expanded(
+                                child: widget.isEditable
+                                    ? TextFormField(
+                                        validator: (value) {
+                                          if (value!.isEmpty)
+                                            return AppLocalizations.of(context)!.validation_msg1;
+                                          else
+                                            return null;
+                                        },
+                                        scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        controller: titleController,
+                                        decoration: const InputDecoration(labelText: '요리명'),
+                                        maxLength: 100,
+                                        keyboardType: TextInputType.text,
+                                      )
+                                    : Text(
+                                        editCookery!.title,
+                                      ),
                               ),
-                      ),
-                      widget.isEditable
-                          ? SelectKindWidget(
-                              callback: (value) => setState(() {
-                                dropDownValue = value;
-                                //  print(value);
-                              }),
-                              init: dropDownValue,
-                            )
-                          : Text(AppLocalizations.of(context)!.cookType(editCookery!.kind),
-                              style: const TextStyle(
-                                //fontSize: 15, // 폰트 크기
-                                color: AppColor.primaryTextColor
-                              )), // TextStyle
-                    ]),
-                    widget.isEditable
-                        ? TextFormField(
-                            validator: (value) {
-                              if (value!.isEmpty)
-                                return AppLocalizations.of(context)!.validation_msg2;
-                              else
-                                return null;
-                            },
-                            controller: descController,
-                            decoration:  InputDecoration(labelText: AppLocalizations.of(context)!.hint_desc),
-                            keyboardType: TextInputType.multiline,
-                            minLines: 3,
-                            maxLength: 500,
-                            maxLines: null,
-                          )
-                        : Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.fromLTRB(0, 20, 10, 30),
-                            // alignment: Alignment(0.0, 0.0),
-                            child: Text(editCookery!.desc, textAlign: TextAlign.left),
-                          ),
+                              widget.isEditable
+                                  ? SelectKindWidget(
+                                      callback: (value) => setState(() {
+                                        dropDownValue = value;
+                                        //  print(value);
+                                      }),
+                                      init: dropDownValue,
+                                    )
+                                  : Text(AppLocalizations.of(context)!.cookType(editCookery!.kind),
+                                      style: const TextStyle(
+                                          //fontSize: 15, // 폰트 크기
+                                          color: AppColor.primaryTextColor)), // TextStyle
+                            ]),
+                            widget.isEditable
+                                ? TextFormField(
+                                    validator: (value) {
+                                      if (value!.isEmpty)
+                                        return AppLocalizations.of(context)!.validation_msg2;
+                                      else
+                                        return null;
+                                    },
+                                    controller: descController,
+                                    decoration: InputDecoration(labelText: AppLocalizations.of(context)!.hint_desc),
+                                    keyboardType: TextInputType.multiline,
+                                    minLines: 3,
+                                    maxLength: 500,
+                                    maxLines: null,
+                                  )
+                                : Container(
+                                    width: double.infinity,
+                                    padding: EdgeInsets.fromLTRB(0, 20, 10, 30),
+                                    // alignment: Alignment(0.0, 0.0),
+                                    child: Text(editCookery!.desc, textAlign: TextAlign.left),
+                                  ),
 //사진등록
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        //Text('사진경로: $_imageFilePath'),
-                        //   SizedBox(height: 30, width: double.infinity),
-                        Visibility(
-                          visible: _imageFilePath.isNotEmpty,
-                          //child: PhotoAreaWidget(_image),
-                          child: _image != null
-                              ? Container(
-                                  width: 150,
-                                  height: 150,
-                                  //child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    image: DecorationImage(image: FileImage(File(_image!.path)), fit: BoxFit.cover),
-                                  ),
-                                )
-                              : Container(
-                                  width: 100,
-                                  height: 100,
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(image: AssetImage('assets/photos/ic_cupcake.png'), fit: BoxFit.cover),
-                                  ),
-                                ),
-                        ),
-                        SizedBox(height: 20),
-                        widget.isEditable ? _buildButton() : Text(""),
-                      ],
-                    ),
-                    widget.isEditable
-                        ? TextFormField(
-                            controller: cautionController,
-                            decoration:  InputDecoration(labelText: AppLocalizations.of(context)!.hint_caution),
-                            maxLength: 200,
-                            keyboardType: TextInputType.text,
-                          )
-                        : Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.fromLTRB(0, 20, 10, 30),
-                            // alignment: Alignment(0.0, 0.0),
-                            child: Text(editCookery!.caution, textAlign: TextAlign.left),
-                          ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                //Text('사진경로: $_imageFilePath'),
+                                //   SizedBox(height: 30, width: double.infinity),
+                                Visibility(
+                                  visible: widget.isEditable || !widget.isEditable && _imageFilePath.isNotEmpty,
+                                  //child: PhotoAreaWidget(_image),
+                                  child: _image != null
+                                      ? Container(
+                                          width: 150,
+                                          height: 150,
+                                          //child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            image: DecorationImage(image: FileImage(File(_image!.path)), fit: BoxFit.cover),
+                                          ),
+                                        )
+                                      : Container(
+                                        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                        alignment: Alignment.center,
+                                          width: 100,
+                                          height: 100,
 
-                    const Padding(padding: EdgeInsets.all(10)),
+                                          decoration: const BoxDecoration(
+                                            image: DecorationImage(image: AssetImage('assets/photos/cook_icon1.png'), fit: BoxFit.cover),
+                                          ),
+                                        ),
+                                ),
+                                SizedBox(height: 10),
+                                widget.isEditable ? _buildButton() : Text(""),
+                              ],
+                            ),
+                            widget.isEditable
+                                ? TextFormField(
+                                    controller: cautionController,
+                                    decoration: InputDecoration(labelText: AppLocalizations.of(context)!.hint_caution),
+                                    maxLength: 200,
+                                    keyboardType: TextInputType.text,
+                                  )
+                                : Container(
+                                    width: double.infinity,
+                                    padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
+                                    // alignment: Alignment(0.0, 0.0),
+                                    child: Text(editCookery!.caution, textAlign: TextAlign.left),
+                                  ),
+                          ],
+                        )),
+
+                    //const Padding(padding: EdgeInsets.all(10)),
                     //재료명, 중량, 단위를 다수개 등록
-                    Center(child: Consumer<ItemsViewModel>(builder: (context, provider, child) {
-                      print("3:edit_page:consumer:called");
-                      return Column(children: provider.boxItemWidget);
-                    })),
+
+                    showIngredientTitle(context),
+                    Container(
+                        padding: EdgeInsets.fromLTRB(12, 0, 0, 12),
+                        //  decoration: BoxDecoration(
+                        //               borderRadius: BorderRadius.circular(2),
+                        //               color: AppColor.bgHome,
+                        //             ),
+                        child: Consumer<ItemsViewModel>(builder: (context, provider, child) {
+                          print("3:edit_page:consumer:called");
+                          return Column(children: provider.boxItemWidget);
+                        })),
                     Visibility(
                         visible: widget.isEditable,
                         child: Row(
@@ -274,7 +303,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                           ],
                         )),
 
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     IconButton(
@@ -290,9 +319,10 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
 
                           setState(() {
                             isFavorit = !isFavorit;
-                            if (widget.currKey != null) {
+                            if (widget.currKey!.isNotEmpty) {
                               cookeryViewModel.update(
                                   widget.currKey!,
+                                  widget.currCookery!.img,
                                   widget.currCookery!.title,
                                   widget.currCookery!.kind,
                                   widget.currCookery!.img,
@@ -309,8 +339,6 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
               ),
             )));
   }
-
-
 
   void handleClick(int item) {
     switch (item) {
@@ -329,6 +357,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
   // 비동기 처리를 통해 카메라와 갤러리에서 이미지를 가져온다.
   Future getImage(ImageSource imageSource) async {
     final XFile? pickedFile = await picker.pickImage(source: imageSource, imageQuality: 50, maxWidth: 600, maxHeight: 600);
+    if (pickedFile == null) return;
 
     //새로 담길 파일 준비
     Directory documentDirectory = await getApplicationDocumentsDirectory();
@@ -367,5 +396,66 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
         ),
       ],
     );
+  }
+
+  Future<dynamic> _showdialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.dialog_msg_delete_confirm),
+        content: Text(AppLocalizations.of(context)!.dialog_msg_delete),
+        actions: [
+          ElevatedButton(
+              onPressed: () async {
+                cookeryViewModel.delete(widget.currKey!, widget.currCookery!);
+                Navigator.of(context).pop();
+                Navigator.pop(context);
+              },
+              child: Text(AppLocalizations.of(context)!.dialog_button_ok)),
+          ElevatedButton(onPressed: () => Navigator.of(context).pop(), child: Text(AppLocalizations.of(context)!.dialog_button_cancel)),
+        ],
+      ),
+    );
+  }
+
+  Widget showIngredientTitle(BuildContext context) {
+    return Container(
+        color: AppColor.bgHome,
+        child: Column(
+          children: [
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                // 커스텀 위젯의 내용
+                children: [
+                  Text(AppLocalizations.of(context)!.hint_ingredient_title, style: TextStyle(fontSize: 14, color: AppColor.lineColor1)),
+                  const SizedBox(
+                    width: 8,
+                    height: 40,
+                  ),
+                  Text(AppLocalizations.of(context)!.hint_ingredient_rate, style: TextStyle(fontSize: 14, color: AppColor.lineColor1)),
+                  const SizedBox(
+                    width: 8,
+                    height: 40,
+                  ),
+                  Text(AppLocalizations.of(context)!.hint_ingredient_unit, style: TextStyle(fontSize: 14, color: AppColor.lineColor1)),
+                  const SizedBox(
+                    width: 8,
+                    height: 40,
+                  ),
+                ]),
+            Visibility(
+                visible: !widget.isEditable,
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.fromLTRB(6, 0, 6, 10),
+                  height: 30,
+                  child: Text(
+                    AppLocalizations.of(context)!.description_msg1,
+                    style: TextStyle(fontSize: 14, color: AppColor.primaryTextColor2),
+                  ),
+                )),
+          ],
+        ));
   }
 }

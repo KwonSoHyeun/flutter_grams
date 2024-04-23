@@ -24,4 +24,32 @@ class Utility {
           );
         }));
   }
+/*
+showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            title: const Text("파일을 어떤형식으로 다운로드하시겠습니까?"),
+            children: [
+              TextButton(
+                child: Text("다운로드"),
+                onPressed: () async {
+                  // 다운로드 선택 시 콜백
+                  // 행위 등록
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                child: Text("공유하기"),
+                onPressed: () async {
+                  // 공유하기 선택 시 콜백
+                  // 행위 등록
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+*/
+
 }

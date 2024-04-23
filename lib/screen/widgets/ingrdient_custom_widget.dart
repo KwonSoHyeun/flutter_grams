@@ -2,11 +2,13 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:grams/util/colorvalue.dart';
 import 'package:grams/viewmodel/items_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
 import 'package:grams/viewmodel/items_viewmodel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class IngredientCustomWidget extends StatelessWidget {
   IngredientCustomWidget(this.boxIndex, this.nameController, this.rateController, this.unitController, this.isEditable, {super.key});
@@ -22,22 +24,29 @@ class IngredientCustomWidget extends StatelessWidget {
     final consumer = Provider.of<ItemsViewModel>(context);
 
     return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+
         // 커스텀 위젯의 내용
         children: [
           Flexible(
+            flex: 6,
             child: Container(
+              alignment: Alignment.centerLeft,
+              //color: Colors.amber,
               height: 50,
-              child: TextFormField(
-                // enabled: isEditable,
-                readOnly: !isEditable,
-                scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                controller: nameController,
-                decoration:  InputDecoration(labelText: '재료명', 
-                 enabledBorder:UnderlineInputBorder(borderSide:isEditable?BorderSide(width: 1):BorderSide.none)
-		),
-                keyboardType: TextInputType.text,
-              ),
+              width: double.infinity,
+              child: isEditable
+                  ? TextFormField(
+                      // enabled: isEditable,
+                      readOnly: !isEditable,
+                      scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                      controller: nameController,
+                      decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)!.hint_ingredient_title,
+                          labelStyle: TextStyle(fontSize: 14),
+                          enabledBorder: UnderlineInputBorder(borderSide: isEditable ? BorderSide(width: 1) : BorderSide.none)),
+                      keyboardType: TextInputType.text,
+                    )
+                  : Text(nameController.text, style: TextStyle(fontSize: 14)),
             ),
           ),
           const SizedBox(
@@ -45,11 +54,12 @@ class IngredientCustomWidget extends StatelessWidget {
             height: 60,
           ),
           Flexible(
+            flex: 6,
             child: Container(
               height: 50,
               child: TextField(
                 controller: rateController,
-                decoration: const InputDecoration(labelText: '중량 또는 비율'),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.hint_ingredient_rate, labelStyle: TextStyle(fontSize: 14)),
                 // keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
                 inputFormatters: [
@@ -71,17 +81,21 @@ class IngredientCustomWidget extends StatelessWidget {
             height: 60,
           ),
           Container(
+            alignment: Alignment.centerLeft,
             width: 60,
             height: 50,
-            child: TextField(
-              readOnly: !isEditable,
-              controller: unitController,
-              decoration:  InputDecoration(labelText: '단위', enabledBorder:UnderlineInputBorder(borderSide:isEditable?BorderSide(width: 1):BorderSide.none)),
-              keyboardType: TextInputType.text,
-              
-            ),
+            child: isEditable
+                ? TextField(
+                    readOnly: !isEditable,
+                    controller: unitController,
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.hint_ingredient_unit,
+                        labelStyle: TextStyle(fontSize: 14),
+                        enabledBorder: UnderlineInputBorder(borderSide: isEditable ? BorderSide(width: 1) : BorderSide.none)),
+                    keyboardType: TextInputType.text,
+                  )
+                : Text(unitController.text, style: TextStyle(fontSize: 14)),
           ),
-         
           Visibility(
               visible: isEditable,
               child: SizedBox(
@@ -91,25 +105,22 @@ class IngredientCustomWidget extends StatelessWidget {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    barrierDismissible: true, //바깥 영역 터치시 닫을지 여부 결정
-                    builder: ((context) {
-                      return AlertDialog(
-                        title: Text("제목"),
-                        content: Text(boxIndex.toString()),
-                        actions: <Widget>[
-                          Container(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                consumer.removeIngredientItem(boxIndex);
-                                Navigator.of(context).pop(); //창 닫기
-                              },
-                              child: Text("네"),
-                            ),
-                          ),
-                        ],
-                      );
-                    }),
+                    builder: (BuildContext context) => AlertDialog(
+                      title: Text(AppLocalizations.of(context)!.dialog_msg_delete_confirm),
+                      content: Text(AppLocalizations.of(context)!.dialog_msg_delete),
+                      actions: [
+                        ElevatedButton(
+                            onPressed: () async {
+                              consumer.removeIngredientItem(boxIndex);
+                              Navigator.of(context).pop();
+                              //Navigator.pop(context);
+                            },
+                            child: Text(AppLocalizations.of(context)!.dialog_button_ok)),
+                        ElevatedButton(onPressed: () => Navigator.of(context).pop(), child: Text(AppLocalizations.of(context)!.dialog_button_cancel)),
+                      ],
+                    ),
                   );
+
                 },
               )))
         ]);

@@ -18,8 +18,15 @@ class ListCookeryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: kind.isNotEmpty ? Text(  AppLocalizations.of(context)!.cookType(kind) + " " + AppLocalizations.of(context)!.title_list ) 
-        : Text(AppLocalizations.of(context)!.kind_all + " " + AppLocalizations.of(context)!.title_list ),
+        title: kind.isNotEmpty
+            ? Text(AppLocalizations.of(context)!.cookType(kind) + " " + AppLocalizations.of(context)!.title_list)
+            : Text(AppLocalizations.of(context)!.kind_all + " " + AppLocalizations.of(context)!.title_list),
+        shape: const Border(
+          bottom: BorderSide(
+            color: AppColor.lineColor2,
+            width: 1,
+          ),
+        ),
       ),
       body: Consumer<CookeryViewModel>(
         builder: (context, provider, child) {
@@ -29,8 +36,7 @@ class ListCookeryPage extends StatelessWidget {
           cookeryList = provider.getCookeryList();
 
           if (search.isNotEmpty) {
-            cookeryList = cookeryList.where((element) => element.title.contains(search) == true 
-            || element.getIngredients().contains(search)).toList();
+            cookeryList = cookeryList.where((element) => element.title.contains(search) == true || element.getIngredients().contains(search)).toList();
           } else {
             if (kind.isNotEmpty) {
               cookeryList = cookeryList.where((element) => element.kind == kind).toList();
@@ -39,17 +45,13 @@ class ListCookeryPage extends StatelessWidget {
 
           return SafeArea(
               child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-            Container(
-              height: 1.0,
-              width: 500.0,
-              color: AppColor.primaryColor,
-            ),
+
             Expanded(
                 child: ListView.separated(
                     itemCount: cookeryList.length,
                     //onPressed:  _navigateToEditScreen(context, index),
                     separatorBuilder: (BuildContext context, int index) {
-                      return Divider(thickness: 1);
+                      return const Divider(thickness: 1, color: AppColor.lineColor2,);
                     },
                     itemBuilder: (context, index) {
                       //return buildRecipeCard(cookeryList[index], context, index);
@@ -66,7 +68,7 @@ class ListCookeryPage extends StatelessWidget {
                             provider.updateCookeryObject(cookeryList[index].key, cookeryList[index]); //todo 구현
                           },
                         ),
-                       
+
                         onTap: () {
                           _navigateToCalculateScreen(context, index);
                         },

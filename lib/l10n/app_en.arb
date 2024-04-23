@@ -1,6 +1,6 @@
 {
 "app_title":"CookGram",
-"app_sub_title":"is an easy ratio calculator to use with cooking recipes.",
+"app_sub_title":"is an easy ratio calculator in cooking recipes.",
 "kind_all":"All",
 "kind_main":"Main",
 "kind_side":"Side",
@@ -25,12 +25,19 @@
 "button_new":"Register a new recipe",
 
 "hint_ingredient_title":"ingredient name",
-"hint_ingredient_rate":"weight or rate",
+"hint_ingredient_rate":"ratio(weight)",
 "hint_ingredient_unit":"unit",
 
 "validation_msg1":"Please enter at least 3 characters.",
 "validation_msg2":"Please enter at least 10 characters.",
 
+"description_msg1":"*One ratio changed,others are auto calculated.",
+
+"dialog_button_ok":"OK",
+"dialog_button_cancel":"CANCEL",
+
+"dialog_msg_delete_confirm":"Confirm",
+"dialog_msg_delete":"Are you sure you want to delete?",
 
 "cookType": "{cookType, select, main{main} side{side} sauce{sauce} dessert{dessert} drink{drink} etc{etc} other{etc}}",
     "@cookType": {
