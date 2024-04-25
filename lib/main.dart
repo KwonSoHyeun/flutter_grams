@@ -28,11 +28,6 @@ Future<void> main() async {
   //FlutterNativeSplash.remove();
 }
 
-@override
-void initState() {
-  logger.d("ksh first");
-}
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

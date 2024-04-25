@@ -21,6 +21,7 @@ class SelectKindWidget extends StatelessWidget {
     }
 
     return DropdownButton(
+      underline: SizedBox(),
       value: _init, //초기 선택값
       items: dropDownList.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
@@ -30,11 +31,6 @@ class SelectKindWidget extends StatelessWidget {
       }).toList(),
 
       onChanged: (String? value) {
-        // 드롭다운의 값을 선택했을 경우
-        // setState(() {
-        //   dropDownValue = value!;
-        //   print(dropDownValue);
-        // });
         callback(value!);
       },
     );

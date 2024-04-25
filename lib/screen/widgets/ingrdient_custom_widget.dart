@@ -41,8 +41,8 @@ class IngredientCustomWidget extends StatelessWidget {
                       scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                       controller: nameController,
                       decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)!.hint_ingredient_title,
-                          labelStyle: TextStyle(fontSize: 14),
+                          // labelText: AppLocalizations.of(context)!.hint_ingredient_title,
+                          // labelStyle: TextStyle(fontSize: 14),
                           enabledBorder: UnderlineInputBorder(borderSide: isEditable ? BorderSide(width: 1) : BorderSide.none)),
                       keyboardType: TextInputType.text,
                     )
@@ -58,9 +58,11 @@ class IngredientCustomWidget extends StatelessWidget {
             child: Container(
               height: 50,
               child: TextField(
+                maxLines: 1,
                 controller: rateController,
-                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.hint_ingredient_rate, labelStyle: TextStyle(fontSize: 14)),
-                // keyboardType: TextInputType.text,
+                // decoration: InputDecoration(
+                // labelText: AppLocalizations.of(context)!.hint_ingredient_rate, 
+                // labelStyle: TextStyle(fontSize: 14)),
                 textInputAction: TextInputAction.done,
                 inputFormatters: [
                   FilteringTextInputFormatter(
@@ -89,8 +91,8 @@ class IngredientCustomWidget extends StatelessWidget {
                     readOnly: !isEditable,
                     controller: unitController,
                     decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.hint_ingredient_unit,
-                        labelStyle: TextStyle(fontSize: 14),
+                       // labelText: AppLocalizations.of(context)!.hint_ingredient_unit,
+                       // labelStyle: TextStyle(fontSize: 14),
                         enabledBorder: UnderlineInputBorder(borderSide: isEditable ? BorderSide(width: 1) : BorderSide.none)),
                     keyboardType: TextInputType.text,
                   )

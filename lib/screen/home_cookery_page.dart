@@ -149,7 +149,7 @@ class HomeCookeryPage extends StatelessWidget {
               height: 10,
             ),
             SizedBox(
-                height: 50,
+                height: 40,
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [Icon(Icons.favorite, color: AppColor.AccentColor), SizedBox(width: 4), Text(AppLocalizations.of(context)!.title_myfavorite)])),
@@ -157,7 +157,7 @@ class HomeCookeryPage extends StatelessWidget {
                 child: ListView.builder(
                     itemCount: favoriteList.length,
                     itemBuilder: (context, index) {
-                      return Padding(padding: const EdgeInsets.all(10), child: BigCard(context, favoriteList[index]));
+                      return Padding(padding: EdgeInsets.fromLTRB(10, 8, 10, 0), child: BigCard(context, favoriteList[index]));
                     }))
           ]));
         },
@@ -179,8 +179,6 @@ class HomeCookeryPage extends StatelessWidget {
     XFile? _image;
     String _imageFilePath = "";
     late FileImage fileImage;
-    print("ksh1");
-
     try {
       if (data.img.isNotEmpty) {
         _imageFilePath = data.img;
@@ -194,7 +192,6 @@ class HomeCookeryPage extends StatelessWidget {
       _imageFilePath = "";
       print(e.toString());
     }
-    print("ksh2");
 
     return Card(
       color: Color(0xffF9F1E7),
@@ -203,14 +200,13 @@ class HomeCookeryPage extends StatelessWidget {
       ),
       child: InkWell(
           onTap: () {
-            print("list_page: card on press : key:" + data.key.toString());
             _navigateToCalculateScreen(context, data);
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.all(15),
+                padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[

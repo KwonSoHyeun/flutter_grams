@@ -15,8 +15,6 @@ class ItemsViewModel with ChangeNotifier {
     boxItemWidget.forEach((element) {
       data.add(Ingredient(name: element.nameController.text, count: double.parse(element.rateController.text), unit: element.unitController.text));
     });
-
-    print("현재 얻은 재료값:" + data.toString());
     return data;
   }
 
@@ -28,8 +26,6 @@ class ItemsViewModel with ChangeNotifier {
     _itemList.forEach((element) {
       addNewWidgetWithController(i++, name: element.name, count: element.count, unit: element.unit, isEditable);
     });
-
-    print("init:makeItemWidgetList called , 위젯길이: " + boxItemWidget.length.toString());
   }
 
   void addNewWidgetWithController(int index, bool isEditable, {String name = "", double count = 0, String unit = ""}) {
@@ -46,7 +42,6 @@ class ItemsViewModel with ChangeNotifier {
 
 //플러스 버튼 눌렀을때 신규 재료 입력 위젯을 추가함.
   void addIngredientWidget() {
-    print("add::addIngredientWidget called , 위젯길이: " + boxItemWidget.length.toString());
     addNewWidgetWithController(boxItemWidget.length, true);
     notifyListeners();
   }
@@ -67,7 +62,6 @@ class ItemsViewModel with ChangeNotifier {
   }
 
   List<IngredientCustomWidget> getBoxItemWidget() {
-    print("boxItemWidget.length : ${boxItemWidget.length}");
     return boxItemWidget;
   }
 
@@ -89,24 +83,15 @@ class ItemsViewModel with ChangeNotifier {
   void reCalculateRate(int index, String val) {
     double changedRate = 0;
     double changedValue = double.parse(val);
-    print("reCalculateRate called");
 
-    // if (!isListenerEnable) //!isEditable &&!countController.value.text.isEmpty &&
-    //   return;
-    //바뀐 비율을 계산하여
     if (changedValue == 0 || _itemList[index].count == null || _itemList[index].count == 0) {
-      print("reCalculateRate 수행조건불합");
       return;
     }
 
     changedRate = (changedValue / _itemList[index].count) as double;
     if (changedRate == 1.00) {
-      print("ksh changed Rate: 같은비율 1");
       return;
     }
-
-    //루프를 돌면서 모든 항목값을 계산하여 갱신한후
-    print("ksh changed Rate:" + changedRate.toString());
 
     for (int i = 0; i < boxItemWidget.length; i++) {
       if (i != index) {

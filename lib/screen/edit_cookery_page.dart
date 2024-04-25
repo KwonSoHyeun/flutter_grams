@@ -54,8 +54,6 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
   @override
   void initState() {
     super.initState();
-    //print("1:edit_page:initState:" + PlatformDispatcher.instance.locale.languageCode     );
-
     cookeryViewModel = Provider.of<CookeryViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
     itemsViewModel = Provider.of<ItemsViewModel>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
     itemsViewModel.clearDataItemList();
@@ -84,11 +82,8 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
 
   @override
   Widget build(BuildContext context) {
-    //var msg = widget.isEditable?'Calculate mode': 'Edit mode';
-    print("2:edit_page:build:");
-    print("2:edit_page:build:currkey" + widget.currKey.toString());
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           title: Text(widget.isEditable ? AppLocalizations.of(context)!.title_edit : AppLocalizations.of(context)!.title_calculate),
           shape: const Border(
@@ -98,6 +93,29 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
             ),
           ),
           actions: [
+            IconButton(
+                icon: Icon(Icons.favorite),
+                color: isFavorit ? Colors.red[600] : Colors.grey,
+                iconSize: 30,
+                onPressed: () {
+                  setState(() {
+                    isFavorit = !isFavorit;
+                    if (widget.currKey!.isNotEmpty) {
+                      cookeryViewModel.update(
+                          widget.currKey!,
+                          widget.currCookery!.img,
+                          widget.currCookery!.title,
+                          widget.currCookery!.kind,
+                          widget.currCookery!.img,
+                          widget.currCookery!.desc,
+                          widget.currCookery!.caution,
+                          isFavorit,
+                          widget.currCookery!.hit,
+                          widget.currCookery!.ingredients); //todo 구현
+                    }
+                  });
+                }),
+
 //앱바 : 신규저장
             Visibility(
               visible: editCookery == null && widget.isEditable,
@@ -149,17 +167,20 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
 //앱바: 에디트 모드로 이동
             Visibility(
               visible: editCookery != null && !widget.isEditable,
-              child: PopupMenuButton<int>(
-                icon: const Icon(Icons.more_vert),
-                onSelected: (item) => handleClick(item),
-                itemBuilder: (context) => [
-                  PopupMenuItem<int>(value: widget.isEditable ? 0 : 1, child: Text(widget.isEditable ? 'save as copy' : 'edit mode')),
-                ],
+              child: IconButton(
+                icon: const Icon(Icons.edit),
+                color: AppColor.primaryMenuColor,
+                tooltip: 'Go to edit mode',
+                onPressed: () {
+                  handleClick(1);
+                },
               ),
             )
           ],
         ),
-        body: SingleChildScrollView(
+        body: 
+        SingleChildScrollView(
+            reverse: false,
             padding: EdgeInsets.only(top: 0, bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Padding(
               padding: const EdgeInsets.all(0),
@@ -172,37 +193,50 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                         child: Column(
                           children: [
                             Row(children: <Widget>[
-                              Expanded(
-                                child: widget.isEditable
-                                    ? TextFormField(
-                                        validator: (value) {
-                                          if (value!.isEmpty)
-                                            return AppLocalizations.of(context)!.validation_msg1;
-                                          else
-                                            return null;
-                                        },
-                                        scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                        controller: titleController,
-                                        decoration: const InputDecoration(labelText: '요리명'),
-                                        maxLength: 100,
-                                        keyboardType: TextInputType.text,
-                                      )
-                                    : Text(
-                                        editCookery!.title,
-                                      ),
-                              ),
-                              widget.isEditable
-                                  ? SelectKindWidget(
-                                      callback: (value) => setState(() {
-                                        dropDownValue = value;
-                                        //  print(value);
-                                      }),
-                                      init: dropDownValue,
-                                    )
-                                  : Text(AppLocalizations.of(context)!.cookType(editCookery!.kind),
-                                      style: const TextStyle(
-                                          //fontSize: 15, // 폰트 크기
-                                          color: AppColor.primaryTextColor)), // TextStyle
+                              Flexible(
+                                  flex: 12,
+                                  child: Container(
+                                    width: double.infinity,
+                                    child: widget.isEditable
+                                        ? TextFormField(
+                                            validator: (value) {
+                                              if (value!.isEmpty)
+                                                return AppLocalizations.of(context)!.validation_msg1;
+                                              else
+                                                return null;
+                                            },
+                                            scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                            controller: titleController,
+                                            decoration: InputDecoration(labelText: AppLocalizations.of(context)!.hint_title),
+                                            maxLength: 100,
+                                            keyboardType: TextInputType.text,
+                                          )
+                                        : Text(
+                                            editCookery!.title, style:TextStyle(fontSize: 16, color: AppColor.primaryTextColor),
+                                          ),
+                                  )),
+                              Flexible(
+                                  flex: 1,
+                                  child: Container(
+                                    width: double.infinity,
+                                  )),
+                              Flexible(
+                                flex: 4,
+                                child: Container(
+                                   
+                                    width: double.infinity,
+                                    child: widget.isEditable
+                                        ? SelectKindWidget(
+                                            callback: (value) => setState(() {
+                                              dropDownValue = value;
+                                            }),
+                                            init: dropDownValue,
+                                          )
+                                        : Text(AppLocalizations.of(context)!.hint_kind + ":" + AppLocalizations.of(context)!.cookType(editCookery!.kind),
+                                            style: const TextStyle(
+                                                fontSize: 16, // 폰트 크기
+                                                color: AppColor.primaryTextColor))), // TextStyle
+                              )
                             ]),
                             widget.isEditable
                                 ? TextFormField(
@@ -245,11 +279,10 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                                           ),
                                         )
                                       : Container(
-                                        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                        alignment: Alignment.center,
+                                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                          alignment: Alignment.center,
                                           width: 100,
                                           height: 100,
-
                                           decoration: const BoxDecoration(
                                             image: DecorationImage(image: AssetImage('assets/photos/cook_icon1.png'), fit: BoxFit.cover),
                                           ),
@@ -281,12 +314,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                     showIngredientTitle(context),
                     Container(
                         padding: EdgeInsets.fromLTRB(12, 0, 0, 12),
-                        //  decoration: BoxDecoration(
-                        //               borderRadius: BorderRadius.circular(2),
-                        //               color: AppColor.bgHome,
-                        //             ),
                         child: Consumer<ItemsViewModel>(builder: (context, provider, child) {
-                          print("3:edit_page:consumer:called");
                           return Column(children: provider.boxItemWidget);
                         })),
                     Visibility(
@@ -306,34 +334,6 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    IconButton(
-                        icon: Icon(Icons.favorite),
-                        color: isFavorit ? Colors.red[600] : Colors.grey,
-                        iconSize: 30,
-                        onPressed: () {
-                          if (editCookery?.ingredients == null) {
-                            print("4:edit_page:ingredient empty");
-                          } else {
-                            print("4:edit_page:ingredient length:" + editCookery!.ingredients!.length.toString());
-                          }
-
-                          setState(() {
-                            isFavorit = !isFavorit;
-                            if (widget.currKey!.isNotEmpty) {
-                              cookeryViewModel.update(
-                                  widget.currKey!,
-                                  widget.currCookery!.img,
-                                  widget.currCookery!.title,
-                                  widget.currCookery!.kind,
-                                  widget.currCookery!.img,
-                                  widget.currCookery!.desc,
-                                  widget.currCookery!.caution,
-                                  isFavorit,
-                                  widget.currCookery!.hit,
-                                  widget.currCookery!.ingredients); //todo 구현
-                            }
-                          });
-                        })
                   ],
                 ),
               ),
@@ -346,7 +346,6 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
         break;
       case 1:
         widget.currCookery!.ingredients = itemsViewModel.getIngredientList();
-        //print("goto edit page" + data.title + data.key.toString());
         Navigator.pop(context);
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey: widget.currKey!, currCookery: widget.currCookery, isEditable: true)));

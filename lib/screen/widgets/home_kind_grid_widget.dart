@@ -23,8 +23,6 @@ class HomeKindGridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(_items[0].name);
-
     return SizedBox(
         child: DecoratedBox(
       decoration:const BoxDecoration(color: AppColor.primaryColor),

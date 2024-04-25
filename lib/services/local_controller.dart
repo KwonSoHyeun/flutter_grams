@@ -14,7 +14,6 @@ class LocalController {
     //addTestData();
     List<Cookery> originalList = repo.getAll();
     List<Cookery> filteredlList = originalList.where((i) => i.title.contains(search)).toList();
-    print("controller : getAll : 필터 검색어:" +search + "/결과:"+ filteredlList.toString());
     return filteredlList;
   }
 

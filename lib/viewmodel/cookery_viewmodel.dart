@@ -97,11 +97,9 @@ class CookeryViewModel with ChangeNotifier {
       if (old_img.isNotEmpty && old_img != img) {
         if (File(old_img).existsSync()) {
           File(old_img).delete();
-          print(old_img + " 해당경로 파일 지움");
         }
       }
     } catch (e) {
-      print(old_img + " 해당경로 파일 지움 에러발생");
       print(e.toString());
     }
 
@@ -115,17 +113,13 @@ class CookeryViewModel with ChangeNotifier {
   }
 
   delete(String key, Cookery data) {
-    //이미지 파일 확인 후 제거
-    print(data.img + " 해당경로 이미지 ");
     try {
       if (data.img.isNotEmpty) {
         if (File(data.img).existsSync()) {
           File(data.img).delete();
-          print(data.img + " 해당경로 파일 지움");
         }
       }
     } catch (e) {
-      print(data.img + " 해당경로 파일 지움 에러발생");
       print(e.toString());
     }
 

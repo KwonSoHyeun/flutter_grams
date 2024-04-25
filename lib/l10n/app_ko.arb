@@ -17,6 +17,7 @@
 "menu_edit":"수정하기",
 
 "hint_title":"요리명",
+"hint_kind":"분류",
 "hint_desc":"레시피 작성",
 "hint_caution":"주의사항",
 "hint_save_favotite":"내가 좋아하는 것을 저장하세요.",

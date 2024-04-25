@@ -17,6 +17,7 @@
 "menu_edit":"Edit",
 
 "hint_title":"title",
+"hint_kind":"category",
 "hint_desc":"recipe description",
 "hint_caution":"caution",
 "hint_save_favotite":"Save my favorite",
