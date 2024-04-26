@@ -9,6 +9,7 @@ import 'package:grams/model/cookery.dart';
 import 'package:grams/screen/edit_cookery_page.dart';
 import 'package:grams/screen/list_cookery_page.dart';
 import 'package:grams/util/colorvalue.dart';
+import 'package:grams/util/navigator.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
 
 //import 'package:flutter_localizations/flutter_localizations.dart'; // Add this line
@@ -84,7 +85,7 @@ class HomeCookeryPage extends StatelessWidget {
                     TextButton(
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.ButtonKindBGColor)),
                       onPressed: () {
-                        _navigateToListScreen(context, "", "");
+                        AppNavigator.navigateToListScreen(context, "", "");
                       },
                       child: Text(AppLocalizations.of(context)!.kind_all),
                     ),
@@ -92,7 +93,7 @@ class HomeCookeryPage extends StatelessWidget {
                     TextButton(
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.ButtonKindBGColor)),
                       onPressed: () {
-                        _navigateToListScreen(context, "", "main");
+                        AppNavigator.navigateToListScreen(context, "", "main");
                       },
                       child: Text(AppLocalizations.of(context)!.kind_main),
                     ),
@@ -100,7 +101,7 @@ class HomeCookeryPage extends StatelessWidget {
                     TextButton(
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.ButtonKindBGColor)),
                       onPressed: () {
-                        _navigateToListScreen(context, "", "side");
+                        AppNavigator.navigateToListScreen(context, "", "side");
                       },
                       child: Text(AppLocalizations.of(context)!.kind_side),
                     ),
@@ -108,7 +109,7 @@ class HomeCookeryPage extends StatelessWidget {
                     TextButton(
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.ButtonKindBGColor)),
                       onPressed: () {
-                        _navigateToListScreen(context, "", "sauce");
+                        AppNavigator.navigateToListScreen(context, "", "sauce");
                       },
                       child: Text(AppLocalizations.of(context)!.kind_sauce),
                     ),
@@ -117,7 +118,7 @@ class HomeCookeryPage extends StatelessWidget {
                     TextButton(
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.ButtonKindBGColor)),
                       onPressed: () {
-                        _navigateToListScreen(context, "", "dessert");
+                        AppNavigator.navigateToListScreen(context, "", "dessert");
                       },
                       child: Text(AppLocalizations.of(context)!.kind_dessert),
                     ),
@@ -125,7 +126,7 @@ class HomeCookeryPage extends StatelessWidget {
                     TextButton(
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.ButtonKindBGColor)),
                       onPressed: () {
-                        _navigateToListScreen(context, "", "drink");
+                        AppNavigator.navigateToListScreen(context, "", "drink");
                       },
                       child: Text(AppLocalizations.of(context)!.kind_drink),
                     ),
@@ -133,7 +134,7 @@ class HomeCookeryPage extends StatelessWidget {
                     TextButton(
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.ButtonKindBGColor)),
                       onPressed: () {
-                        _navigateToListScreen(context, "", "etc");
+                        AppNavigator.navigateToListScreen(context, "", "etc");
                       },
                       child: Text(AppLocalizations.of(context)!.kind_etc),
                     ),
@@ -165,7 +166,7 @@ class HomeCookeryPage extends StatelessWidget {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _navigateToNewScreen(context, -1);
+          AppNavigator.navigateToNewScreen(context, -1);
         },
         tooltip: 'New Receipy',
         child: const Icon(Icons.add),
@@ -200,7 +201,7 @@ class HomeCookeryPage extends StatelessWidget {
       ),
       child: InkWell(
           onTap: () {
-            _navigateToCalculateScreen(context, data);
+            AppNavigator.navigateToCalculateScreen(context, data);
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -260,25 +261,7 @@ class HomeCookeryPage extends StatelessWidget {
           )),
     );
   }
-
-  void _navigateToListScreen(BuildContext context, String search, String kind) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ListCookeryPage(search, kind)));
-  }
-
-  void _navigateToCalculateScreen(BuildContext context, Cookery data) {
-    // Cookery data = cookeryList[index].deepCopy();
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey: data.key, currCookery: data, isEditable: false)));
-  }
-
-  void _navigateToEditScreen(BuildContext context, int index) {
-    Cookery data = cookeryList[index].deepCopy();
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey: data.key, currCookery: data, isEditable: true)));
-  }
-
-  void _navigateToNewScreen(BuildContext context, int index) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(isEditable: true)));
-  }
-
+  
   Container _getDefaultIcon(String kind) {
     var _color = Colors.amber[400];
     IconData _icon = Icons.dinner_dining;
@@ -331,7 +314,7 @@ class HomeCookeryPage extends StatelessWidget {
           color: AppColor.textHome1,
           onPressed: () {
             // provider.setCookeryList(search: _search_value);
-            _navigateToListScreen(context, _search_value, "");
+            AppNavigator.navigateToListScreen(context, _search_value, "");
           },
         ),
       ], //trailing: [Icon(Icons.search ,color: primaryButtonTextColor,)],
@@ -344,7 +327,7 @@ class HomeCookeryPage extends StatelessWidget {
         _search_value = value;
       },
       onSubmitted: (value) {
-        _navigateToListScreen(context, _search_value, "");
+        AppNavigator.navigateToListScreen(context, _search_value, "");
       },
     );
   }

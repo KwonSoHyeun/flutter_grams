@@ -71,7 +71,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
       descController.text = editCookery!.desc;
       cautionController.text = editCookery!.caution;
 
-      itemsViewModel.makeItemWidgetList(editCookery!.ingredients!, widget.isEditable);
+      itemsViewModel.initItemWidgetList(editCookery!.ingredients!, widget.isEditable);
       isFavorit = editCookery!.heart;
     }
 
@@ -111,7 +111,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                           widget.currCookery!.caution,
                           isFavorit,
                           widget.currCookery!.hit,
-                          widget.currCookery!.ingredients); //todo 구현
+                          widget.currCookery!.ingredients); 
                     }
                   });
                 }),
@@ -127,7 +127,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                   final formKeyState = _formKey.currentState!;
                   if (formKeyState.validate()) {
                     cookeryViewModel.addCookery(titleController.text, dropDownValue, _imageFilePath, descController.text, cautionController.text, isFavorit, 0,
-                        itemsViewModel.getIngredientList()); //todo 구현
+                        itemsViewModel.getIngredientList()); 
                     Navigator.of(context).pop();
                   }
                 },
@@ -144,7 +144,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                   final formKeyState = _formKey.currentState!;
                   if (formKeyState.validate()) {
                     cookeryViewModel.update(widget.currKey!, widget.currCookery!.img, titleController.text, dropDownValue, _imageFilePath, descController.text,
-                        cautionController.text, isFavorit, 0, itemsViewModel.getIngredientList()); //todo 구현
+                        cautionController.text, isFavorit, 0, itemsViewModel.getIngredientList()); 
                     Navigator.of(context).pop();
                   }
                 },

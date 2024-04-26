@@ -61,8 +61,9 @@ class IngredientCustomWidget extends StatelessWidget {
                 maxLines: 1,
                 controller: rateController,
                 // decoration: InputDecoration(
-                // labelText: AppLocalizations.of(context)!.hint_ingredient_rate, 
+                // labelText: AppLocalizations.of(context)!.hint_ingredient_rate,
                 // labelStyle: TextStyle(fontSize: 14)),
+
                 textInputAction: TextInputAction.done,
                 inputFormatters: [
                   FilteringTextInputFormatter(
@@ -70,10 +71,14 @@ class IngredientCustomWidget extends StatelessWidget {
                     allow: true,
                   )
                 ],
-                onTap: () => rateController.selection = TextSelection(baseOffset: 0, extentOffset: rateController.value.text.length),
+                onTap: () {
+                  if (rateController.value.text == "0") { //최소 입력시 편리하도록 
+                    rateController.selection = TextSelection(baseOffset: 0, extentOffset: rateController.value.text.length);
+                  }
+                },
 
                 onSubmitted: (String val) {
-                  if (!isEditable) consumer.reCalculateRate(boxIndex, val);
+                  //if (!isEditable) consumer.reCalculateRate(boxIndex, val);
                 },
               ),
             ),
@@ -91,8 +96,8 @@ class IngredientCustomWidget extends StatelessWidget {
                     readOnly: !isEditable,
                     controller: unitController,
                     decoration: InputDecoration(
-                       // labelText: AppLocalizations.of(context)!.hint_ingredient_unit,
-                       // labelStyle: TextStyle(fontSize: 14),
+                        // labelText: AppLocalizations.of(context)!.hint_ingredient_unit,
+                        // labelStyle: TextStyle(fontSize: 14),
                         enabledBorder: UnderlineInputBorder(borderSide: isEditable ? BorderSide(width: 1) : BorderSide.none)),
                     keyboardType: TextInputType.text,
                   )
@@ -122,7 +127,6 @@ class IngredientCustomWidget extends StatelessWidget {
                       ],
                     ),
                   );
-
                 },
               )))
         ]);

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:grams/model/ingredient.dart';
+import 'package:intl/intl.dart';
 
 import '../screen/widgets/ingrdient_custom_widget.dart';
 
 class ItemsViewModel with ChangeNotifier {
+  var f = NumberFormat("0.##");
+
+  var log_i = 0;
+
   List<Ingredient> _itemList = List.empty(growable: true); // 현재 ingredient 목록값인데, 변경될수 있다. 왜냐하면 비율을 여러번 변경시 rate 계산의 기준값이 필요하기 때문.
   List<IngredientCustomWidget> boxItemWidget = List.empty(growable: true); //UI 위젯 목록값
   int boxIndex = 0;
@@ -18,11 +23,13 @@ class ItemsViewModel with ChangeNotifier {
     return data;
   }
 
-  makeItemWidgetList(List<Ingredient> itemList, bool isEditable) {
+  initItemWidgetList(List<Ingredient> itemList, bool isEditable) {
+    
     int i = 0;
 
     clearDataItemList();
     _itemList = itemList;
+
     _itemList.forEach((element) {
       addNewWidgetWithController(i++, name: element.name, count: element.count, unit: element.unit, isEditable);
     });
@@ -34,8 +41,15 @@ class ItemsViewModel with ChangeNotifier {
     TextEditingController unitController = TextEditingController();
 
     nameController.text = name;
-    countController.text = count.toStringAsFixed(2);
+    countController.text = f.format(count);
     unitController.text = unit;
+
+    countController.addListener(() {
+      //print("value " + rateController.value.toString());
+      if (!isEditable && !countController.value.text.isEmpty && isListenerEnable) {
+        reCalculateRate(boxIndex, countController.value.text);
+      }
+    });
 
     boxItemWidget.add(IngredientCustomWidget(index, nameController, countController, unitController, isEditable));
   }
@@ -78,30 +92,31 @@ class ItemsViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  bool isListenerEnable = false;
+  bool isListenerEnable = true;
 
   void reCalculateRate(int index, String val) {
+    print("reCalculate call with index:" + index.toString());
+
     double changedRate = 0;
-    double changedValue = double.parse(val);
+    double changedValue = 0;
 
-    if (changedValue == 0 || _itemList[index].count == null || _itemList[index].count == 0) {
+    try {
+      changedValue = double.parse(val);
+    } catch (e) {
+      print("KSH error1");
       return;
     }
 
+   isListenerEnable = false;
     changedRate = (changedValue / _itemList[index].count) as double;
-    if (changedRate == 1.00) {
-      return;
-    }
+    //print("log_i" + (log_i++).toString());
 
     for (int i = 0; i < boxItemWidget.length; i++) {
       if (i != index) {
-        boxItemWidget[i].rateController.text = (_itemList[i].count * changedRate).toStringAsFixed(2);
+        boxItemWidget[i].rateController.text = f.format(_itemList[i].count * changedRate);
       }
-
-      _itemList[i].count = _itemList[i].count * changedRate;
     }
-
-    //ui에 반영한다.
     notifyListeners();
+    isListenerEnable = true;
   }
 }

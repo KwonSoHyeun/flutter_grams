@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grams/model/cookery.dart';
 import 'package:grams/screen/edit_cookery_page.dart';
 import 'package:grams/util/colorvalue.dart';
+import 'package:grams/util/navigator.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -65,15 +66,15 @@ class ListCookeryPage extends StatelessWidget {
                           tooltip: AppLocalizations.of(context)!.hint_save_favotite,
                           onPressed: () {
                             cookeryList[index].heart = !cookeryList[index].heart;
-                            provider.updateCookeryObject(cookeryList[index].key, cookeryList[index]); //todo 구현
+                            provider.updateCookeryObject(cookeryList[index].key, cookeryList[index]);
                           },
                         ),
 
                         onTap: () {
-                          _navigateToCalculateScreen(context, index);
+                          AppNavigator.navigateToCalculateScreen(context, cookeryList[index]);
                         },
                         onLongPress: () {
-                          _navigateToEditScreen(context, index);
+                          AppNavigator.navigateToEditScreen(context, index, cookeryList[index]);
                         },
                       );
                     })),
@@ -83,7 +84,7 @@ class ListCookeryPage extends StatelessWidget {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _navigateToNewScreen(context, -1);
+          AppNavigator.navigateToNewScreen(context, -1);
         },
         tooltip: AppLocalizations.of(context)!.button_new,
         child: const Icon(Icons.add),
@@ -93,17 +94,4 @@ class ListCookeryPage extends StatelessWidget {
     );
   }
 
-  void _navigateToCalculateScreen(BuildContext context, int index) {
-    Cookery data = cookeryList[index].deepCopy();
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey: cookeryList[index].key, currCookery: data, isEditable: false)));
-  }
-
-  void _navigateToEditScreen(BuildContext context, int index) {
-    Cookery data = cookeryList[index].deepCopy();
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(currKey: cookeryList[index].key, currCookery: data, isEditable: true)));
-  }
-
-  void _navigateToNewScreen(BuildContext context, int index) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditCookeryPage(isEditable: true)));
-  }
 }
