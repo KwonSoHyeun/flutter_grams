@@ -194,7 +194,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                           children: [
                             Row(children: <Widget>[
                               Flexible(
-                                  flex: 12,
+                                  flex: 13,
                                   child: Container(
                                     width: double.infinity,
                                     child: widget.isEditable
@@ -221,7 +221,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                                     width: double.infinity,
                                   )),
                               Flexible(
-                                flex: 4,
+                                flex: 5,
                                 child: Container(
                                    
                                     width: double.infinity,
@@ -345,6 +345,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
       case 0:
         break;
       case 1:
+        
         widget.currCookery!.ingredients = itemsViewModel.getIngredientList();
         Navigator.pop(context);
         Navigator.of(context)

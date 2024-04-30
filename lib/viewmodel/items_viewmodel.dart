@@ -18,13 +18,13 @@ class ItemsViewModel with ChangeNotifier {
     List<Ingredient> data = List.empty(growable: true);
 
     boxItemWidget.forEach((element) {
+      if (element.rateController.text.isEmpty) element.rateController.text = "0";
       data.add(Ingredient(name: element.nameController.text, count: double.parse(element.rateController.text), unit: element.unitController.text));
     });
     return data;
   }
 
   initItemWidgetList(List<Ingredient> itemList, bool isEditable) {
-    
     int i = 0;
 
     clearDataItemList();
@@ -46,8 +46,8 @@ class ItemsViewModel with ChangeNotifier {
 
     countController.addListener(() {
       //print("value " + rateController.value.toString());
-      if (!isEditable && !countController.value.text.isEmpty && isListenerEnable) {
-        reCalculateRate(boxIndex, countController.value.text);
+      if (!isEditable && isListenerEnable) {
+        reCalculateRate(index, countController.value.text);
       }
     });
 
@@ -95,27 +95,36 @@ class ItemsViewModel with ChangeNotifier {
   bool isListenerEnable = true;
 
   void reCalculateRate(int index, String val) {
-    print("reCalculate call with index:" + index.toString());
-
+    print("reCalculate call with index:" + index.toString() + ": val:" + val);
     double changedRate = 0;
     double changedValue = 0;
 
-    try {
-      changedValue = double.parse(val);
-    } catch (e) {
-      print("KSH error1");
-      return;
-    }
+    if (!val.isEmpty) {
+      try {
+        changedValue = double.parse(val);
+      } catch (e) {
+        print("KSH error1");
+        return;
+      }
 
-   isListenerEnable = false;
-    changedRate = (changedValue / _itemList[index].count) as double;
-    //print("log_i" + (log_i++).toString());
+      isListenerEnable = false;
+      changedRate = (changedValue / _itemList[index].count) as double;
+      //print("log_i" + (log_i++).toString());
 
-    for (int i = 0; i < boxItemWidget.length; i++) {
-      if (i != index) {
-        boxItemWidget[i].rateController.text = f.format(_itemList[i].count * changedRate);
+      for (int i = 0; i < boxItemWidget.length; i++) {
+        if (i != index) {
+          boxItemWidget[i].rateController.text = f.format(_itemList[i].count * changedRate);
+        }
+      }
+    } else {
+      print("!!! val is empty");
+      for (int i = 0; i < boxItemWidget.length; i++) {
+        if (i != index) {
+          boxItemWidget[i].rateController.text = "";
+        }
       }
     }
+
     notifyListeners();
     isListenerEnable = true;
   }
