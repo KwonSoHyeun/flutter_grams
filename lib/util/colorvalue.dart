@@ -27,5 +27,6 @@ class AppColor {
 
 class AppConst {
   static const List<String> cookingKindList = ['main', 'side', 'sauce', 'dessert', 'drink', 'etc'];
-  static const List<String> cookingKindList_ko = ['메인', '반찬', '소스', '디저트', '드링크', '기타'];
+  //static const List<String> cookingKindList_ko = ['메인', '반찬', '소스', '디저트', '드링크', '기타'];
+  static const String sampleFileName = "assets/photos/img_sample_pumkin.jpg";
 }

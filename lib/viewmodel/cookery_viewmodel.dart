@@ -16,6 +16,7 @@ class CookeryViewModel with ChangeNotifier {
 
   CookeryViewModel() {
     _cookeryController = LocalController();
+    _cookeryController.init() ;
     _getCookeryList();
   }
 

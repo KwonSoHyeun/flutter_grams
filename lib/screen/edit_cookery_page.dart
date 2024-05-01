@@ -111,7 +111,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                           widget.currCookery!.caution,
                           isFavorit,
                           widget.currCookery!.hit,
-                          widget.currCookery!.ingredients); 
+                          widget.currCookery!.ingredients);
                     }
                   });
                 }),
@@ -127,7 +127,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                   final formKeyState = _formKey.currentState!;
                   if (formKeyState.validate()) {
                     cookeryViewModel.addCookery(titleController.text, dropDownValue, _imageFilePath, descController.text, cautionController.text, isFavorit, 0,
-                        itemsViewModel.getIngredientList()); 
+                        itemsViewModel.getIngredientList());
                     Navigator.of(context).pop();
                   }
                 },
@@ -144,7 +144,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                   final formKeyState = _formKey.currentState!;
                   if (formKeyState.validate()) {
                     cookeryViewModel.update(widget.currKey!, widget.currCookery!.img, titleController.text, dropDownValue, _imageFilePath, descController.text,
-                        cautionController.text, isFavorit, 0, itemsViewModel.getIngredientList()); 
+                        cautionController.text, isFavorit, 0, itemsViewModel.getIngredientList());
                     Navigator.of(context).pop();
                   }
                 },
@@ -178,8 +178,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
             )
           ],
         ),
-        body: 
-        SingleChildScrollView(
+        body: SingleChildScrollView(
             reverse: false,
             padding: EdgeInsets.only(top: 0, bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Padding(
@@ -212,7 +211,8 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                                             keyboardType: TextInputType.text,
                                           )
                                         : Text(
-                                            editCookery!.title, style:TextStyle(fontSize: 16, color: AppColor.primaryTextColor),
+                                            editCookery!.title,
+                                            style: TextStyle(fontSize: 16, color: AppColor.primaryTextColor),
                                           ),
                                   )),
                               Flexible(
@@ -223,7 +223,6 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                               Flexible(
                                 flex: 5,
                                 child: Container(
-                                   
                                     width: double.infinity,
                                     child: widget.isEditable
                                         ? SelectKindWidget(
@@ -269,15 +268,26 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                                   visible: widget.isEditable || !widget.isEditable && _imageFilePath.isNotEmpty,
                                   //child: PhotoAreaWidget(_image),
                                   child: _image != null
-                                      ? Container(
-                                          width: 150,
-                                          height: 150,
-                                          //child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
-                                            image: DecorationImage(image: FileImage(File(_image!.path)), fit: BoxFit.cover),
-                                          ),
-                                        )
+                                      ? _image!.path != AppConst.sampleFileName
+                                          ? Container(
+                                              width: 150,
+                                              height: 150,
+                                              //child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10),
+                                                image: DecorationImage(image: FileImage(File(_image!.path)), fit: BoxFit.cover),
+                                              ),
+                                            )
+                                          : Container(
+                                              //for sample data
+                                              width: 150,
+                                              height: 150,
+
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10),
+                                                image: DecorationImage(image: AssetImage(_image!.path), fit: BoxFit.cover),
+                                              ),
+                                            )
                                       : Container(
                                           padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                                           alignment: Alignment.center,
@@ -345,7 +355,6 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
       case 0:
         break;
       case 1:
-        
         widget.currCookery!.ingredients = itemsViewModel.getIngredientList();
         Navigator.pop(context);
         Navigator.of(context)

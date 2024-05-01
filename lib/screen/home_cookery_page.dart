@@ -146,7 +146,7 @@ class HomeCookeryPage extends StatelessWidget {
               width: 500.0,
               color: AppColor.lineColor2,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             SizedBox(
@@ -155,11 +155,14 @@ class HomeCookeryPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [Icon(Icons.favorite, color: AppColor.AccentColor), SizedBox(width: 4), Text(AppLocalizations.of(context)!.title_myfavorite)])),
             Expanded(
-                child: ListView.builder(
-                    itemCount: favoriteList.length,
-                    itemBuilder: (context, index) {
-                      return Padding(padding: EdgeInsets.fromLTRB(10, 8, 10, 0), child: BigCard(context, favoriteList[index]));
-                    }))
+                child: favoriteList.length > 0
+                    ? ListView.builder(
+                        itemCount: favoriteList.length,
+                        itemBuilder: (context, index) {
+                          return Padding(padding: EdgeInsets.fromLTRB(10, 8, 10, 0), child: BigCard(context, favoriteList[index]));
+                        })
+                    : Container(
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 0), alignment: Alignment.topCenter, child: Text(AppLocalizations.of(context)!.description_msg2)))
           ]));
         },
       ),
@@ -179,18 +182,28 @@ class HomeCookeryPage extends StatelessWidget {
   Card BigCard(BuildContext context, Cookery data) {
     XFile? _image;
     String _imageFilePath = "";
+    bool isFile = true;
     late FileImage fileImage;
+    late AssetImage assetImage;
+
+    //print("favoriteList length:" + favoriteList.toString());
     try {
       if (data.img.isNotEmpty) {
         _imageFilePath = data.img;
-        _image = XFile(_imageFilePath); //가져온 이미지를 _image에 저장
-        fileImage = FileImage(File(_image!.path));
-        if (!File(_image!.path).existsSync()) {
-          _imageFilePath = "";
+
+        if (_imageFilePath.startsWith("assets")) {
+          assetImage = AssetImage(_imageFilePath);
+          isFile = false;
+        } else {
+          _image = XFile(_imageFilePath); //가져온 이미지를 _image에 저장
+          if (File(_image!.path).existsSync()) {
+            fileImage = FileImage(File(_image.path));
+          } else {
+            _imageFilePath = "";
+          }
         }
       }
     } catch (e) {
-      _imageFilePath = "";
       print(e.toString());
     }
 
@@ -216,14 +229,24 @@ class HomeCookeryPage extends StatelessWidget {
                       visible: true,
                       //child: PhotoAreaWidget(_image),
                       child: _imageFilePath.isNotEmpty
-                          ? Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(image: fileImage, fit: BoxFit.cover),
-                              ),
-                            )
+                          ? !isFile
+                              ? Container(
+                                  //for sample data
+                                  width: 80,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(image: AssetImage(AppConst.sampleFileName), fit: BoxFit.cover),
+                                  ),
+                                )
+                              : Container(
+                                  width: 80,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(image: fileImage, fit: BoxFit.cover),
+                                  ),
+                                )
                           : Container(
                               width: 80,
                               height: 80,
@@ -244,13 +267,13 @@ class HomeCookeryPage extends StatelessWidget {
                           Container(height: 5),
                           Text(data.title, style: TextStyle(fontSize: 16, color: Colors.black87)),
                           Container(height: 0),
-                          Text(AppLocalizations.of(context)!.cookType(data.kind, ), style: TextStyle(fontSize: 14, color: AppColor.lineColor1)),
-                          Container(height: 5),
                           Text(
-                            data.desc,
-                            maxLines: 2,
-                            style: TextStyle(fontSize: 14, color: Colors.black87)
-                          ),
+                              AppLocalizations.of(context)!.cookType(
+                                data.kind,
+                              ),
+                              style: TextStyle(fontSize: 14, color: AppColor.lineColor1)),
+                          Container(height: 5),
+                          Text(data.desc, maxLines: 2, style: TextStyle(fontSize: 14, color: Colors.black87)),
                         ],
                       ),
                     ),
@@ -261,7 +284,7 @@ class HomeCookeryPage extends StatelessWidget {
           )),
     );
   }
-  
+
   Container _getDefaultIcon(String kind) {
     var _color = Colors.amber[400];
     IconData _icon = Icons.dinner_dining;

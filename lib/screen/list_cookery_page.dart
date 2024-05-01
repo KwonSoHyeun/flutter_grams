@@ -19,9 +19,7 @@ class ListCookeryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: kind.isNotEmpty
-            ? Text(AppLocalizations.of(context)!.cookType(kind) + " " + AppLocalizations.of(context)!.title_list)
-            : Text(AppLocalizations.of(context)!.kind_all + " " + AppLocalizations.of(context)!.title_list),
+        title: kind.isNotEmpty ? Text(AppLocalizations.of(context)!.cookType(kind).toUpperCase()) : Text(AppLocalizations.of(context)!.kind_all.toUpperCase()),
         shape: const Border(
           bottom: BorderSide(
             color: AppColor.lineColor2,
@@ -46,20 +44,29 @@ class ListCookeryPage extends StatelessWidget {
 
           return SafeArea(
               child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-
+            cookeryList.length <= 1
+                ? Container(
+                    padding: EdgeInsets.fromLTRB(0, 30, 0, 30),
+                    alignment: Alignment.topCenter,
+                    child: Text(style: TextStyle(color: Colors.blue[700], fontSize: 20), AppLocalizations.of(context)!.description_msg3),
+                  )
+                : SizedBox(),
             Expanded(
                 child: ListView.separated(
                     itemCount: cookeryList.length,
                     //onPressed:  _navigateToEditScreen(context, index),
                     separatorBuilder: (BuildContext context, int index) {
-                      return const Divider(thickness: 1, color: AppColor.lineColor2,);
+                      return const Divider(
+                        thickness: 1,
+                        color: AppColor.lineColor2,
+                      );
                     },
                     itemBuilder: (context, index) {
                       //return buildRecipeCard(cookeryList[index], context, index);
                       return ListTile(
                         // leading: CircleAvatar(child: Text('C')), //CircleAvatar(child: Text('C')),
                         title: Text("${cookeryList[index].title}"),
-                        subtitle: Text("${cookeryList[index].desc} "),
+                        subtitle: Text(maxLines: 3, "${cookeryList[index].desc} "),
                         trailing: IconButton(
                           icon: const Icon(Icons.favorite),
                           color: cookeryList[index].heart ? Colors.redAccent : Colors.grey,
@@ -93,5 +100,4 @@ class ListCookeryPage extends StatelessWidget {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-
 }
