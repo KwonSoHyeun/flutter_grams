@@ -36,7 +36,7 @@ class LocalController {
   addTestData1_en() {
     List<Cookery> list = [
       Cookery(
-          title: 'Pumkin Soup(Sample)',
+          title: 'Pumpkin Soup(Sample)',
           kind: 'side',
           img: AppConst.sampleFileName,
           desc:
