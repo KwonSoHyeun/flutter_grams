@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grams/model/cookery.dart';
 import 'package:grams/screen/edit_cookery_page.dart';
+import 'package:grams/screen/list_api_page.dart';
 import 'package:grams/screen/list_cookery_page.dart';
 import 'package:grams/util/colorvalue.dart';
 import 'package:grams/util/navigator.dart';
@@ -139,6 +140,12 @@ class HomeCookeryPage extends StatelessWidget {
                       child: Text(AppLocalizations.of(context)!.kind_etc),
                     ),
                     Spacer(),
+                     TextButton(
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColor.ButtonKindBGColor)),
+                      onPressed: () {
+                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => ListApiPage()));
+                      },
+                      child: Text("api")),
                   ]),
                 ])),
             Container(
