@@ -43,7 +43,7 @@ dependencies:
   gallery_saver: ^2.0.1
   image_picker: ^1.0.7
   build_runner: ^2.0.4
-  json_annotation: ^4.0.1
+  json_annotation: ^4.6.0
   json_serializable: ^6.7.1
   flutter_localizations:
     sdk: flutter

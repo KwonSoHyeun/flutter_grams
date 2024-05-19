@@ -26,7 +26,6 @@ class Cookery extends HiveObject {
   List<Ingredient>? ingredients;
 
   Cookery({
-  
     required this.title,
     required this.kind,
     required this.img,

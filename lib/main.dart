@@ -3,6 +3,7 @@ import 'package:grams/model/ingredient.dart';
 import 'package:grams/screen/home_cookery_page.dart';
 import 'package:grams/util/colorvalue.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
+import 'package:grams/viewmodel/http_provider.dart';
 import 'package:grams/viewmodel/items_viewmodel.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:logger/logger.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<ItemsViewModel>(create: (_) => ItemsViewModel()),
         ChangeNotifierProvider<CookeryViewModel>(create: (BuildContext context) => CookeryViewModel()),
+        ChangeNotifierProvider<HttpProvider>(create: (_) => HttpProvider()),
 
       ],
       child: MaterialApp(

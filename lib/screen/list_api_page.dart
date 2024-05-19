@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grams/model/cookery.dart';
+import 'package:grams/viewmodel/http_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:grams/util/colorvalue.dart';
 import 'package:grams/util/navigator.dart';
@@ -17,7 +18,8 @@ class ListApiPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getApiData();
+    HttpProvider httpViewModel = Provider.of<HttpProvider>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
+    httpViewModel.started();
 
     return Scaffold(
       appBar: AppBar(
@@ -29,20 +31,14 @@ class ListApiPage extends StatelessWidget {
           ),
         ),
       ),
-      body: Consumer<CookeryViewModel>(
+      body: Consumer<HttpProvider>(
         builder: (context, provider, child) {
           print("list_page:search word:" + search);
 
           //cookeryList = provider.cookeryList;
-          cookeryList = provider.getCookeryList();
+          //cookeryList = provider.getCookeryList();
 
-          if (search.isNotEmpty) {
-            cookeryList = cookeryList.where((element) => element.title.contains(search) == true || element.getIngredients().contains(search)).toList();
-          } else {
-            if (kind.isNotEmpty) {
-              cookeryList = cookeryList.where((element) => element.kind == kind).toList();
-            }
-          }
+          cookeryList = provider.cookeryList;
 
           return SafeArea(
               child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
@@ -74,8 +70,8 @@ class ListApiPage extends StatelessWidget {
                           color: cookeryList[index].heart ? Colors.redAccent : Colors.grey,
                           tooltip: AppLocalizations.of(context)!.hint_save_favotite,
                           onPressed: () {
-                            cookeryList[index].heart = !cookeryList[index].heart;
-                            provider.updateCookeryObject(cookeryList[index].key, cookeryList[index]);
+                            //cookeryList[index].heart = !cookeryList[index].heart;
+                            //provider.updateCookeryObject(cookeryList[index].key, cookeryList[index]);
                           },
                         ),
 
