@@ -36,8 +36,12 @@ class Cookery extends HiveObject {
     this.ingredients,
   });
 
-  Cookery deepCopy() =>
-      Cookery(title: title, kind: kind, img: img, desc: desc, caution: caution, heart: heart, hit:hit, ingredients: ingredients!.map((e) => e.deepCopy()).toList());
+  Cookery deepCopy() {
+    if(ingredients !=null)
+    return Cookery(title: title, kind: kind, img: img, desc: desc, caution: caution, heart: heart, hit:hit, ingredients: ingredients!.map((e) => e.deepCopy()).toList());
+    else 
+        return Cookery(title: title, kind: kind, img: img, desc: desc, caution: caution, heart: heart, hit:hit, ingredients: null);
+  }
 
   @override
   String toString() => '{title:$title, kind:$kind, img:$img, desc:$desc, caution:$caution, heart:$heart,hit:$hit, ingredient:$ingredients}';

@@ -152,12 +152,12 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
             ),
 //앱바: 삭제
             Visibility(
-              visible: widget.isEditable,
+              visible: widget.isEditable ,
               child: IconButton(
                 icon: const Icon(Icons.delete),
-                color: widget.currKey!.isNotEmpty ? AppColor.AccentColor : Colors.grey[400],
+                color: widget.currKey !=null && widget.currKey!.isNotEmpty ? AppColor.AccentColor : Colors.grey[400],
                 tooltip: 'Delete',
-                onPressed: widget.currKey!.isEmpty
+                onPressed: widget.currKey !=null && widget.currKey!.isEmpty
                     ? null
                     : () {
                         _showdialog(context);

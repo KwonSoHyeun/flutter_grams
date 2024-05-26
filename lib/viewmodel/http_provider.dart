@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:grams/model/cookery.dart';
 import 'package:grams/model/cookrcp01.dart';
+import 'package:grams/model/ingredient.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 
@@ -41,11 +42,11 @@ class HttpProvider extends ChangeNotifier {
           title: _data[i].RCP_NM,
           kind: _data[i].RCP_PAT2!,
           img: _data[i].ATT_FILE_NO_MK!,
-          desc: _data[i].MANUAL01!,
+          desc: _data[i].MANUAL01! + "\n" + _data[i].MANUAL02! + "\n" + _data[i].MANUAL03!,
           caution: "",
           heart: false,
           hit: 0,
-          ingredients: null);
+          ingredients: List.empty(growable: true));
       cookeryList.add(data);
       print(data.title);
     }
