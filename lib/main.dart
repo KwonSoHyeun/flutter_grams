@@ -3,13 +3,13 @@ import 'package:grams/model/ingredient.dart';
 import 'package:grams/screen/home_cookery_page.dart';
 import 'package:grams/util/colorvalue.dart';
 import 'package:grams/viewmodel/cookery_viewmodel.dart';
-import 'package:grams/viewmodel/http_provider.dart';
+import 'package:grams/viewmodel/http_provider_Cookrcp01.dart';
 import 'package:grams/viewmodel/items_viewmodel.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'model/cookery.dart';
-import 'services/hive_data.dart'; 
+import 'services/local_hive_data.dart'; 
 import 'package:flutter_localizations/flutter_localizations.dart'; // Add this line
 import 'package:flutter_gen/gen_l10n/app_localizations.dart'; 
 
@@ -23,7 +23,7 @@ Future<void> main() async {
   //WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  await HiveData.init();
+  await LocalHiveData.init();
 
   runApp(const MyApp());
   //FlutterNativeSplash.remove();
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<ItemsViewModel>(create: (_) => ItemsViewModel()),
         ChangeNotifierProvider<CookeryViewModel>(create: (BuildContext context) => CookeryViewModel()),
-        ChangeNotifierProvider<HttpProvider>(create: (_) => HttpProvider()),
+        ChangeNotifierProvider<HttpProviderCookrcp01>(create: (_) => HttpProviderCookrcp01()),
 
       ],
       child: MaterialApp(

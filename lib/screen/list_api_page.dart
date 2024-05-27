@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:grams/model/cookery.dart';
-import 'package:grams/viewmodel/http_provider.dart';
+import 'package:grams/viewmodel/http_provider_Cookrcp01.dart';
 import 'package:http/http.dart' as http;
 import 'package:grams/util/colorvalue.dart';
 import 'package:grams/util/navigator.dart';
@@ -39,7 +39,7 @@ class _ListApiPageState extends State<ListApiPage> {
     _scrollController.addListener(_loadMore);
     // _fetchData(_currentPage);
 
-    HttpProvider httpViewModel = Provider.of<HttpProvider>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
+    HttpProviderCookrcp01 httpViewModel = Provider.of<HttpProviderCookrcp01>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
     httpViewModel.started();
   }
 
@@ -51,12 +51,12 @@ class _ListApiPageState extends State<ListApiPage> {
 
   void _loadMore() {
     if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-      HttpProvider httpViewModel = Provider.of<HttpProvider>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
+      HttpProviderCookrcp01 httpViewModel = Provider.of<HttpProviderCookrcp01>(context, listen: false); //초기 데이타 기본값을을 널어주기 위함.
       if (!httpViewModel.isLoading) {
         buildLoading(context);
         _currentPage++;
         logger.i(">>>>>>>  _loadMoare called");
-        httpViewModel.more(_currentPage * httpViewModel.fetchCount);
+        httpViewModel.more(_currentPage * AppConst.fetchDefaultCount);
       }
     }
   }
@@ -73,7 +73,7 @@ class _ListApiPageState extends State<ListApiPage> {
           ),
         ),
       ),
-      body: Consumer<HttpProvider>(
+      body: Consumer<HttpProviderCookrcp01>(
         builder: (context, provider, child) {
           print("list_page:search word:" + search);
 
@@ -82,7 +82,7 @@ class _ListApiPageState extends State<ListApiPage> {
             Navigator.of(dialogContext!).pop();
           }
 
-          if (cookeryList.length <= 1) {
+          if (cookeryList.length < 1) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               buildLoading(context);
             });

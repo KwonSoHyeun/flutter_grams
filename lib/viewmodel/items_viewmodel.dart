@@ -5,9 +5,7 @@ import 'package:intl/intl.dart';
 import '../screen/widgets/ingrdient_custom_widget.dart';
 
 class ItemsViewModel with ChangeNotifier {
-  var f = NumberFormat("0.##");
-
-  var log_i = 0;
+  var formatType = NumberFormat("0.##");
 
   List<Ingredient> _itemList = List.empty(growable: true); // 현재 ingredient 목록값인데, 변경될수 있다. 왜냐하면 비율을 여러번 변경시 rate 계산의 기준값이 필요하기 때문.
   List<IngredientCustomWidget> boxItemWidget = List.empty(growable: true); //UI 위젯 목록값
@@ -41,7 +39,7 @@ class ItemsViewModel with ChangeNotifier {
     TextEditingController unitController = TextEditingController();
 
     nameController.text = name;
-    countController.text = f.format(count);
+    countController.text = formatType.format(count);
     unitController.text = unit;
 
     countController.addListener(() {
@@ -103,21 +101,18 @@ class ItemsViewModel with ChangeNotifier {
       try {
         changedValue = double.parse(val);
       } catch (e) {
-        print("KSH error1");
         return;
       }
 
       isListenerEnable = false;
       changedRate = (changedValue / _itemList[index].count) as double;
-      //print("log_i" + (log_i++).toString());
 
       for (int i = 0; i < boxItemWidget.length; i++) {
         if (i != index) {
-          boxItemWidget[i].rateController.text = f.format(_itemList[i].count * changedRate);
+          boxItemWidget[i].rateController.text = formatType.format(_itemList[i].count * changedRate);
         }
       }
     } else {
-      print("!!! val is empty");
       for (int i = 0; i < boxItemWidget.length; i++) {
         if (i != index) {
           boxItemWidget[i].rateController.text = "";

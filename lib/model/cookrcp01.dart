@@ -16,6 +16,7 @@ class COOKRCP01 {
   String? MANUAL01;
   String? MANUAL02;
   String? MANUAL03;
+  String? RCP_NA_TIP;
 
   COOKRCP01({
      required this.RCP_NM,
@@ -24,7 +25,8 @@ class COOKRCP01 {
      this.ATT_FILE_NO_MK,
      this.MANUAL01,
      this.MANUAL02,
-     this.MANUAL03
+     this.MANUAL03,
+     this.RCP_NA_TIP
   });
 
   factory COOKRCP01.fromJson(Map<String, dynamic> json) =>_$COOKRCP01FromJson(json);

@@ -12,7 +12,7 @@ import 'local_repository.dart';
   Hive.registerAdapter(IngredientAdapter());
   await Hive.openBox<Cookery>("COOKERY_BOX");
 */
-class HiveData {
+class LocalHiveData {
   
   static init() async {
     final appDocDir = await path_provider.getApplicationDocumentsDirectory();

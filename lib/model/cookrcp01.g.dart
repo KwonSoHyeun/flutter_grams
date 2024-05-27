@@ -14,6 +14,7 @@ COOKRCP01 _$COOKRCP01FromJson(Map<String, dynamic> json) => COOKRCP01(
       MANUAL01: json['MANUAL01'] as String?,
       MANUAL02: json['MANUAL02'] as String?,
       MANUAL03: json['MANUAL03'] as String?,
+      RCP_NA_TIP: json['RCP_NA_TIP'] as String?,
     );
 
 Map<String, dynamic> _$COOKRCP01ToJson(COOKRCP01 instance) => <String, dynamic>{
@@ -24,4 +25,5 @@ Map<String, dynamic> _$COOKRCP01ToJson(COOKRCP01 instance) => <String, dynamic>{
       'MANUAL01': instance.MANUAL01,
       'MANUAL02': instance.MANUAL02,
       'MANUAL03': instance.MANUAL03,
+      'RCP_NA_TIP': instance.RCP_NA_TIP,
     };
