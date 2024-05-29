@@ -9,16 +9,19 @@ class Ingredient extends HiveObject {
   double count;
   @HiveField(2)
   String unit;
+  @HiveField(3)
+  bool isdesc;
 
   Ingredient({
     required this.name,
     required this.count,
     required this.unit,
+    this.isdesc = false
   });
 
 
   @override
-  String toString() => '{name:$name, count:$count, unit:$unit}';
+  String toString() => '{name:$name, count:$count, unit:$unit, isdesc:$isdesc}';
 
-  Ingredient deepCopy() => Ingredient(name: name, count: count, unit: unit);
+  Ingredient deepCopy() => Ingredient(name: name, count: count, unit: unit, isdesc: isdesc);
 }

@@ -29,11 +29,11 @@ class ItemsViewModel with ChangeNotifier {
     _itemList = itemList;
 
     _itemList.forEach((element) {
-      addNewWidgetWithController(i++, name: element.name, count: element.count, unit: element.unit, isEditable);
+      addNewWidgetWithController(i++, name: element.name, count: element.count, unit: element.unit, isEditable, isdesc: element.isdesc);
     });
   }
 
-  void addNewWidgetWithController(int index, bool isEditable, {String name = "", double count = 0, String unit = ""}) {
+  void addNewWidgetWithController(int index, bool isEditable, {String name = "", double count = 0, String unit = "", bool isdesc=false}) {
     TextEditingController nameController = TextEditingController();
     TextEditingController countController = TextEditingController();
     TextEditingController unitController = TextEditingController();
@@ -49,7 +49,7 @@ class ItemsViewModel with ChangeNotifier {
       }
     });
 
-    boxItemWidget.add(IngredientCustomWidget(index, nameController, countController, unitController, isEditable));
+    boxItemWidget.add(IngredientCustomWidget(index, nameController, countController, unitController, isEditable, isdesc));
   }
 
 //플러스 버튼 눌렀을때 신규 재료 입력 위젯을 추가함.

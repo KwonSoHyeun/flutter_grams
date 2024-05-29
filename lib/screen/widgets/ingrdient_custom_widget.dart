@@ -11,13 +11,14 @@ import 'package:grams/viewmodel/items_viewmodel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class IngredientCustomWidget extends StatelessWidget {
-  IngredientCustomWidget(this.boxIndex, this.nameController, this.rateController, this.unitController, this.isEditable, {super.key});
+  IngredientCustomWidget(this.boxIndex, this.nameController, this.rateController, this.unitController, this.isEditable, this.isDesc, {super.key});
 
   int boxIndex;
   final TextEditingController nameController;
   final TextEditingController rateController;
   final TextEditingController unitController;
   final bool isEditable; //위젯값 변경을 감시당하고 있는가?
+  final bool isDesc; //설명항목인가? 
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +58,8 @@ class IngredientCustomWidget extends StatelessWidget {
             flex: 6,
             child: Container(
               height: 50,
-              child: TextField(
+              child: 
+              Visibility(visible: !isDesc,  child: TextField(
                 maxLines: 1,
                 controller: rateController,
                 // decoration: InputDecoration(
@@ -72,7 +74,7 @@ class IngredientCustomWidget extends StatelessWidget {
                   )
                 ],
                 onTap: () {
-                  if (rateController.value.text == "0") { //최소 입력시 편리하도록 
+                  if (rateController.value.text == "0") { //최초 입력시 편리하도록 
                     rateController.selection = TextSelection(baseOffset: 0, extentOffset: rateController.value.text.length);
                   }
                 },
@@ -80,7 +82,9 @@ class IngredientCustomWidget extends StatelessWidget {
                 onSubmitted: (String val) {
                   //if (!isEditable) consumer.reCalculateRate(boxIndex, val);
                 },
-              ),
+              ),)
+              
+              
             ),
           ),
           const SizedBox(

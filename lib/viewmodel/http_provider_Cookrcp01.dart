@@ -36,8 +36,8 @@ class HttpProviderCookrcp01 extends ChangeNotifier implements HttpPublicData {
     List<COOKRCP01>? _data = await fetchPost(pageNo: nextNo);
     Cookery data;
 
-    for (int i = 0; i < 2; i++) {
-      //  for (int i = 0; i < _data.length; i++) {
+    //for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < _data.length; i++) {
       data = Cookery(
           title: _data[i].RCP_NM,
           kind: _data[i].RCP_PAT2!,
@@ -88,6 +88,8 @@ class HttpProviderCookrcp01 extends ChangeNotifier implements HttpPublicData {
     String ingr_name = "";
     double ingr_count = 0;
     String ingr_unit = "";
+    bool ingr_isdesc = false;
+
     RegExp regex;
     List<String> str1;
     String rateBlock = "";
@@ -114,9 +116,17 @@ class HttpProviderCookrcp01 extends ChangeNotifier implements HttpPublicData {
             tempStr = parts[i];
           }
           print("tempStr=" + tempStr);
+          if (tempStr.trim().isEmpty ) continue;
 
-          ingr_name = tempStr.substring(0, tempStr.lastIndexOf(" ")).trim();
-          rateBlock = tempStr.substring(tempStr.lastIndexOf(" "), tempStr.length).trim();
+          //3. 공백문자가 없는 항목인지 확인하여 처리함.
+          regex = new RegExp(r'[0-9]');
+          if (tempStr.contains(" ")) {
+            ingr_name = tempStr.substring(0, tempStr.lastIndexOf(" ")).trim();
+            rateBlock = tempStr.substring(tempStr.lastIndexOf(" "), tempStr.length).trim();
+          } else {
+            rateBlock = tempStr;
+          }
+
           print("ingr_name=" + ingr_name);
           print("rateBlock=" + rateBlock);
 
@@ -129,23 +139,23 @@ class HttpProviderCookrcp01 extends ChangeNotifier implements HttpPublicData {
             ingr_name = ingr_name + rateBlock;
             ingr_count = 0;
             ingr_unit = "";
+            ingr_isdesc = true;
           } else {
             print("B");
-            regex = new RegExp(r'^[0-9|\.]*'); // //r'/[^0-9]/g')
+            regex = new RegExp(r'^[0-9|\.]*'); 
             match1 = regex.firstMatch(rateBlock);
             if (match1 != null && match1.start != null) {
               ingr_count = double.parse(rateBlock.substring(match1.start, match1.end));
               ingr_unit = rateBlock.substring(match1.end, rateBlock.length);
             }
+            ingr_isdesc = false;
           }
-          ingrDataList.add(Ingredient(name: ingr_name, count: ingr_count, unit: ingr_unit));
+          ingrDataList.add(Ingredient(name: ingr_name, count: ingr_count, unit: ingr_unit, isdesc: ingr_isdesc));
           print("-----------------------------");
-
-
         } catch (e) {}
       }
-      print("Org is " + data.toString());
-      print("All ingrDataList is " + ingrDataList.toString());
+      //print("Org is " + data.toString());
+      //print("All ingrDataList is " + ingrDataList.toString());
       return ingrDataList;
     } else {
       return List.empty(growable: true);

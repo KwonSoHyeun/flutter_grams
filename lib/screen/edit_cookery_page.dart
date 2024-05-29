@@ -62,9 +62,14 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
       editCookery = widget.currCookery!.deepCopy();
       titleController.text = editCookery!.title;
 
+      print("editCookery!.img value::::" + editCookery!.img);
       if (editCookery!.img.isNotEmpty) {
-        _imageFilePath = editCookery!.img;
-        _image = XFile(_imageFilePath); //가져온 이미지를 _image에 저장
+        if (!editCookery!.img.startsWith('http')) {
+          _imageFilePath = editCookery!.img;
+          _image = XFile(_imageFilePath); //가져온 이미지를 _image에 저장
+        } else {
+          _imageFilePath = editCookery!.img;
+        }
       }
 
       dropDownValue = editCookery!.kind;
@@ -152,12 +157,12 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
             ),
 //앱바: 삭제
             Visibility(
-              visible: widget.isEditable ,
+              visible: widget.isEditable,
               child: IconButton(
                 icon: const Icon(Icons.delete),
-                color: widget.currKey !=null && widget.currKey!.isNotEmpty ? AppColor.AccentColor : Colors.grey[400],
+                color: widget.currKey != null && widget.currKey!.isNotEmpty ? AppColor.AccentColor : Colors.grey[400],
                 tooltip: 'Delete',
-                onPressed: widget.currKey !=null && widget.currKey!.isEmpty
+                onPressed: widget.currKey != null && widget.currKey!.isEmpty
                     ? null
                     : () {
                         _showdialog(context);
@@ -264,40 +269,7 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                               children: [
                                 //Text('사진경로: $_imageFilePath'),
                                 //   SizedBox(height: 30, width: double.infinity),
-                                Visibility(
-                                  visible: widget.isEditable || !widget.isEditable && _imageFilePath.isNotEmpty,
-                                  //child: PhotoAreaWidget(_image),
-                                  child: _image != null
-                                      ? _image!.path != AppConst.sampleFileName
-                                          ? Container(
-                                              width: 150,
-                                              height: 150,
-                                              //child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(10),
-                                                image: DecorationImage(image: FileImage(File(_image!.path)), fit: BoxFit.cover),
-                                              ),
-                                            )
-                                          : Container(
-                                              //for sample data
-                                              width: 150,
-                                              height: 150,
-
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(10),
-                                                image: DecorationImage(image: AssetImage(_image!.path), fit: BoxFit.cover),
-                                              ),
-                                            )
-                                      : Container(
-                                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                          alignment: Alignment.center,
-                                          width: 100,
-                                          height: 100,
-                                          decoration: const BoxDecoration(
-                                            image: DecorationImage(image: AssetImage('assets/photos/cook_icon1.png'), fit: BoxFit.cover),
-                                          ),
-                                        ),
-                                ),
+                                Visibility(visible: widget.isEditable || !widget.isEditable && _imageFilePath.isNotEmpty, child: showImageField(context)),
                                 SizedBox(height: 10),
                                 widget.isEditable ? _buildButton() : Text(""),
                               ],
@@ -466,5 +438,80 @@ class _EditCookeryPageState extends State<EditCookeryPage> {
                 )),
           ],
         ));
+  }
+
+  Container showImageField(BuildContext context) {
+    /*
+       _image != null ? _image!.path != AppConst.sampleFileName
+                                          ? Container(
+                                              width: 150,
+                                              height: 150,
+                                              //child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10),
+                                               // image: DecorationImage(image: FileImage(File(_image!.path)), fit: BoxFit.cover),
+                                               image: DecorationImage(image: NetworkImage(editCookery!.img), fit: BoxFit.cover),
+                                              ),
+                                            )
+                                          : Container(
+                                              //for sample data
+                                              width: 150,
+                                              height: 150,
+
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10),
+                                                image: DecorationImage(image: AssetImage(_image!.path), fit: BoxFit.cover),
+                                              ),
+                                            )
+                                      : Container(
+                                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                          alignment: Alignment.center,
+                                          width: 100,
+                                          height: 100,
+                                          decoration: const BoxDecoration(
+                                            image: DecorationImage(image: AssetImage('assets/photos/cook_icon1.png'), fit: BoxFit.cover),
+                                          ),
+                                        ),
+      */
+
+    if (_image != null && _image!.path != AppConst.sampleFileName) {
+      //파일
+      return Container(
+        width: 150,
+        height: 150,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          image: DecorationImage(image: FileImage(File(_image!.path)), fit: BoxFit.cover),
+        ),
+      );
+    } else if (_image != null && _image!.path == AppConst.sampleFileName) {
+      //샘플
+      return Container(
+          width: 150,
+          height: 150,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(image: AssetImage(_image!.path), fit: BoxFit.cover),
+          ));
+    } else if (editCookery != null && editCookery!.img.startsWith("http")) {
+      return Container(
+        width: 150,
+        height: 150,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          image: DecorationImage(image: NetworkImage(editCookery!.img), fit: BoxFit.cover),
+        ),
+      );
+    } else
+      return Container(
+        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+        alignment: Alignment.center,
+        width: 100,
+        height: 100,
+        decoration: const BoxDecoration(
+          image: DecorationImage(image: AssetImage('assets/photos/cook_icon1.png'), fit: BoxFit.cover),
+        ),
+      );
+    //인터넷 리모트
   }
 }
