@@ -42,3 +42,20 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+macos/Flutter/ephemeral/.symlinks/plugins/file_selector_macos
+macos/Flutter/ephemeral/.symlinks/plugins/path_provider_foundation
+macos/Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation
+macos/Flutter/ephemeral/.symlinks/plugins/sqflite
+macos/Flutter/ephemeral/.app_filename
+macos/Flutter/ephemeral/Flutter-Generated.xcconfig
+macos/Flutter/ephemeral/flutter_export_environment.sh
+macos/Flutter/ephemeral/FlutterInputs.xcfilelist
+macos/Flutter/ephemeral/FlutterMacOS.podspec
+macos/Flutter/ephemeral/FlutterOutputs.xcfilelist
+macos/Flutter/ephemeral/tripwire
+macos/Flutter/GeneratedPluginRegistrant.swift
+macos/Pods/Local Podspecs/file_selector_macos.podspec.json
+macos/Pods/Local Podspecs/FlutterMacOS.podspec.json
+macos/Pods/Local Podspecs/path_provider_foundation.podspec.json
+macos/Pods/Local Podspecs/shared_preferences_foundation.podspec.json
+macos/Pods/Local Podspecs/sqflite.podspec.json
