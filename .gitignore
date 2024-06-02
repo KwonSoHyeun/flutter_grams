@@ -42,6 +42,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
 macos/Flutter/ephemeral/.symlinks/plugins/file_selector_macos
 macos/Flutter/ephemeral/.symlinks/plugins/path_provider_foundation
 macos/Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation
@@ -59,3 +60,8 @@ macos/Pods/Local Podspecs/FlutterMacOS.podspec.json
 macos/Pods/Local Podspecs/path_provider_foundation.podspec.json
 macos/Pods/Local Podspecs/shared_preferences_foundation.podspec.json
 macos/Pods/Local Podspecs/sqflite.podspec.json
+
+
+key.properties
+**/*. keystore
+**/*.jks

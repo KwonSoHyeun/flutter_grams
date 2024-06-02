@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.1+7
 
 environment:
   sdk: '>=3.1.3 <4.0.0'
@@ -30,14 +30,26 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  sqflite: ^2.3.3
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   logger: ^2.0.2+1
+  provider: ^6.0.0
+  flutter_native_splash: ^2.4.0
+  path: ^1.7.0
+  camera: ^0.10.5+9
+  path_provider: ^2.1.2
+  gallery_saver: ^2.0.1
+  image_picker: ^1.0.7
+  build_runner: ^2.0.4
+  json_annotation: ^4.6.0
+  json_serializable: ^6.7.1
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.18.1
+  shared_preferences: ^2.1.0
+  http: ^0.13.6
 
 dev_dependencies:
   flutter_test:
@@ -48,7 +60,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.2
   hive_generator: ^2.0.1
   build_runner: ^2.4.6
 
@@ -57,11 +69,11 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -93,3 +105,15 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+  assets:
+    - assets/asset_list.json
+    - assets/photos/ic_cupcake.png
+    - assets/photos/ic_launcher.png
+    - assets/photos/
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/photos/cookgram_text.png
+  #fullscreen: true
+  web: false
